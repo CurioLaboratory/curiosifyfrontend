@@ -1,0 +1,123 @@
+.student-management {
+    padding: 20px;
+    background-color: #f7f7f7;
+  
+    .no-batches, .create-batch, .student-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+  
+      p {
+        font-size: 1.2em;
+        margin-bottom: 20px;
+      }
+  
+      button {
+        padding: 10px 20px;
+        background-color: #ff8c00;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        cursor: pointer;
+        font-size: 1em;
+      }
+    }
+  
+    .create-batch {
+      input {
+        margin-bottom: 20px;
+        padding: 10px;
+        font-size: 1em;
+        width: 300px;
+      }
+  
+      button {
+        margin-top: 10px;
+      }
+    }
+  
+    .batch-list {
+      table {
+        width: 100%;
+        border-collapse: collapse;
+  
+        th, td {
+          padding: 10px;
+          border: 1px solid #ddd;
+          text-align: left;
+        }
+  
+        th {
+          background-color: #f2f2f2;
+        }
+  
+        button {
+          background-color: #ff8c00;
+          border: none;
+          border-radius: 4px;
+          color: white;
+          cursor: pointer;
+          font-size: 1em;
+          padding: 5px 10px;
+        }
+      }
+    }
+  
+    .student-list {
+      width: 100%;
+  
+      h1 {
+        margin-bottom: 20px;
+      }
+  
+      .student-add {
+        display: flex;
+        margin-bottom: 20px;
+  
+        input {
+          padding: 10px;
+          font-size: 1em;
+          width: 300px;
+          margin-right: 10px;
+        }
+  
+        button {
+          padding: 10px 20px;
+          background-color: #ff8c00;
+          border: none;
+          border-radius: 4px;
+          color: white;
+          cursor: pointer;
+          font-size: 1em;
+        }
+      }
+  
+      table {
+        width: 100%;
+        border-collapse: collapse;
+  
+        th, td {
+          padding: 10px;
+          border: 1px solid #ddd;
+          text-align: left;
+        }
+  
+        th {
+          background-color: #f2f2f2;
+        }
+  
+        button {
+          background-color: #ff8c00;
+          border: none;
+          border-radius: 4px;
+          color: white;
+          cursor: pointer;
+          font-size: 1em;
+          padding: 5px 10px;
+        }
+      }
+    }
+  }
+  

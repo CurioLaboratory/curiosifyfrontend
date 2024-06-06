@@ -1,0 +1,224 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
+
+.home-page {
+  display: flex;
+  min-height: 100vh;
+
+  .sidebar {
+    width: 250px;
+    background-color: #fff;
+    border-right: 1px solid #ccc;
+    padding: 20px;
+
+    .logo {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        cursor: pointer;
+        color: #333;
+        transition: background-color 0.3s;
+
+        img {
+          margin-right: 10px;
+        }
+
+        &.active, &:hover {
+          background-color: #ff9900;
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    .header {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 20px;
+      background-color: #fff;
+      border-bottom: 1px solid #ccc;
+      position: relative;
+
+      .profile {
+        display: flex;
+        align-items: center;
+        position: relative;
+
+        .icon-bell {
+          font-size: 20px;
+          margin-right: 20px;
+          cursor: pointer;
+        }
+
+        .notifications-dropdown {
+          position: absolute;
+          top: 50px;
+          right: 0;
+          width: 200px;
+          background-color: #fff;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+          z-index: 10;
+          padding: 10px;
+
+          h4 {
+            margin: 0;
+            margin-bottom: 10px;
+            font-size: 16px;
+          }
+
+          p {
+            margin: 0;
+            font-size: 14px;
+          }
+        }
+
+        .profile-info {
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+
+          .profile-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #ccc;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+          }
+
+          .profile-name {
+            font-size: 16px;
+            margin-right: 5px;
+          }
+
+          .dropdown-icon {
+            font-size: 12px;
+          }
+
+          .profile-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            width: 150px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+
+            ul {
+              list-style: none;
+              padding: 10px;
+              margin: 0;
+
+              li {
+                padding: 10px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+
+                &:hover {
+                  background-color: #f0f0f0;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .content {
+      padding: 20px;
+      background-color: #f9f9f9;
+
+      h1 {
+        margin-top: 0;
+      }
+
+      .widgets {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+
+        .widget {
+          background-color: #fff;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          text-align: center;
+          height: 100%;
+
+          h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+          }
+
+          button {
+            padding: 10px 20px;
+            background-color: #ff9900;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+
+            &:hover {
+              background-color: #e68a00;
+            }
+          }
+        }
+      }
+
+      .chart-container {
+        height: 300px; // Adjust height as needed
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .home-page {
+    flex-direction: column;
+
+    .sidebar {
+      width: 100%;
+    }
+
+    .main-content {
+      .header {
+        justify-content: space-between;
+      }
+
+      .content {
+        padding: 10px;
+
+        .widgets {
+          grid-template-columns: repeat(1, 1fr); // Adjust for smaller screens
+        }
+      }
+    }
+  }
+}
