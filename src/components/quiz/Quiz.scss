@@ -2,7 +2,8 @@
     padding: 20px;
     background-color: #f9f9f9;
   
-    .no-quizzes, .quizzes {
+    .no-quizzes,
+    .quizzes {
       text-align: center;
   
       p {
@@ -37,6 +38,61 @@
   
       .create-quiz-button {
         margin: 10px;
+        width: 210px;
+      }
+    }
+  
+    .quizzes-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      
+      .filters {
+        display: flex;
+        gap: 10px;
+  
+        .filter-by-class,
+        .sort-by {
+          padding: 10px;
+          font-size: 16px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+      }
+  
+      .search-bar {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 200px;
+      }
+    }
+  
+    .deleteRow {
+      width: 200px;
+  
+      .delete-quiz-button {
+        padding: 10px 20px;
+        background-color: #ff0000;
+        border: none;
+        color: #fff;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: 100%;
+  
+        &:hover {
+          background-color: #cc0000;
+        }
+  
+        &:disabled {
+          background-color: #ccc;
+          cursor: not-allowed;
+        }
       }
     }
   
@@ -45,7 +101,8 @@
       border-collapse: collapse;
       margin-top: 20px;
   
-      th, td {
+      th,
+      td {
         padding: 10px;
         text-align: left;
       }
