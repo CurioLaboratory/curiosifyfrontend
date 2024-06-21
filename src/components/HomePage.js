@@ -6,38 +6,25 @@ import Library from './library/Library';
 import ScanAI from './scanAI/ScanAI';
 import Events from './events/Events';
 import StudentManagement from './studentManagement/StudentManagement';
-
+import { useAuth } from './auth/AuthContext';
+import Grid from './Grid';
 const HomePage = () => {
   const [selectedMenu, setSelectedMenu] = useState('home');
   const [currentPage, setCurrentPage] = useState('home');
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+  const { user, logout } = useAuth();
   const renderContent = () => {
     switch (currentPage) {
       case 'home':
         return (
           <div className="content">
-            <h1>Hi Jane, Welcome back!</h1>
-            <div className="widgets">
-              <div className="widget">
-                <h2>Weekly summary</h2>
-                <p>Check back shortly for your weekly summary update!</p>
-              </div>
-              <div className="widget">
-                <h2>Quiz Performance</h2>
-                <p>You have no quizzes.</p>
-                <button onClick={() => setCurrentPage('create-quiz')}>Create Quiz</button>
-              </div>
-              <div className="widget">
-                <h2>Activity feed</h2>
-                <p>No activity</p>
-              </div>
-              <div className="widget">
-                <h2>Schedule</h2>
-                <p>No Events Scheduled</p>
-              </div>
-            </div>
+            <h1>Hi {user.full_name}, Welcome back!</h1>
+            <Grid/>
           </div>
         );
       case 'quiz':
@@ -59,19 +46,22 @@ const HomePage = () => {
 
   return (
     <div className="home-page">
-      <div className="sidebar">
-        <div className="logo">CURIOSIFY</div>
+      <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
+        {/* <div className="hamburger" onClick={toggleSidebar}>
+          <img src="/icons/home.png" alt="Menu" />
+        </div> */}
+        <div className="logo"><img src="/icons/logo.png" alt="Logo" /></div>
         <ul>
-          <li onClick={() => { setSelectedMenu('home'); setCurrentPage('home'); }} className={selectedMenu === 'home' ? 'active' : ''}>
+          <li onClick={() => { setSelectedMenu('home'); setCurrentPage('home'); toggleSidebar(); }} className={selectedMenu === 'home' ? 'active' : ''}>
             <img src="/icons/home.png" alt="Home" /> Home
           </li>
-          <li onClick={() => { setSelectedMenu('quiz'); setCurrentPage('quiz'); }} className={selectedMenu === 'quiz' ? 'active' : ''}>
+          <li onClick={() => { setSelectedMenu('quiz'); setCurrentPage('quiz'); toggleSidebar(); }} className={selectedMenu === 'quiz' ? 'active' : ''}>
             <img src="/icons/quiz.png" alt="Quiz" /> Quiz
           </li>
-          <li onClick={() => { setSelectedMenu('library'); setCurrentPage('library'); }} className={selectedMenu === 'library' ? 'active' : ''}>
+          <li onClick={() => { setSelectedMenu('library'); setCurrentPage('library'); toggleSidebar(); }} className={selectedMenu === 'library' ? 'active' : ''}>
             <img src="/icons/library.png" alt="Library" /> Library
           </li>
-          <li onClick={() => { setSelectedMenu('events'); setCurrentPage('events'); }} className={selectedMenu === 'events' ? 'active' : ''}>
+          <li onClick={() => { setSelectedMenu('events'); setCurrentPage('events'); toggleSidebar(); }} className={selectedMenu === 'events' ? 'active' : ''}>
             <img src="/icons/events.png" alt="Events" /> Events
           </li>
           <li onClick={() => { setSelectedMenu('scan-ai'); setCurrentPage('scan-ai'); }} className={selectedMenu === 'scan-ai' ? 'active' : ''}>
@@ -100,14 +90,14 @@ const HomePage = () => {
             )}
             <div className="profile-info" onClick={() => setShowProfileMenu(!showProfileMenu)}>
               <div className="profile-icon">JH</div>
-              <div className="profile-name">Jane H</div>
+              <div className="profile-name">{user.full_name}</div>
               <div className="dropdown-icon">▼</div>
               {showProfileMenu && (
                 <div className="profile-dropdown">
                   <ul>
                     <li>Profile</li>
                     <li>Settings</li>
-                    <li>Logout</li>
+                    <li onClick={logout}><a href="/login">Logout</a></li>
                   </ul>
                 </div>
               )}
