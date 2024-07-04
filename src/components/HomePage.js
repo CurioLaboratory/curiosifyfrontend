@@ -8,6 +8,8 @@ import Events from './events/Events';
 import StudentManagement from './studentManagement/StudentManagement';
 import { useAuth } from './auth/AuthContext';
 import Grid from './Grid';
+import FlashCard from './flashCard/FlashCard';
+import CreateFlashCard from './flashCard/CreateFlashCard';
 const HomePage = () => {
   const [selectedMenu, setSelectedMenu] = useState('home');
   const [currentPage, setCurrentPage] = useState('home');
@@ -37,6 +39,10 @@ const HomePage = () => {
         return <Events />;
       case 'scan-ai':
         return <ScanAI />;
+      case 'flashcards':
+        return <FlashCard onCreateFlashCards={() => setCurrentPage('create-flashcards')} />
+      case 'create-flashcards':
+        return <CreateFlashCard/>;
       case 'student-management':
         return <StudentManagement />;
       default:
@@ -46,10 +52,8 @@ const HomePage = () => {
 
   return (
     <div className="home-page">
+      
       <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-        {/* <div className="hamburger" onClick={toggleSidebar}>
-          <img src="/icons/home.png" alt="Menu" />
-        </div> */}
         <div className="logo"><img src="/icons/logo.png" alt="Logo" /></div>
         <ul>
           <li onClick={() => { setSelectedMenu('home'); setCurrentPage('home'); toggleSidebar(); }} className={selectedMenu === 'home' ? 'active' : ''}>
@@ -67,7 +71,7 @@ const HomePage = () => {
           <li onClick={() => { setSelectedMenu('scan-ai'); setCurrentPage('scan-ai'); }} className={selectedMenu === 'scan-ai' ? 'active' : ''}>
             <img src="/icons/scan-ai.png" alt="Scan AI" /> Scan AI
           </li>
-          <li onClick={() => setSelectedMenu('flashcards')} className={selectedMenu === 'flashcards' ? 'active' : ''}>
+          <li onClick={() => { setSelectedMenu('flashcards'); setCurrentPage('flashcards'); }} className={selectedMenu === 'flashcards' ? 'active' : ''}>
             <img src="/icons/flashcards.png" alt="Flashcards" /> Flashcards
           </li>
           <li onClick={() => setSelectedMenu('create-content')} className={selectedMenu === 'create-content' ? 'active' : ''}>
@@ -80,6 +84,9 @@ const HomePage = () => {
       </div>
       <div className="main-content">
         <div className="header">
+          {/* <div className="hamburger" onClick={toggleSidebar}>
+            {isSidebarOpen ? '✖' : '☰'}
+          </div> */}
           <div className="profile">
             <span className="icon-bell" onClick={() => setShowNotifications(!showNotifications)}>🔔</span>
             {showNotifications && (

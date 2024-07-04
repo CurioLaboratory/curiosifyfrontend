@@ -22,26 +22,6 @@ $sidebar-width: 250px;
     transition: transform 0.3s ease-in-out;
     z-index: 10;
 
-    // &.open {
-    //   transform: translateX(0);
-    // }
-
-    // .hamburger {
-    //   position: absolute;
-    //   top: 15px;
-    //   right: -45px;
-    //   background-color: $primary-color;
-    //   padding: 10px;
-    //   border-radius: 5px;
-    //   cursor: pointer;
-    //   z-index: 20;
-
-    //   img {
-    //     width: 25px;
-    //     height: 25px;
-    //   }
-    // }
-
     .logo {
       text-align: center;
       padding: 0;
@@ -215,10 +195,6 @@ $sidebar-width: 250px;
     .sidebar {
       transform: translateX(0);
 
-      // .hamburger {
-      //   display: block;
-      //   background-color: $primary-color;
-      // }
     }
 
     .main-content {
@@ -230,7 +206,8 @@ $sidebar-width: 250px;
         padding: 10px;
 
         .widgets {
-          grid-template-columns: repeat(1, 1fr); // Adjust for smaller screens
+          grid-template-columns: repeat(1, 1fr); 
+          height: auto;
         }
       }
     }

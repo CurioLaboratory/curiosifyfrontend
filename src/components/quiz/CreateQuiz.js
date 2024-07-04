@@ -188,31 +188,43 @@ const CreateQuiz = () => {
 
   return (
     <div className="create-quiz-page">
-      <div className="header">
-        <h1>Create Quiz</h1>
-      </div>
-      <div className="tabs">
-        <button className={activeTab === 'Upload' ? 'active' : ''} onClick={() => setActiveTab('Upload')}>Upload</button>
-        <button className={activeTab === 'Text/AI' ? 'active' : ''} onClick={() => setActiveTab('Text/AI')}>Text/AI</button>
-        <button className={activeTab === 'Manual' ? 'active' : ''} onClick={() => setActiveTab('Manual')}>Manual</button>
-      </div>
-      {activeTab === 'Upload' && renderUploadTab()}
-      {activeTab === 'Text/AI' && renderTextAiTab()}
-      {activeTab === 'Manual' && renderManualTab()}
+      <div className="container">
+        <div className="left">
+          <div className="left-header">
+            <h2>Create Quiz</h2>
+          </div>
+          <div className="tabs">
+            <button className={activeTab === 'Upload' ? 'active' : ''} onClick={() => setActiveTab('Upload')}>Upload</button>
+            <button className={activeTab === 'Text/AI' ? 'active' : ''} onClick={() => setActiveTab('Text/AI')}>Text/AI</button>
+            <button className={activeTab === 'Manual' ? 'active' : ''} onClick={() => setActiveTab('Manual')}>Manual</button>
+          </div>
+          {activeTab === 'Upload' && renderUploadTab()}
+          {activeTab === 'Text/AI' && renderTextAiTab()}
+          {activeTab === 'Manual' && renderManualTab()}
 
-      {uploadModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h2>Upload a document</h2>
-            <input type="file" onChange={handleDocumentUpload} />
-            <small>DOCX, JPEG, JPG, PNG, and PDF formats up to 5 MB</small>
-            <div className="modal-actions">
-              <button onClick={() => setUploadModalOpen(false)}>Cancel</button>
-              <button onClick={() => setUploadModalOpen(false)}>Continue</button>
+          {uploadModalOpen && (
+            <div className="modal-overlay">
+              <div className="modal">
+                <h2>Upload a document</h2>
+                <input type="file" onChange={handleDocumentUpload} />
+                <small>DOCX, JPEG, JPG, PNG, and PDF formats up to 5 MB</small>
+                <div className="modal-actions">
+                  <button onClick={() => setUploadModalOpen(false)}>Cancel</button>
+                  <button onClick={() => setUploadModalOpen(false)}>Continue</button>
+                </div>
+              </div>
             </div>
+          )}
+        </div>
+        <div className="right">
+          <div className='right-header'>
+            <button type="button" className="publish-button">
+              Publish
+            </button>
           </div>
         </div>
-      )}
+      </div>
+
     </div>
   );
 };
