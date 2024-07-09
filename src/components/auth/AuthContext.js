@@ -6,7 +6,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        const storedUser = sessionStorage.getItem('user');
+        const storedUser = localStorage.getItem('user');
         if (storedUser) {
             setUser(JSON.parse(storedUser));
         }
@@ -14,12 +14,12 @@ export const AuthProvider = ({ children }) => {
 
     const login = (userData) => {
         setUser(userData);
-        sessionStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('user', JSON.stringify(userData));
     };
 
     const logout = () => {
         setUser(null);
-        sessionStorage.removeItem('user');
+        localStorage.removeItem('user');
     };
 
     return (

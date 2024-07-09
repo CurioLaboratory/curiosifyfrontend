@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './CreateQuiz.scss';
+import ManualTab from './ManualTab';
+import RightTab from './RightTab';
 
 const CreateQuiz = () => {
   const [activeTab, setActiveTab] = useState('Upload');
@@ -144,46 +146,7 @@ const CreateQuiz = () => {
   );
 
   const renderManualTab = () => (
-    <div className="form-container">
-      <form>
-        <div className="form-group">
-          <label>Choose Language</label>
-          <select value={language} onChange={(e) => setLanguage(e.target.value)}>
-            <option value="English">English</option>
-            <option value="Spanish">Spanish</option>
-            <option value="French">French</option>
-          </select>
-        </div>
-        <div className="form-group">
-          <label>Enter a title</label>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
-        </div>
-        <div className="form-group">
-          <label>Enter your question</label>
-          <input type="text" value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="Enter your question here" />
-        </div>
-        {options.map((option, index) => (
-          <div className="form-group" key={index}>
-            <label>Option {String.fromCharCode(65 + index)}</label>
-            <div className="option-input">
-              <input type="text" value={option} onChange={(e) => handleOptionChange(index, e.target.value)} />
-              <button type="button" onClick={() => handleRemoveOption(index)}>X</button>
-            </div>
-          </div>
-        ))}
-        <div className="form-group">
-          <label>Answer</label>
-          <select value={answer} onChange={(e) => setAnswer(e.target.value)}>
-            {options.map((option, index) => (
-              <option key={index} value={option}>Option {String.fromCharCode(65 + index)}</option>
-            ))}
-          </select>
-        </div>
-        <button type="button" onClick={handleGenerateQuiz} className="generate-button">
-          Add Question
-        </button>
-      </form>
-    </div>
+   <ManualTab/>
   );
 
   return (
@@ -217,11 +180,12 @@ const CreateQuiz = () => {
           )}
         </div>
         <div className="right">
-          <div className='right-header'>
+          {/* <div className='right-header'>
             <button type="button" className="publish-button">
               Publish
             </button>
-          </div>
+          </div> */}
+          <RightTab/>
         </div>
       </div>
 
