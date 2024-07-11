@@ -1,21 +1,37 @@
 .create-quiz-page {
-    padding: 20px;
-    background-color: #f9f9f9;
+  // padding: 20px;
+  background-color: #f9f9f9;
+  // height: 100vh;
+  // width: 50%;
+  display: flex;
+  flex-direction: row;
+  // border-right: 1px solid #ccc;
+
+
+
+  .container {
+    width: 100%;
     height: 100vh;
     display: flex;
-    flex-direction: column;
-  
-    .header {
-      h1 {
+  }
+
+  .left {
+    flex: 50%;
+    // background-color: blue;
+    border-right: 1px solid #ccc;
+    padding: 20px;
+
+    .left-header {
+      h2 {
         margin-bottom: 20px;
       }
     }
-  
+
     .tabs {
       display: flex;
       justify-content: flex-start;
       margin-bottom: 20px;
-  
+
       button {
         padding: 10px 20px;
         background: none;
@@ -25,140 +41,166 @@
         color: #666;
         transition: color 0.3s;
         border-bottom: 2px solid transparent;
-  
+
         &.active {
           color: #ff9900;
           border-bottom: 2px solid #ff9900;
         }
-  
+
         &:hover {
           color: #ff9900;
         }
       }
     }
-  
-    .form-container {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      flex: 1;
-  
-      form {
-        display: flex;
-        flex-direction: column;
-  
-        .form-group {
-          display: flex;
-          flex-direction: column;
-          margin-bottom: 20px;
-  
-          label {
-            margin-bottom: 5px;
-            font-size: 14px;
-            color: #666;
-          }
-  
-          input,
-          select {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-          }
-  
-          small {
-            margin-top: 5px;
-            font-size: 12px;
-            color: #999;
-          }
-  
-          .option-input {
-            display: flex;
-            align-items: center;
-  
-            input {
-              flex: 1;
-              margin-right: 10px;
-            }
-  
-            button {
-              background: none;
-              border: none;
-              color: #ff0000;
-              cursor: pointer;
-              font-size: 16px;
-            }
-          }
-        }
-  
-        .generate-button {
-          padding: 10px 20px;
-          background-color: #ff9900;
-          border: none;
-          color: #fff;
-          font-size: 16px;
-          border-radius: 5px;
-          cursor: pointer;
-          transition: background-color 0.3s;
-  
-          &:hover {
-            background-color: #e68a00;
-          }
+  }
+
+  .right {
+    flex: 50%;
+    padding: 20px;
+
+    .right-header {
+      display: flex;
+      justify-content: end;
+
+      .publish-button {
+        padding: 10px 20px;
+        background-color: #ff9900;
+        border: none;
+        color: #fff;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+          background-color: #e68a00;
         }
       }
     }
-  
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
+
+  }
+
+  .form-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex: 1;
+
+    form {
       display: flex;
-      justify-content: center;
-      align-items: center;
-  
-      .modal {
-        background: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        width: 400px;
-        max-width: 80%;
-  
-        h2 {
-          margin-top: 0;
+      flex-direction: column;
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+
+        label {
+          margin-bottom: 5px;
+          font-size: 14px;
+          color: #666;
         }
-  
-        .modal-actions {
+
+        input,
+        select {
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          font-size: 16px;
+        }
+
+        small {
+          margin-top: 5px;
+          font-size: 12px;
+          color: #999;
+        }
+
+        .option-input {
           display: flex;
-          justify-content: flex-end;
-          margin-top: 20px;
-  
+          align-items: center;
+
+          input {
+            flex: 1;
+            margin-right: 10px;
+          }
+
           button {
-            padding: 10px 20px;
-            margin-left: 10px;
-            cursor: pointer;
+            background: none;
             border: none;
-            border-radius: 5px;
+            color: #ff0000;
+            cursor: pointer;
+            font-size: 16px;
           }
-  
-          button:first-child {
-            background: #ccc;
-          }
-  
-          button:last-child {
-            background: #ff9900;
-            color: #fff;
-  
-            &:hover {
-              background: #e68a00;
-            }
+        }
+      }
+
+      .generate-button {
+        padding: 10px 20px;
+        background-color: #ff9900;
+        border: none;
+        color: #fff;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+          background-color: #e68a00;
+        }
+      }
+    }
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .modal {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      max-width: 80%;
+
+      h2 {
+        margin-top: 0;
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+
+        button {
+          padding: 10px 20px;
+          margin-left: 10px;
+          cursor: pointer;
+          border: none;
+          border-radius: 5px;
+        }
+
+        button:first-child {
+          background: #ccc;
+        }
+
+        button:last-child {
+          background: #ff9900;
+          color: #fff;
+
+          &:hover {
+            background: #e68a00;
           }
         }
       }
     }
   }
-  
+}

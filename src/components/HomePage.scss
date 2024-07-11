@@ -5,39 +5,61 @@ body {
   padding: 0;
 }
 
+$primary-color: #fff;
+$sidebar-width: 250px;
+
 .home-page {
   display: flex;
   min-height: 100vh;
 
   .sidebar {
-    width: 250px;
-    background-color: #fff;
+    background-color: $primary-color;
     border-right: 1px solid #ccc;
+    // position: fixed;
+    width: $sidebar-width;
     padding: 20px;
+    transform: translateX(0);
+    transition: transform 0.3s ease-in-out;
+    z-index: 10;
 
     .logo {
-      font-size: 24px;
-      margin-bottom: 20px;
+      text-align: center;
+      padding: 0;
+
+      img {
+        width: 120px;
+      }
     }
 
     ul {
       list-style: none;
       padding: 0;
+      margin: 0;
 
       li {
         display: flex;
         align-items: center;
-        padding: 10px 0;
         cursor: pointer;
-        color: #333;
+        padding: 10px;
+        border-radius: 5px;
+        color: black;
+        font-size: 16px;
+        padding: 15px 20px;
         transition: background-color 0.3s;
 
         img {
+          width: 20px;
+          height: 20px;
           margin-right: 10px;
         }
 
-        &.active, &:hover {
-          background-color: #ff9900;
+        &.active {
+          background-color: #FFF3E0;
+          color: #1E1E1E;
+        }
+
+        &:hover {
+          background-color: hsl(36, 88%, 75%);
           color: #fff;
         }
       }
@@ -157,40 +179,7 @@ body {
         margin-top: 0;
       }
 
-      .widgets {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 20px;
 
-        .widget {
-          background-color: #fff;
-          padding: 20px;
-          border-radius: 10px;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-          text-align: center;
-          height: 100%;
-
-          h2 {
-            margin-top: 0;
-            margin-bottom: 20px;
-          }
-
-          button {
-            padding: 10px 20px;
-            background-color: #ff9900;
-            border: none;
-            color: #fff;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-
-            &:hover {
-              background-color: #e68a00;
-            }
-          }
-        }
-      }
 
       .chart-container {
         height: 300px; // Adjust height as needed
@@ -199,12 +188,13 @@ body {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .home-page {
     flex-direction: column;
 
     .sidebar {
-      width: 100%;
+      transform: translateX(0);
+
     }
 
     .main-content {
@@ -216,7 +206,8 @@ body {
         padding: 10px;
 
         .widgets {
-          grid-template-columns: repeat(1, 1fr); // Adjust for smaller screens
+          grid-template-columns: repeat(1, 1fr); 
+          height: auto;
         }
       }
     }

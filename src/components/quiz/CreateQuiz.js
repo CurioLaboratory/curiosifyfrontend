@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './CreateQuiz.scss';
+import ManualTab from './ManualTab';
+import RightTab from './RightTab';
 
 const CreateQuiz = () => {
   const [activeTab, setActiveTab] = useState('Upload');
@@ -144,75 +146,49 @@ const CreateQuiz = () => {
   );
 
   const renderManualTab = () => (
-    <div className="form-container">
-      <form>
-        <div className="form-group">
-          <label>Choose Language</label>
-          <select value={language} onChange={(e) => setLanguage(e.target.value)}>
-            <option value="English">English</option>
-            <option value="Spanish">Spanish</option>
-            <option value="French">French</option>
-          </select>
-        </div>
-        <div className="form-group">
-          <label>Enter a title</label>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
-        </div>
-        <div className="form-group">
-          <label>Enter your question</label>
-          <input type="text" value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="Enter your question here" />
-        </div>
-        {options.map((option, index) => (
-          <div className="form-group" key={index}>
-            <label>Option {String.fromCharCode(65 + index)}</label>
-            <div className="option-input">
-              <input type="text" value={option} onChange={(e) => handleOptionChange(index, e.target.value)} />
-              <button type="button" onClick={() => handleRemoveOption(index)}>X</button>
-            </div>
-          </div>
-        ))}
-        <div className="form-group">
-          <label>Answer</label>
-          <select value={answer} onChange={(e) => setAnswer(e.target.value)}>
-            {options.map((option, index) => (
-              <option key={index} value={option}>Option {String.fromCharCode(65 + index)}</option>
-            ))}
-          </select>
-        </div>
-        <button type="button" onClick={handleGenerateQuiz} className="generate-button">
-          Add Question
-        </button>
-      </form>
-    </div>
+   <ManualTab/>
   );
 
   return (
     <div className="create-quiz-page">
-      <div className="header">
-        <h1>Create Quiz</h1>
-      </div>
-      <div className="tabs">
-        <button className={activeTab === 'Upload' ? 'active' : ''} onClick={() => setActiveTab('Upload')}>Upload</button>
-        <button className={activeTab === 'Text/AI' ? 'active' : ''} onClick={() => setActiveTab('Text/AI')}>Text/AI</button>
-        <button className={activeTab === 'Manual' ? 'active' : ''} onClick={() => setActiveTab('Manual')}>Manual</button>
-      </div>
-      {activeTab === 'Upload' && renderUploadTab()}
-      {activeTab === 'Text/AI' && renderTextAiTab()}
-      {activeTab === 'Manual' && renderManualTab()}
-
-      {uploadModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h2>Upload a document</h2>
-            <input type="file" onChange={handleDocumentUpload} />
-            <small>DOCX, JPEG, JPG, PNG, and PDF formats up to 5 MB</small>
-            <div className="modal-actions">
-              <button onClick={() => setUploadModalOpen(false)}>Cancel</button>
-              <button onClick={() => setUploadModalOpen(false)}>Continue</button>
-            </div>
+      <div className="container">
+        <div className="left">
+          <div className="left-header">
+            <h2>Create Quiz</h2>
           </div>
+          <div className="tabs">
+            <button className={activeTab === 'Upload' ? 'active' : ''} onClick={() => setActiveTab('Upload')}>Upload</button>
+            <button className={activeTab === 'Text/AI' ? 'active' : ''} onClick={() => setActiveTab('Text/AI')}>Text/AI</button>
+            <button className={activeTab === 'Manual' ? 'active' : ''} onClick={() => setActiveTab('Manual')}>Manual</button>
+          </div>
+          {activeTab === 'Upload' && renderUploadTab()}
+          {activeTab === 'Text/AI' && renderTextAiTab()}
+          {activeTab === 'Manual' && renderManualTab()}
+
+          {uploadModalOpen && (
+            <div className="modal-overlay">
+              <div className="modal">
+                <h2>Upload a document</h2>
+                <input type="file" onChange={handleDocumentUpload} />
+                <small>DOCX, JPEG, JPG, PNG, and PDF formats up to 5 MB</small>
+                <div className="modal-actions">
+                  <button onClick={() => setUploadModalOpen(false)}>Cancel</button>
+                  <button onClick={() => setUploadModalOpen(false)}>Continue</button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      )}
+        <div className="right">
+          {/* <div className='right-header'>
+            <button type="button" className="publish-button">
+              Publish
+            </button>
+          </div> */}
+          <RightTab/>
+        </div>
+      </div>
+
     </div>
   );
 };
