@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Library.scss';
+import axiosInstance from "../../axiosInstance";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUndo, faRedo } from '@fortawesome/free-solid-svg-icons'
 
 const Library = () => {
   const [resources, setResources] = useState([]);
@@ -8,19 +11,33 @@ const Library = () => {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [selectedTab, setSelectedTab] = useState('assignments');
   const [filterClass, setFilterClass] = useState('');
+  const [refreshResources, setRefreshResources] = useState(true);
+
+  const [newResTitle, setNewResTitle] = useState("");
+  const [newResSubject, setNewResSubject] = useState("");
+  const [newResClassLevel, setNewResClassLevel] = useState("");
+  const [newResDate, setNewResDate] = useState(Date.now());
 
   useEffect(() => {
     // Simulating a fetch request to the backend with dummy data
-    setTimeout(() => {
-      const dummyData = [
-        { id: 1, title: 'Linear Equations', subject: 'Maths', class: 9 },
-        { id: 2, title: 'Cell structure and function', subject: 'Biology', class: 10 },
-        { id: 3, title: 'Atomic structure', subject: 'Chemistry', class: 11 },
-      ];
-      setResources(dummyData);
+    // setTimeout(() => {
+    //   const dummyData = [
+    //     { id: 1, title: 'Linear Equations', subject: 'Maths', class: 9 },
+    //     { id: 2, title: 'Cell structure and function', subject: 'Biology', class: 10 },
+    //     { id: 3, title: 'Atomic structure', subject: 'Chemistry', class: 11 },
+    //   ];
+    //   setResources(dummyData);
+    //   setLoading(false);
+    // }, 10); // Simulating network delay
+
+    const getAllResources = async () => {
+      const response = await axiosInstance.get("/library/getallresource");
+      setResources(response.data);
       setLoading(false);
-    }, 10); // Simulating network delay
-  }, []);
+    }
+
+    getAllResources();
+  }, [refreshResources]);
 
   const handleFilterChange = (event) => {
     setFilterClass(event.target.value);
@@ -29,6 +46,30 @@ const Library = () => {
   const filteredResources = resources.filter(resource =>
     filterClass ? resource.class.toString() === filterClass : true
   );
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    if (newResTitle !== "" && newResSubject !== "") {
+      const newResource = await axiosInstance.post("/library/createmanualresource", {
+        title: newResTitle,
+        subject: newResSubject,
+        classLevel: newResClassLevel,
+        date: newResDate
+      });
+
+      setShowCreateResource(false);
+      setRefreshResources(!refreshResources);
+    }
+  };
+
+  const handleDeleteResource = async (resourceId) => {
+    try {
+      const deletedResource = await axiosInstance.delete(`/library/deleteresource/${resourceId}`);
+      setRefreshResources(!refreshResources);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const renderNoResources = () => (
     <div className="no-resources">
@@ -59,7 +100,10 @@ const Library = () => {
       </div>
       <div className="resources-content">
         {filteredResources.map(resource => (
-          <div className="resource-card" key={resource.id}>
+          <div className="resource-card" key={resource._id}>
+            <div>
+              <img className="event-delete-button" onClick={() => handleDeleteResource(resource._id)} src="/icons/dustbin.png" alt="Quiz" />
+            </div>
             <h3>{resource.title}</h3>
             <p>Subject: {resource.subject}</p>
             <p>Class: {resource.class}</p>
@@ -79,12 +123,19 @@ const Library = () => {
       <form>
         <div className="form-group">
           <label>Enter Note title</label>
-          <input type="text" />
+          <input type="text" value={newResTitle} onChange={(e) => setNewResTitle(e.target.value)}/>
+          <label>Enter Class Level</label>
+          <select onChange={(e) => setNewResClassLevel(e.target.value)} value={newResClassLevel}>
+          <option value="9">Class 9</option>
+          <option value="10">Class 10</option>
+          <option value="11">Class 11</option>
+          <option value="12">Class 12</option>
+        </select>
         </div>
         <div className="form-group">
           <div className="rich-text-editor-toolbar">
-            <button type="button"><i className="fas fa-undo"></i></button>
-            <button type="button"><i className="fas fa-redo"></i></button>
+            <button type="button"><FontAwesomeIcon icon={faUndo} /></button>
+            <button type="button"><FontAwesomeIcon icon={faRedo} /></button>
             <select>
               <option value="Arial">Arial</option>
               <option value="Times New Roman">Times New Roman</option>
@@ -105,11 +156,11 @@ const Library = () => {
             <button type="button"><i className="fas fa-list-ul"></i></button>
             <button type="button"><i className="fas fa-list-ol"></i></button>
           </div>
-          <textarea placeholder="Start noting..."></textarea>
+          <textarea placeholder="Start noting..." onChange={(e) => setNewResSubject(e.target.value)} value={newResSubject}></textarea>
         </div>
         <div className="form-actions">
           <button type="button">Share</button>
-          <button type="button">Save</button>
+          <button type="button" onClick={handleSave}>Save</button>
         </div>
       </form>
     </div>
