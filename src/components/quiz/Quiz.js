@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Quiz.scss';
+import axiosInstance from "../../axiosInstance";
 
 const Quiz = ({ onCreateQuiz }) => {
   const [quizzes, setQuizzes] = useState([]);
@@ -17,17 +18,24 @@ const Quiz = ({ onCreateQuiz }) => {
   );
   useEffect(() => {
     // Simulating a fetch request to the backend with dummy data
-    setTimeout(() => {
-      const dummyData = [
-        { id: 1, name: 'Evolution', numOfQuestions: 2, class: 12, createdOn: '01-03-2024' },
-        { id: 2, name: 'Laws of motion', numOfQuestions: 1, class: 11, createdOn: '01-03-2024' },
-      ];
-      const data = localStorage.getItem('quizzes');
-      // console.log(data)
-      setQuizzes(data);
+    // setTimeout(() => {
+    //   const dummyData = [
+    //     { id: 1, name: 'Evolution', numOfQuestions: 2, class: 12, createdOn: '01-03-2024' },
+    //     { id: 2, name: 'Laws of motion', numOfQuestions: 1, class: 11, createdOn: '01-03-2024' },
+    //   ];
+    //   const data = localStorage.getItem('quizzes');
+    //   // console.log(data)
+    //   setQuizzes(data);
 
+    //   setLoading(false);
+    // }, 10); // Simulating network delay
+    const getAllQuiz = async () => {
+      const allQuiz = await axiosInstance.get("/quiz/getallquiz");
+      setQuizzes(allQuiz);
       setLoading(false);
-    }, 10); // Simulating network delay
+    };
+
+    getAllQuiz();
   }, []);
 
   const handleCheckboxChange = (id) => {
