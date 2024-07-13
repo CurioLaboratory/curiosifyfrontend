@@ -22,7 +22,7 @@ const Login = () => {
         const user = await axiosInstance.post("/auth/login", {
           email, password
         });
-        login(user);
+        login({ ...user.data.user, token: user.data.token});
         navigate('/home');
       } catch (error) {
         setError(error.response.data.message);

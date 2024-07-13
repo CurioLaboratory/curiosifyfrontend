@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Events.scss';
+import axiosInstance from "../../axiosInstance";
 
 const Events = () => {
   const [events, setEvents] = useState([]);
@@ -7,6 +8,7 @@ const Events = () => {
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [showEditEvent, setShowEditEvent] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [refreshEvents, setRefreshEvents] = useState(true);
 
   // State for create event form
   const [newEventTitle, setNewEventTitle] = useState('');
@@ -15,15 +17,23 @@ const Events = () => {
   const [newEventDate, setNewEventDate] = useState('');
 
   useEffect(() => {
-    const storedEvents = JSON.parse(localStorage.getItem('events') || '[]');
-    setEvents(storedEvents);
-    setLoading(false);
-  }, []);
+    // const storedEvents = JSON.parse(localStorage.getItem('events') || '[]');
+    // setEvents(storedEvents);
+    // setLoading(false);
+    const getAllEvents = async () => {
+      const response = await axiosInstance.get("/event/getallevent");
+      setEvents(response.data);
+      setLoading(false);
+    }
+
+    getAllEvents();
+  }, [refreshEvents]);
 
   const formatDate = (dateString) => {
     const options = { weekday: 'short', day: '2-digit', month: 'short' };
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
+
   const handleCreateEvent = () => {
     setShowCreateEvent(true);
   };
@@ -32,11 +42,15 @@ const Events = () => {
     setSelectedEvent(event);
     setShowEditEvent(true);
   };
-  const handleDeleteEvent = (eventId) => {
-    const updatedEvents = events.filter(event => event.id !== eventId);
-    setEvents(updatedEvents);
-    localStorage.setItem('events', JSON.stringify(updatedEvents));
+
+  const handleDeleteEvent = async (eventId) => {
+    // const updatedEvents = events?.filter(event => event.id !== eventId);
+    // setEvents(updatedEvents);
+    // localStorage.setItem('events', JSON.stringify(updatedEvents));
+    const deletedEvent = await axiosInstance.delete(`/event/deleteevent/${eventId}`);
+    setRefreshEvents(!refreshEvents);
   };
+
   const renderNoEvents = () => (
     <div className="no-events">
       <p>You don't have any events</p>
@@ -51,15 +65,15 @@ const Events = () => {
         <button className="list-event-button" onClick={handleCreateEvent}>List new activity</button>
       </div>
       <div className="events-content">
-        {events.map(event => (
-          <div className="event-card" key={event.id}>
+        {events.length !== 0 && events.map(event => (
+          <div className="event-card" key={event._id}>
             <img className="event-card-img" src='./icons/logo.png' alt={event.title} />
             {/* <img className="event-card-img" src={event.poster} alt={event.title} /> */}
             <div className="event-card-date">
               <p className="event-card-para">{formatDate(event.date)}</p>
               <div className="event-buttons">
                 <img className="event-edit-button" onClick={() => handleEditEvent(event)} src="/icons/pencil.png" alt="Edit" />
-                <img className="event-delete-button" onClick={() => handleDeleteEvent(event.id)} src="/icons/dustbin.png" alt="Quiz" />
+                <img className="event-delete-button" onClick={() => handleDeleteEvent(event._id)} src="/icons/dustbin.png" alt="Quiz" />
               </div>
             </div>
 
@@ -73,23 +87,31 @@ const Events = () => {
   );
 
   const renderCreateEvent = () => {
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
       e.preventDefault();
-      const newEvent = {
+      const newEventDetails = {
         id: Date.now(),
         title: newEventTitle,
         poster: newEventPoster,
         summary: newEventSummary,
         date: newEventDate
       };
-      const updatedEvents = [...events, newEvent];
-      setEvents(updatedEvents);
-      localStorage.setItem('events', JSON.stringify(updatedEvents));
+
+      const newEvent = await axiosInstance.post("/event/addevent", {
+        title: newEventTitle,
+        summary: newEventSummary,
+        date: newEventDate 
+      });
+
+      // const updatedEvents = [...events, newEvent];
+      // setEvents(updatedEvents);
+      // localStorage.setItem('events', JSON.stringify(updatedEvents));
       setShowCreateEvent(false);
       setNewEventTitle('');
       setNewEventPoster('');
       setNewEventSummary('');
       setNewEventDate('');
+      setRefreshEvents(!refreshEvents);
     };
 
     return (
@@ -121,13 +143,20 @@ const Events = () => {
   };
 
   const renderEditEvent = () => {
-    const handleSaveChanges = () => {
-      const updatedEvents = events.map(event =>
-        event.id === selectedEvent.id ? selectedEvent : event
-      );
-      setEvents(updatedEvents);
-      localStorage.setItem('events', JSON.stringify(updatedEvents));
+    const handleSaveChanges = async () => {
+      // const updatedEvents = events.map(event =>
+      //   event._id === selectedEvent._id ? selectedEvent : event
+      // );
+      // setEvents(updatedEvents);
+      // localStorage.setItem('events', JSON.stringify(updatedEvents));
+      // setShowEditEvent(false);
+      const updatedEvent = await axiosInstance.post(`/event/editevent/${selectedEvent._id}`, {
+        title: selectedEvent.title,
+        summary: selectedEvent.summary,
+        date: selectedEvent.date
+      });
       setShowEditEvent(false);
+      setRefreshEvents(!refreshEvents);
     };
 
     return (
@@ -142,7 +171,7 @@ const Events = () => {
 
           <div className="form-group">
             <label>Date</label>
-            <input type="date" value={selectedEvent.date} onChange={(e) => setSelectedEvent({ ...selectedEvent, date: e.target.value })} />
+            <input type="date" value={selectedEvent.date.split("T")[0]} onChange={(e) => setSelectedEvent({ ...selectedEvent, date: e.target.value })} />
           </div>
           <div className="form-group">
             <label>Event summary</label>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './HomePage.scss';
 import Quiz from './quiz/Quiz';
 import CreateQuiz from './quiz/CreateQuiz';
@@ -16,16 +16,22 @@ const HomePage = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [user, setUser] = useState();
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-  const { user, logout } = useAuth();
+  const { getUser, logout } = useAuth();
+
+  useEffect(() => {
+    setUser(getUser());
+  }, []);
+
   const renderContent = () => {
     switch (currentPage) {
       case 'home':
         return (
           <div className="content">
-            <h1>Hi {user.full_name}, Welcome back!</h1>
+            <h1>Hi {user?.name}, Welcome back!</h1>
             <Grid/>
           </div>
         );
@@ -97,14 +103,14 @@ const HomePage = () => {
             )}
             <div className="profile-info" onClick={() => setShowProfileMenu(!showProfileMenu)}>
               <div className="profile-icon">JH</div>
-              <div className="profile-name">{user.full_name}</div>
+              <div className="profile-name">{user?.name}</div>
               <div className="dropdown-icon">▼</div>
               {showProfileMenu && (
                 <div className="profile-dropdown">
                   <ul>
                     <li>Profile</li>
                     <li>Settings</li>
-                    <li onClick={logout}><a href="/login">Logout</a></li>
+                    <li onClick={logout}><a href="/">Logout</a></li>
                   </ul>
                 </div>
               )}
