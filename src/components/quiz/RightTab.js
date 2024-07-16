@@ -1,43 +1,57 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import axiosInstance from '../../axiosInstance';
+import { useAuth } from '../auth/AuthContext';
 
-const RightTab = () => {
+const RightTab = (props) => {
     const [quizData, setQuizData] = useState([]);
+
+    const { getUser } = useAuth();
 
     useEffect(() => {
         const data = JSON.parse(localStorage.getItem('manualQuizData')) || [];
         setQuizData(data);
-    }, []);
+    }, [props.refreshLocalQuiz]);
 
-    const handlePublish = () => {
+    const handlePublish = async () => {
         if (quizData.length === 0) {
             alert('No questions to publish!');
             return;
         }
-
+        // console.log(quizData[0]);
+        const user = getUser();
         const publishedQuiz = {
             title: quizData[0].title,
             date: new Date().toLocaleDateString(),
-            class: quizData[0].classLevel,
+            classLevel: quizData[0].classLevel,
             language: quizData[0].language,
             totalQuestions: quizData.length,
             questions: quizData.map(item => ({
                 question: item.question,
                 options: item.options,
                 answer: item.answer
-            }))
+            })),
+            createdBy: user.email
         };
 
-        const existingQuizzes = JSON.parse(localStorage.getItem('quizzes')) || [];
-        const updatedQuizzes = [...existingQuizzes, publishedQuiz];
-        localStorage.setItem('quizzes', JSON.stringify(updatedQuizzes));
+        const response = await axiosInstance.post("/quiz/createmanualquiz", publishedQuiz); 
+
+        if (response.status === 201) {
+            alert('Quiz published successfully!');
+            localStorage.removeItem('manualQuizData');
+            setQuizData([]);
+        }
+
+        if (response.status === 203) {
+            alert(response.data.message);
+        }
+        // const existingQuizzes = JSON.parse(localStorage.getItem('quizzes')) || [];
+        // const updatedQuizzes = [...existingQuizzes, publishedQuiz];
+        // localStorage.setItem('quizzes', JSON.stringify(updatedQuizzes));
 
         // Clear manualQuizData from localStorage
-        localStorage.removeItem('manualQuizData');
 
         // Clear the displayed quiz data
-        setQuizData([]);
 
-        alert('Quiz published successfully!');
     };
 
     if (quizData.length === 0) {

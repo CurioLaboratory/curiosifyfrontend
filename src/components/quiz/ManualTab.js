@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function QuizForm() {
+function QuizForm(props) {
     const [language, setLanguage] = useState('English');
     const [title, setTitle] = useState('');
     const [question, setQuestion] = useState('');
@@ -56,6 +56,7 @@ function QuizForm() {
         const existingQuizData = JSON.parse(localStorage.getItem('manualQuizData')) || [];
         const updatedQuizData = [...existingQuizData, quizItem];
         localStorage.setItem('manualQuizData', JSON.stringify(updatedQuizData));
+        props.setRefreshLocalQuiz(!props.refreshLocalQuiz);
 
         setLanguage('English');
         setQuestion('');
