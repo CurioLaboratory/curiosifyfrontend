@@ -3,6 +3,7 @@ import './Library.scss';
 import axiosInstance from "../../axiosInstance";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUndo, faRedo } from '@fortawesome/free-solid-svg-icons'
+import { useAuth } from '../auth/AuthContext';
 
 const Library = () => {
   const [resources, setResources] = useState([]);
@@ -15,8 +16,15 @@ const Library = () => {
 
   const [newResTitle, setNewResTitle] = useState("");
   const [newResSubject, setNewResSubject] = useState("");
-  const [newResClassLevel, setNewResClassLevel] = useState("");
+  const [newResClassLevel, setNewResClassLevel] = useState("Class 9");
   const [newResDate, setNewResDate] = useState(Date.now());
+  const [user, setUser] = useState("");
+  const { getUser } = useAuth();
+  
+  useEffect(() => {
+    const userData = getUser();
+    setUser(user);
+  }, []);
 
   useEffect(() => {
     // Simulating a fetch request to the backend with dummy data
@@ -54,7 +62,8 @@ const Library = () => {
         title: newResTitle,
         subject: newResSubject,
         classLevel: newResClassLevel,
-        date: newResDate
+        date: newResDate,
+        createdBy: user._id
       });
 
       setShowCreateResource(false);

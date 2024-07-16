@@ -72,7 +72,7 @@ const Quiz = ({ onCreateQuiz }) => {
   //     }
   //     return 0;
   //   });
-  console.log("Quiz ==>", quizzes);
+  // console.log("Quiz ==>", quizzes);
   if (loading) {
     return <p>Loading...</p>;
   }

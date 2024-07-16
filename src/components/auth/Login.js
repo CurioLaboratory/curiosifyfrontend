@@ -19,11 +19,15 @@ const Login = () => {
     setError('');
     if (email.length !== 0 && password.length !== 0) {
       try {
-        const user = await axiosInstance.post("/auth/login", {
-          email, password
+        const response = await axiosInstance.post("/auth/login", {
+          email, password, role: userType
         });
-        login({ ...user.data.user, token: user.data.token});
-        navigate('/home');
+
+        if (response.status === 200) {
+          login({ ...response.data.user, token: response.data.token});
+          navigate('/home');
+        }
+
       } catch (error) {
         setError(error.response.data.message);
         console.log(error);
