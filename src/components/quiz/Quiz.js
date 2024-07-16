@@ -30,8 +30,9 @@ const Quiz = ({ onCreateQuiz }) => {
     //   setLoading(false);
     // }, 10); // Simulating network delay
     const getAllQuiz = async () => {
-      const allQuiz = await axiosInstance.get("/quiz/getallquiz");
-      setQuizzes(allQuiz);
+      const response = await axiosInstance.get("/quiz/getallquiz");
+      setQuizzes(response.data);
+      console.log(response.data);
       setLoading(false);
     };
 
@@ -147,7 +148,7 @@ const Quiz = ({ onCreateQuiz }) => {
           {/* <div className="deleteRow">
             <button className="delete-quiz-button" onClick={handleDelete} disabled={selectedQuizzes.length === 0}>Delete Quiz</button>
           </div> */}
-          <table>
+          {/* <table>
             <thead>
               <tr>
                 <th></th>
@@ -158,7 +159,7 @@ const Quiz = ({ onCreateQuiz }) => {
                 <th></th>
               </tr>
             </thead>
-              <tbody>
+              <tbody> */}
                 
 
                 
@@ -179,7 +180,7 @@ const Quiz = ({ onCreateQuiz }) => {
                   <td>...</td>
                 </tr>
               ))} */}
-                {/* {quizzes.map((quiz, quizIndex) => (
+                {quizzes.map((quiz, quizIndex) => (
                   <div key={quizIndex} className="quiz-container">
                     <h2>{quiz.title}</h2>
                     <p>Language: {quiz.language}</p>
@@ -203,9 +204,9 @@ const Quiz = ({ onCreateQuiz }) => {
                       ))}
                     </div>
                   </div>
-                ))} */}
-            </tbody>
-          </table>
+                ))}
+            {/* </tbody>
+          </table> */}
         </div>
       )}
     </div>
