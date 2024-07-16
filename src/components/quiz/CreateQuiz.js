@@ -19,6 +19,7 @@ const CreateQuiz = () => {
   const [question, setQuestion] = useState('');
   const [options, setOptions] = useState(['', '', '', '']);
   const [answer, setAnswer] = useState('');
+  const [refreshLocalQuiz, setRefreshLocalQuiz] = useState(true);
 
   const handleDocumentUpload = (event) => {
     setDocument(event.target.files[0]);
@@ -146,7 +147,7 @@ const CreateQuiz = () => {
   );
 
   const renderManualTab = () => (
-   <ManualTab/>
+   <ManualTab refreshLocalQuiz={refreshLocalQuiz} setRefreshLocalQuiz={setRefreshLocalQuiz} />
   );
 
   return (
@@ -185,7 +186,7 @@ const CreateQuiz = () => {
               Publish
             </button>
           </div> */}
-          <RightTab/>
+          <RightTab refreshLocalQuiz={refreshLocalQuiz} />
         </div>
       </div>
 
