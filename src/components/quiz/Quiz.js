@@ -32,7 +32,7 @@ const Quiz = ({ onCreateQuiz }) => {
     const getAllQuiz = async () => {
       const response = await axiosInstance.get("/quiz/getallquiz");
       setQuizzes(response.data);
-      console.log(response.data);
+      // console.log(response.data);
       setLoading(false);
     };
 

@@ -27,7 +27,7 @@ const Register = () => {
     if (formData.password.length !== 0 && (formData.password === rePassword)) {
       try {
         const user = await axiosInstance.post("/auth/signup", {...formData, role: userType});
-        console.log(user);
+        // console.log(user);
         login(user);
         navigate('/', {
           state: {

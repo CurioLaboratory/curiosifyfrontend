@@ -2,22 +2,19 @@ import axios from "axios";
 
 const baseURL = "http://localhost:5000/api";
 
-const user = JSON.parse(localStorage.getItem("user"));
-
 const instance = axios.create({
     baseURL,
     headers: {
         "Content-Type": "application/json",
-        "authToken": user?.token 
     },
 });
 
 // Request interceptor to add token to headers
 instance.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            config.headers.authorization = `Bearer ${token}`;
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (user) {
+            config.headers.authToken = `${user.token}`;
         }
         return config;
     },
