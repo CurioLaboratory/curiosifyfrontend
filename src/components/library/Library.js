@@ -16,7 +16,7 @@ const Library = () => {
 
   const [newResTitle, setNewResTitle] = useState("");
   const [newResSubject, setNewResSubject] = useState("");
-  const [newResClassLevel, setNewResClassLevel] = useState("Class 9");
+  const [newResClassLevel, setNewResClassLevel] = useState(9);
   const [newResDate, setNewResDate] = useState(Date.now());
   const [user, setUser] = useState("");
   const { getUser } = useAuth();
@@ -115,7 +115,7 @@ const Library = () => {
             </div>
             <h3>{resource.title}</h3>
             <p>Subject: {resource.subject}</p>
-            <p>Class: {resource.class}</p>
+            <p>Class: {resource.classLevel}</p>
           </div>
         ))}
       </div>
@@ -134,7 +134,7 @@ const Library = () => {
           <label>Enter Note title</label>
           <input type="text" value={newResTitle} onChange={(e) => setNewResTitle(e.target.value)}/>
           <label>Enter Class Level</label>
-          <select onChange={(e) => setNewResClassLevel(e.target.value)} value={newResClassLevel}>
+          <select onChange={(e) => setNewResClassLevel(parseInt(e.target.value, 10))} value={newResClassLevel}>
           <option value="9">Class 9</option>
           <option value="10">Class 10</option>
           <option value="11">Class 11</option>
