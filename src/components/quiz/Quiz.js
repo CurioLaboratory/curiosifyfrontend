@@ -10,6 +10,8 @@ const Quiz = ({ onCreateQuiz }) => {
   const [selectedClass, setSelectedClass] = useState('');
   const [sortOption, setSortOption] = useState('');
   const [selectedQuiz, setSelectedQuiz] = useState(null);
+  const [refreshAllQuiz, setRefreshAllQuiz] = useState(true);
+
   const renderNoQuizzes = () => (
     <div className="no-quizzes">
       <p>You don't have any quiz</p>
@@ -32,12 +34,12 @@ const Quiz = ({ onCreateQuiz }) => {
     const getAllQuiz = async () => {
       const response = await axiosInstance.get("/quiz/getallquiz");
       setQuizzes(response.data);
-      console.log(response.data);
+      // console.log(response.data);
       setLoading(false);
     };
 
     getAllQuiz();
-  }, []);
+  }, [refreshAllQuiz]);
 
   const handleCheckboxChange = (id) => {
     setSelectedQuizzes((prevSelectedQuizzes) =>
@@ -47,11 +49,19 @@ const Quiz = ({ onCreateQuiz }) => {
     );
   };
 
-  const handleDelete = () => {
-    setQuizzes((prevQuizzes) =>
-      prevQuizzes.filter((quiz) => !selectedQuizzes.includes(quiz.id))
-    );
-    setSelectedQuizzes([]);
+  const handleDelete = async (id) => {
+    // setQuizzes((prevQuizzes) =>
+    //   prevQuizzes.filter((quiz) => !selectedQuizzes.includes(quiz.id))
+    // );
+    // setSelectedQuizzes([]);
+    const response = await axiosInstance.delete(`/quiz/deletequiz/${id}`);
+
+    if (response.status === 200) {
+      window.alert("Quiz deleted successfully!");
+      setRefreshAllQuiz(!refreshAllQuiz);
+    } else {
+      console.log(response);
+    }
   };
 
   const handleQuizClick = (quiz) => {
@@ -142,9 +152,9 @@ const Quiz = ({ onCreateQuiz }) => {
             </div>
 
           </div> */}
-          <div className="deleteRow">
+          {/* <div className="deleteRow">
             <button className="delete-quiz-button" >Delete Quiz</button>
-          </div>
+          </div> */}
           {/* <div className="deleteRow">
             <button className="delete-quiz-button" onClick={handleDelete} disabled={selectedQuizzes.length === 0}>Delete Quiz</button>
           </div> */}
@@ -203,6 +213,7 @@ const Quiz = ({ onCreateQuiz }) => {
                         </div>
                       ))}
                     </div>
+                    <button className="delete-quiz-button" onClick={() => handleDelete(quiz._id)} >Delete Quiz</button>
                   </div>
                 ))}
             {/* </tbody>
