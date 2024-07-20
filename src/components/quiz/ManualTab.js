@@ -50,6 +50,7 @@ function QuizForm(props) {
             options,
             answer,
             classLevel,
+            totalQuestions,
             date: formatDate(new Date())
         };
 
