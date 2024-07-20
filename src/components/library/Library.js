@@ -20,7 +20,7 @@ const Library = () => {
   const [newResDate, setNewResDate] = useState(Date.now());
   const [user, setUser] = useState("");
   const { getUser } = useAuth();
-  
+
   useEffect(() => {
     const userData = getUser();
     setUser(user);
@@ -109,15 +109,21 @@ const Library = () => {
       </div>
       <div className="resources-content">
         {filteredResources.map(resource => (
-          <div className="resource-card" key={resource._id}>
-            <div>
-              <img className="event-delete-button" onClick={() => handleDeleteResource(resource._id)} src="/icons/dustbin.png" alt="Quiz" />
+          <div className="card" key={resource._id}>
+            <div className="card-icon">
+              <img className="event-delete-button" src="/icons/file.png" alt="Quiz" />
             </div>
-            <h3>{resource.title}</h3>
-            <p>Subject: {resource.subject}</p>
-            <p>Class: {resource.classLevel}</p>
+            <div className="card-content">
+              <h3 className="card-title">{resource.title}</h3>
+              <p className="card-subject"> {resource.subject}</p>
+              <p className="card-class">Class: {resource.classLevel} </p>
+            </div>
+            <div className="card-options">
+              <img className="event-delete-button icon-options" onClick={() => handleDeleteResource(resource._id)}  src="/icons/dustbin.png" alt="Quiz" />
+            </div>
           </div>
         ))}
+
       </div>
     </div>
   );
@@ -132,14 +138,14 @@ const Library = () => {
       <form>
         <div className="form-group">
           <label>Enter Note title</label>
-          <input type="text" value={newResTitle} onChange={(e) => setNewResTitle(e.target.value)}/>
+          <input type="text" value={newResTitle} onChange={(e) => setNewResTitle(e.target.value)} />
           <label>Enter Class Level</label>
           <select onChange={(e) => setNewResClassLevel(parseInt(e.target.value, 10))} value={newResClassLevel}>
-          <option value="9">Class 9</option>
-          <option value="10">Class 10</option>
-          <option value="11">Class 11</option>
-          <option value="12">Class 12</option>
-        </select>
+            <option value="9">Class 9</option>
+            <option value="10">Class 10</option>
+            <option value="11">Class 11</option>
+            <option value="12">Class 12</option>
+          </select>
         </div>
         <div className="form-group">
           <div className="rich-text-editor-toolbar">
