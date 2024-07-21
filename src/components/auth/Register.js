@@ -4,6 +4,8 @@ import { useAuth } from './AuthContext';
 // import { registerUser } from './AuthAPI';
 import './Register.scss';
 import axiosInstance from "../../axiosInstance";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
   const [userType, setUserType] = useState('teacher');
@@ -13,7 +15,7 @@ const Register = () => {
     password: '',
   });
   const [rePassword, setRePassword] = useState('');
-  const [error, setError] = useState('');
+  // const [error, setError] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -23,49 +25,33 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    // setError('');
     if (formData.password.length !== 0 && (formData.password === rePassword)) {
       try {
-        const user = await axiosInstance.post("/auth/signup", {...formData, role: userType});
-        // console.log(user);
+        const user = await axiosInstance.post("/auth/signup", { ...formData, role: userType });
+        console.log(user);
         login(user);
-        navigate('/', {
-          state: {
-            registered: true
-          }
+        toast.success("Registration Successfull", {
+          position: "top-right",
+          autoClose: 2000
         });
+        setTimeout(() => {
+          navigate('/', {
+            state: {
+              registered: true
+            }
+          });
+        }, 3000);
       } catch (error) {
-        setError(error.response.data.message);
+        // setError(error.response.data.message);
+        toast.warn("Invalid Credentials", {
+          position: "top-right",
+          autoClose: 2000
+        });
         console.log(error);
       }
-    } else {
-      setError("Invalid Password!");
-    }
+    } 
   }
-
-  // const teacherSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setError('');
-  //   try {
-  //     const user = await registerUser(formData);
-  //     login(user);
-  //     navigate('/login');
-  //   } catch (error) {
-  //     setError(error.message);
-  //   }
-  // };
-
-  // const studentSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setError('');
-  //   try {
-  //     const user = await registerUser(formData);
-  //     login(user);
-  //     navigate('/login');
-  //   } catch (error) {
-  //     setError(error.message);
-  //   }
-  // };
 
   return (
     <div className="register-container">
@@ -89,7 +75,7 @@ const Register = () => {
       </div>
       {userType === 'teacher' ?
         <form onSubmit={handleSubmit}>
-          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {/* {error && <p style={{ color: 'red' }}>{error}</p>} */}
           <label>
             Teacher Name
             <input
@@ -139,7 +125,7 @@ const Register = () => {
           </div>
           <button className="form-button" type="submit">Login</button>
         </form> : <form onSubmit={handleSubmit}>
-          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {/* {error && <p style={{ color: 'red' }}>{error}</p>} */}
           <label>
             Student Name
             <input
@@ -189,7 +175,7 @@ const Register = () => {
           </div>
           <button className="form-button" type="submit">Login</button>
         </form>}
-
+      <ToastContainer />
     </div>
   );
 };

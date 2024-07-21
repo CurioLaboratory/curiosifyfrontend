@@ -4,6 +4,8 @@ import axiosInstance from "../../axiosInstance";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUndo, faRedo } from '@fortawesome/free-solid-svg-icons'
 import { useAuth } from '../auth/AuthContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Library = () => {
   const [resources, setResources] = useState([]);
@@ -27,17 +29,6 @@ const Library = () => {
   }, []);
 
   useEffect(() => {
-    // Simulating a fetch request to the backend with dummy data
-    // setTimeout(() => {
-    //   const dummyData = [
-    //     { id: 1, title: 'Linear Equations', subject: 'Maths', class: 9 },
-    //     { id: 2, title: 'Cell structure and function', subject: 'Biology', class: 10 },
-    //     { id: 3, title: 'Atomic structure', subject: 'Chemistry', class: 11 },
-    //   ];
-    //   setResources(dummyData);
-    //   setLoading(false);
-    // }, 10); // Simulating network delay
-
     const getAllResources = async () => {
       const response = await axiosInstance.get("/library/getallresource");
       setResources(response.data);
@@ -65,7 +56,10 @@ const Library = () => {
         date: newResDate,
         createdBy: user._id
       });
-
+      toast.success("Resource Added!", {
+        position: "top-right",
+        autoClose: 1000
+      });
       setShowCreateResource(false);
       setRefreshResources(!refreshResources);
     }
@@ -74,6 +68,10 @@ const Library = () => {
   const handleDeleteResource = async (resourceId) => {
     try {
       const deletedResource = await axiosInstance.delete(`/library/deleteresource/${resourceId}`);
+      toast.error("Resource Deleted!", {
+        position: "top-right",
+        autoClose: 1000
+      });
       setRefreshResources(!refreshResources);
     } catch (error) {
       console.log(error);
@@ -109,7 +107,7 @@ const Library = () => {
       </div>
       <div className="resources-content">
         {filteredResources.map(resource => (
-          <div className="card" key={resource._id}>
+          <div className="card-lib" key={resource._id}>
             <div className="card-icon">
               <img className="event-delete-button" src="/icons/file.png" alt="Quiz" />
             </div>
@@ -224,6 +222,7 @@ const Library = () => {
     <div className="library-page">
       {showCreateResource ? renderCreateResource() : (resources.length === 0 ? renderNoResources() : renderResources())}
       {showUploadModal && renderUploadModal()}
+      <ToastContainer />
     </div>
   );
 };

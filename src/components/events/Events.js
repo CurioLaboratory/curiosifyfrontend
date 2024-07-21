@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Events.scss';
 import axiosInstance from "../../axiosInstance";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Events = () => {
   const [events, setEvents] = useState([]);
@@ -17,9 +19,6 @@ const Events = () => {
   const [newEventDate, setNewEventDate] = useState('');
 
   useEffect(() => {
-    // const storedEvents = JSON.parse(localStorage.getItem('events') || '[]');
-    // setEvents(storedEvents);
-    // setLoading(false);
     const getAllEvents = async () => {
       const response = await axiosInstance.get("/event/getallevent");
       setEvents(response.data);
@@ -44,10 +43,11 @@ const Events = () => {
   };
 
   const handleDeleteEvent = async (eventId) => {
-    // const updatedEvents = events?.filter(event => event.id !== eventId);
-    // setEvents(updatedEvents);
-    // localStorage.setItem('events', JSON.stringify(updatedEvents));
     const deletedEvent = await axiosInstance.delete(`/event/deleteevent/${eventId}`);
+    toast.error("Event Deleted", {
+      position: "top-right",
+      autoClose: 1000
+    });
     setRefreshEvents(!refreshEvents);
   };
 
@@ -102,10 +102,10 @@ const Events = () => {
         summary: newEventSummary,
         date: newEventDate 
       });
-
-      // const updatedEvents = [...events, newEvent];
-      // setEvents(updatedEvents);
-      // localStorage.setItem('events', JSON.stringify(updatedEvents));
+      toast.success("Event Added Successfull", {
+        position: "top-right",
+        autoClose: 1000
+      });
       setShowCreateEvent(false);
       setNewEventTitle('');
       setNewEventPoster('');
@@ -144,16 +144,14 @@ const Events = () => {
 
   const renderEditEvent = () => {
     const handleSaveChanges = async () => {
-      // const updatedEvents = events.map(event =>
-      //   event._id === selectedEvent._id ? selectedEvent : event
-      // );
-      // setEvents(updatedEvents);
-      // localStorage.setItem('events', JSON.stringify(updatedEvents));
-      // setShowEditEvent(false);
       const updatedEvent = await axiosInstance.post(`/event/editevent/${selectedEvent._id}`, {
         title: selectedEvent.title,
         summary: selectedEvent.summary,
         date: selectedEvent.date
+      });
+      toast.success("Event Edit Successfull", {
+        position: "top-right",
+        autoClose: 1000
       });
       setShowEditEvent(false);
       setRefreshEvents(!refreshEvents);
@@ -168,7 +166,6 @@ const Events = () => {
             <label>Enter a title</label>
             <input type="text" value={selectedEvent.title} onChange={(e) => setSelectedEvent({ ...selectedEvent, title: e.target.value })} />
           </div>
-
           <div className="form-group">
             <label>Date</label>
             <input type="date" value={selectedEvent.date.split("T")[0]} onChange={(e) => setSelectedEvent({ ...selectedEvent, date: e.target.value })} />
@@ -194,6 +191,7 @@ const Events = () => {
   return (
     <div className="events-page">
       {showCreateEvent ? renderCreateEvent() : showEditEvent ? renderEditEvent() : (events.length === 0 ? renderNoEvents() : renderEvents())}
+      <ToastContainer />
     </div>
   );
 };
