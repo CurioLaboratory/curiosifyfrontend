@@ -3,6 +3,8 @@ import axiosInstance from '../../axiosInstance';
 import { useAuth } from '../auth/AuthContext';
 import Card from 'react-bootstrap/Card';
 import './Righttab.scss'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const RightTab = (props) => {
     const [quizData, setQuizData] = useState([]);
@@ -15,14 +17,22 @@ const RightTab = (props) => {
     }, [props.refreshLocalQuiz]);
 
     const handleReset = async () => {
-        alert('Quiz Reset successfully!');
+        toast.success("Quiz Reset successfully!", {
+            position: "top-right",
+            autoClose: 1000
+        });
+        // alert('Quiz Reset successfully!');
         localStorage.removeItem('manualQuizData');
         setQuizData([]);
     }
 
     const handlePublish = async () => {
         if (quizData.length === 0) {
-            alert('No questions to publish!');
+            toast.info("No questions to publish!", {
+                position: "top-right",
+                autoClose: 1000
+            });
+            // alert('No questions to publish!');
             return;
         }
         // console.log(quizData[0]);
@@ -44,7 +54,11 @@ const RightTab = (props) => {
         const response = await axiosInstance.post("/quiz/createmanualquiz", publishedQuiz);
 
         if (response.status === 201) {
-            alert('Quiz published successfully!');
+            toast.success("Quiz published successfully!", {
+                position: "top-right",
+                autoClose: 1000
+            });
+            // alert('Quiz published successfully!');
             localStorage.removeItem('manualQuizData');
             setQuizData([]);
         }
@@ -74,7 +88,7 @@ const RightTab = (props) => {
                 </div>
             </div>
             <div className="quiz-data-display">
-                <Card className="text-center">
+                <Card className="text-center cardBody">
                     <Card.Body>
                         <Card.Title className='cardTitle '>
                             {/* <h1>Title : {quizData[0].title}</h1> */}
@@ -98,6 +112,7 @@ const RightTab = (props) => {
 
                     </Card.Body>
                 </Card>
+                <ToastContainer />
             </div>
         </>
     )

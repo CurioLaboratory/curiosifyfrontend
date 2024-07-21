@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function QuizForm(props) {
     const [language, setLanguage] = useState('English');
     const [title, setTitle] = useState('');
@@ -69,8 +70,11 @@ function QuizForm(props) {
         if (!existingTitle) {
             setExistingTitle(title);
         }
-
-        alert('Quiz question added successfully!');
+        toast.success("Quiz question added successfully!", {
+            position: "top-right",
+            autoClose: 1000
+        });
+        // alert('Quiz question added successfully!');
     };
 
     return (
@@ -140,6 +144,7 @@ function QuizForm(props) {
                     Add Question
                 </button>
             </form>
+            <ToastContainer />
         </div>
     );
 }
