@@ -187,7 +187,7 @@ const Register = () => {
             <a href="/forgot-password">Forgot Password?</a>
             <a href="/">Login</a>
           </div>
-          <button className="form-button" type="submit">Login</button>
+          <button className="form-button" type="submit">Register</button>
         </form>}
 
     </div>
