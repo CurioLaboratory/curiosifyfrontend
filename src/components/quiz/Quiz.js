@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Quiz.scss';
 import axiosInstance from "../../axiosInstance";
+import Table from 'react-bootstrap/Table';
 
 const Quiz = ({ onCreateQuiz }) => {
   const [quizzes, setQuizzes] = useState([]);
@@ -122,82 +123,32 @@ const Quiz = ({ onCreateQuiz }) => {
             <h1>Quiz</h1>
             <button className="create-quiz-button" onClick={onCreateQuiz}>+ Create new quiz</button>
           </div>
-          {/* <div className="quizzes-controls">
-          <input
-              type="text"
-              className="search-bar"
-              placeholder="Search"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <div className="filters">
-              <select
-                className="filter-by-class"
-                value={selectedClass}
-                onChange={(e) => setSelectedClass(e.target.value)}
-              >
-                <option value="">Filter by Class</option>
-                <option value="11">Class 11</option>
-                <option value="12">Class 12</option>
-              </select>
-              <select
-                className="sort-by"
-                value={sortOption}
-                onChange={(e) => setSortOption(e.target.value)}
-              >
-                <option value="">Sort by</option>
-                <option value="date">Date</option>
-                <option value="questions">Number of Questions</option>
-              </select>
-            </div>
-
-          </div> */}
-          {/* <div className="deleteRow">
-            <button className="delete-quiz-button" >Delete Quiz</button>
-          </div> */}
-          {/* <div className="deleteRow">
-            <button className="delete-quiz-button" onClick={handleDelete} disabled={selectedQuizzes.length === 0}>Delete Quiz</button>
-          </div> */}
-          {/* <table>
+          <Table striped bordered hover>
             <thead>
               <tr>
-                <th></th>
-                <th>QUIZ</th>
-                <th>NO. OF QUESTIONS</th>
-                <th>CLASS</th>
-                <th>CREATED ON</th>
-                <th></th>
+                <th>Quiz</th>
+                <th>No. of Questions</th>
+                <th>Class</th>
+                <th>Created On</th>
+                <th>Delete</th>
               </tr>
             </thead>
-              <tbody> */}
-                
-
-                
-              {/* {filteredQuizzes.map((quiz) => (
-                <tr key={quiz.id} onClick={() => handleQuizClick(quiz)}>
+            <tbody>
+              {quizzes.map((quiz, quizIndex) => (
+                <tr key={quizIndex}>
+                  <td>{quiz.title}</td>
+                  <td>{quiz.totalQuestions}</td>
+                  <td>{quiz.classLevel}</td>
+                  <td>{quiz.date}</td>
                   <td>
-                    <input
-                      type="checkbox"
-                      checked={selectedQuizzes.includes(quiz.id)}
-                      onChange={() => handleCheckboxChange(quiz.id)}
-                      onClick={(e) => e.stopPropagation()}
-                    />
+                    <img className="event-delete-button" style={{ cursor: "pointer" }} onClick={() => handleDelete(quiz._id)} src="/icons/dustbin.png" alt="Quiz" />
                   </td>
-                  <td>{quiz.name}</td>
-                  <td>{quiz.numOfQuestions}</td>
-                  <td>{quiz.class}</td>
-                  <td>{quiz.createdOn}</td>
-                  <td>...</td>
-                </tr>
-              ))} */}
-                {quizzes.map((quiz, quizIndex) => (
-                  <div key={quizIndex} className="quiz-container">
-                    <h2>{quiz.title}</h2>
+                  {/* <h2>{quiz.title}</h2>
                     <p>Language: {quiz.language}</p>
                     <p>Class: {quiz.class}</p>
                     <p>Date Published: {quiz.date}</p>
-                    <p>Total Questions: {quiz.totalQuestions}</p>
-                    <div className="questions-container">
+                    <p>Total Questions: {quiz.totalQuestions}</p> */}
+                  {/* <div className="questions-container">
                       {quiz.questions.map((item, questionIndex) => (
                         <div key={questionIndex} className="quiz-question">
                           <h3>Question {questionIndex + 1}</h3>
@@ -212,12 +163,12 @@ const Quiz = ({ onCreateQuiz }) => {
                           <p>Correct Answer: {item.answer}</p>
                         </div>
                       ))}
-                    </div>
-                    <button className="delete-quiz-button" onClick={() => handleDelete(quiz._id)} >Delete Quiz</button>
-                  </div>
-                ))}
-            {/* </tbody>
-          </table> */}
+                    </div> */}
+
+                </tr>
+              ))}
+            </tbody>
+          </Table>
         </div>
       )}
     </div>
