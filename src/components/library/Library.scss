@@ -309,6 +309,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   flex: 1 1 calc(33.333% - 20px);
   max-width: calc(33.333% - 45px);
+  cursor: pointer;
 
   .card-icon {
     flex: 0 0 auto;
@@ -360,5 +361,17 @@
       color: #666;
       cursor: pointer;
     }
+  }
+}
+
+.back-button-res {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 20px;
+
+  &:hover {
+    color: #ff9900;
   }
 }

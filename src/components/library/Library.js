@@ -14,8 +14,9 @@ const Library = () => {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [selectedTab, setSelectedTab] = useState('assignments');
   const [filterClass, setFilterClass] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [refreshResources, setRefreshResources] = useState(true);
-
+  const [selectedResource, setSelectedResource] = useState(null);
   const [newResTitle, setNewResTitle] = useState("");
   const [newResSubject, setNewResSubject] = useState("");
   const [newResClassLevel, setNewResClassLevel] = useState(9);
@@ -25,7 +26,7 @@ const Library = () => {
 
   useEffect(() => {
     const userData = getUser();
-    setUser(user);
+    setUser(userData);
   }, []);
 
   useEffect(() => {
@@ -42,8 +43,14 @@ const Library = () => {
     setFilterClass(event.target.value);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
   const filteredResources = resources.filter(resource =>
-    filterClass ? resource.class.toString() === filterClass : true
+    (filterClass ? resource.classLevel.toString() === filterClass : true) &&
+    (searchTerm ? resource.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      resource.subject.toLowerCase().includes(searchTerm.toLowerCase()) : true)
   );
 
   const handleSave = async (e) => {
@@ -78,6 +85,10 @@ const Library = () => {
     }
   }
 
+  const handleResourceSelect = (resource) => {
+    setSelectedResource(resource);
+  }
+
   const renderNoResources = () => (
     <div className="no-resources">
       <p>You don't have any resources</p>
@@ -92,7 +103,12 @@ const Library = () => {
         <button className="create-resource-button" onClick={() => setShowCreateResource(true)}>+ Create a resource</button>
       </div>
       <div className="filters">
-        <input type="text" placeholder="Search for topic of the subject" />
+        <input
+          type="text"
+          placeholder="Search for topic or subject"
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
         <select onChange={handleFilterChange} value={filterClass}>
           <option value="">Filter by class</option>
           <option value="9">Class 9</option>
@@ -107,7 +123,7 @@ const Library = () => {
       </div>
       <div className="resources-content">
         {filteredResources.map(resource => (
-          <div className="card-lib" key={resource._id}>
+          <div className="card-lib" key={resource._id} onClick={() => handleResourceSelect(resource)}>
             <div className="card-icon">
               <img className="event-delete-button" src="/icons/file.png" alt="Quiz" />
             </div>
@@ -117,11 +133,18 @@ const Library = () => {
               <p className="card-class">Class: {resource.classLevel} </p>
             </div>
             <div className="card-options">
-              <img className="event-delete-button icon-options" onClick={() => handleDeleteResource(resource._id)}  src="/icons/dustbin.png" alt="Quiz" />
+              <img
+                className="event-delete-button icon-options"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteResource(resource._id);
+                }}
+                src="/icons/dustbin.png"
+                alt="Delete"
+              />
             </div>
           </div>
         ))}
-
       </div>
     </div>
   );
@@ -214,13 +237,26 @@ const Library = () => {
     </div>
   );
 
+  const renderSelectedResource = () => (
+    <div className="selected-resource">
+      {/* <button onClick={() => setSelectedResource(null)}>Back to Library</button> */}
+      <button className="back-button-res" onClick={() => setSelectedResource(null)}>← Back</button>
+      <h2>{selectedResource.title}</h2>
+      {/* Add more details about the selected resource here */}
+    </div>
+  );
+
   if (loading) {
     return <p>Loading...</p>;
   }
 
   return (
     <div className="library-page">
-      {showCreateResource ? renderCreateResource() : (resources.length === 0 ? renderNoResources() : renderResources())}
+      {selectedResource ? renderSelectedResource() :
+        (showCreateResource ? renderCreateResource() :
+          (resources.length === 0 ? renderNoResources() : renderResources())
+        )
+      }
       {showUploadModal && renderUploadModal()}
       <ToastContainer />
     </div>
