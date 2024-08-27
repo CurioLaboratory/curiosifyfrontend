@@ -10,7 +10,8 @@ import { useAuth } from './auth/AuthContext';
 import Grid from './Grid';
 import FlashCard from './flashCard/FlashCard';
 import CreateFlashCard from './flashCard/CreateFlashCard';
-
+import CreateContent from './createContent/Createcontent';
+import Create_assigment from './createContent/Create_assigment'
 const HomePage = () => {
   const [selectedMenu, setSelectedMenu] = useState('home');
   const [currentPage, setCurrentPage] = useState('home');
@@ -50,6 +51,10 @@ const HomePage = () => {
         return <FlashCard onCreateFlashCards={() => setCurrentPage('create-flashcards')} />
       case 'create-flashcards':
         return <CreateFlashCard setCurrentPage={setCurrentPage} />;
+      case 'create-content':
+        return <CreateContent onCreateAssigment={()=>setCurrentPage('create-assigment')}/>
+      case 'create-assigment':
+        return <Create_assigment/>    
       case 'student-management':
         return <StudentManagement />;
       default:
@@ -79,7 +84,7 @@ const HomePage = () => {
           <li onClick={() => { setSelectedMenu('flashcards'); setCurrentPage('flashcards'); }} className={selectedMenu === 'flashcards' ? 'active' : ''}>
             <img src="/icons/flashcards.png" alt="Flashcards" /> Flashcards
           </li>
-          <li onClick={() => setSelectedMenu('create-content')} className={selectedMenu === 'create-content' ? 'active' : ''}>
+          <li onClick={() => {setSelectedMenu('create-content');setCurrentPage('create-content');}} className={selectedMenu === 'create-content' ? 'active' : ''}>
             <img src="/icons/create-content.png" alt="Create content with Curio AI" /> Create content with Curio AI
           </li>
           <li onClick={() => { setSelectedMenu('student-management'); setCurrentPage('student-management'); }} className={selectedMenu === 'student-management' ? 'active' : ''}>
