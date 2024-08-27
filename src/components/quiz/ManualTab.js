@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-
-function QuizForm() {
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+function QuizForm(props) {
     const [language, setLanguage] = useState('English');
     const [title, setTitle] = useState('');
     const [question, setQuestion] = useState('');
@@ -50,12 +51,14 @@ function QuizForm() {
             options,
             answer,
             classLevel,
+            totalQuestions,
             date: formatDate(new Date())
         };
 
         const existingQuizData = JSON.parse(localStorage.getItem('manualQuizData')) || [];
         const updatedQuizData = [...existingQuizData, quizItem];
         localStorage.setItem('manualQuizData', JSON.stringify(updatedQuizData));
+        props.setRefreshLocalQuiz(!props.refreshLocalQuiz);
 
         setLanguage('English');
         setQuestion('');
@@ -67,8 +70,11 @@ function QuizForm() {
         if (!existingTitle) {
             setExistingTitle(title);
         }
-
-        alert('Quiz question added successfully!');
+        toast.success("Quiz question added successfully!", {
+            position: "top-right",
+            autoClose: 1000
+        });
+        // alert('Quiz question added successfully!');
     };
 
     return (
@@ -138,6 +144,7 @@ function QuizForm() {
                     Add Question
                 </button>
             </form>
+            <ToastContainer />
         </div>
     );
 }

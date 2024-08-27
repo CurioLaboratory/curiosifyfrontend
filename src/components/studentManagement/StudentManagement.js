@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './StudentManagement.scss';
+import axiosInstance from "../../axiosInstance";
 
 const StudentManagement = () => {
   const [batches, setBatches] = useState([]);
@@ -9,59 +10,147 @@ const StudentManagement = () => {
   const [students, setStudents] = useState([]);
   const [showStudentList, setShowStudentList] = useState(false);
   const [currentBatch, setCurrentBatch] = useState(null);
+  const [refreshBatches, setRefreshBatches] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [studentEmail, setStudentEmail] = useState("");
 
-  const handleCreateBatch = () => {
-    const newBatch = { id: Date.now(), name: batchName, subject: subject, students: [] };
-    setBatches([...batches, newBatch]);
-    setShowCreateBatch(false);
+  useEffect(() => {
+    const getAllBatches = async () => {
+      const response = await axiosInstance.get("/studentManagement/getAllBatches");
+      if (response.status === 200) {
+        setBatches(response.data.allBatches);
+        setLoading(false);
+      }
+    };
+
+    getAllBatches();
+  }, [refreshBatches]);
+
+  const handleCreateBatch = async () => {
+    // const newBatch = { id: Date.now(), name: batchName, subject: subject, students: [] };
+    const response = await axiosInstance.post("/studentManagement/createBatch", {
+      batchName,
+      subject,
+      dateCreated: Date.now()
+    });
+
+    if (response.status === 201) {
+      setBatchName("");
+      setSubject("");
+      setShowCreateBatch(false);
+      setRefreshBatches(!refreshBatches);
+    }
+    // setBatches([...batches, newBatch]);
   };
 
-  const handleAddStudent = (email) => {
-    const updatedBatch = { ...currentBatch, students: [...currentBatch.students, { email, id: Date.now() }] };
-    setBatches(batches.map(batch => (batch.id === currentBatch.id ? updatedBatch : batch)));
-    setStudents(updatedBatch.students);
+  const handleAddStudent = async () => {
+    // const updatedBatch = { ...currentBatch, students: [...currentBatch.students, { email, id: Date.now() }] };
+    // setBatches(batches.map(batch => (batch.id === currentBatch.id ? updatedBatch : batch)));
+    // setStudents(updatedBatch.students);
+    try {
+      const response = await axiosInstance.post(`/studentManagement/addEmail/${currentBatch._id}`, {
+        studentEmail
+      });
+      if (response.status === 200) {
+        setError("");
+        getBatch(currentBatch._id);
+        setStudentEmail("");
+      }
+    } catch (error) {
+      if (error.response.status === 406 || error.response.status === 404 || error.response.status === 409) {
+        setError(error.response.data.message);
+      }
+    }
   };
 
-  const handleDeleteStudent = (id) => {
-    const updatedBatch = { ...currentBatch, students: currentBatch.students.filter(student => student.id !== id) };
-    setBatches(batches.map(batch => (batch.id === currentBatch.id ? updatedBatch : batch)));
-    setStudents(updatedBatch.students);
+  const handleDeleteStudent = async (email) => {
+    // const updatedBatch = { ...currentBatch, students: currentBatch.students.filter(student => student.id !== id) };
+    // setBatches(batches.map(batch => (batch.id === currentBatch.id ? updatedBatch : batch)));
+    // setStudents(updatedBatch.students);
+    try {
+      const response = await axiosInstance.post(`/studentManagement/deleteEmail/${currentBatch._id}`, {
+        studentEmail: email
+      });
+
+      if (response.status === 201) {
+        getBatch(currentBatch._id);
+      }
+    } catch (error) {
+      setError("Error deleting the student.");
+    }
   };
 
-  const handleBatchClick = (batch) => {
-    setCurrentBatch(batch);
-    setStudents(batch.students);
-    setShowStudentList(true);
+  const handleBatchClick = (batchId) => {
+    if (getBatch(batchId)) setShowStudentList(true);
   };
+
+  const getBatch = async (batchId) => {
+    const response = await axiosInstance.get(`/studentManagement/getBatch/${batchId}`);
+    if (response.status === 200) {
+      setCurrentBatch(response.data.batch);
+      setStudents(response.data.batch.students);
+      return true;
+    }
+    return false;
+  }
+
+  const formatDate = (dateString) => {
+    const date = new Date(Number(dateString));
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`;
+  };
+
+  const handleKeyDown = (e) => {
+    switch (e.key) {
+      case 'Enter':
+        handleAddStudent();
+        break;
+      default:
+        if (error.length !== 0) setError("");
+        break;
+    }
+  }
 
   return (
     <div className="student-management">
       {showStudentList ? (
         <div className="student-list">
           <button onClick={() => setShowStudentList(false)}>Back</button>
-          <h1>Batch - {currentBatch.name}</h1>
+          <h1>Batch - {currentBatch?.name}</h1>
+          {error.length !== 0 && <div id='error-msg'>{error}</div>}
           <div className="student-add">
-            <input type="text" placeholder="Email ID" onKeyDown={(e) => e.key === 'Enter' && handleAddStudent(e.target.value)} />
-            <button onClick={() => handleAddStudent(document.querySelector('input').value)}>Add</button>
+            <input type="text" placeholder="Email ID" value={studentEmail} onChange={(e) => setStudentEmail(e.target.value)} onKeyDown={handleKeyDown} />
+            <button onClick={handleAddStudent}>Add</button>
           </div>
-          <div className="student-list">
-            <table>
-              <thead>
-                <tr>
-                  <th>Email ID</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {students.map(student => (
-                  <tr key={student.id}>
-                    <td>{student.email}</td>
-                    <td><button onClick={() => handleDeleteStudent(student.id)}>Delete</button></td>
+            {students.length === 0 ? (
+              <div>
+                No students added!
+              </div>
+            ) : (
+              <div className="student-list">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Email ID</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {students.map((student, index) => (
+                    <tr key={index}>
+                      <td>{student.email}</td>
+                      <td><button onClick={() => handleDeleteStudent(student.email)}>Delete</button></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            )}
         </div>
       ) : (
         <div>
@@ -75,8 +164,12 @@ const StudentManagement = () => {
             </div>
           ) : (
             <div>
-              {batches.length === 0 ? (
-                <div className="no-batches">
+              { loading ? <div>
+                Loading...
+              </div> : 
+            <>
+                {batches.length === 0 ? (
+                  <div className="no-batches">
                   <p>You haven't created any batch list yet</p>
                   <button onClick={() => setShowCreateBatch(true)}>Create batch list</button>
                 </div>
@@ -95,18 +188,20 @@ const StudentManagement = () => {
                     </thead>
                     <tbody>
                       {batches.map(batch => (
-                        <tr key={batch.id}>
+                        <tr key={batch._id}>
                           <td>{batch.name}</td>
                           <td>{batch.subject}</td>
                           <td>{batch.students.length}</td>
-                          <td>{new Date(batch.id).toLocaleDateString()}</td>
-                          <td><button onClick={() => handleBatchClick(batch)}>View</button></td>
+                          <td>{formatDate(batch.dateCreated)}</td>
+                          <td><button onClick={() => handleBatchClick(batch._id)}>View</button></td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
               )}
+            </>
+            }
             </div>
           )}
         </div>

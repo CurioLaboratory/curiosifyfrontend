@@ -3,6 +3,9 @@ import './Library.scss';
 import axiosInstance from "../../axiosInstance";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUndo, faRedo } from '@fortawesome/free-solid-svg-icons'
+import { useAuth } from '../auth/AuthContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Library = () => {
   const [resources, setResources] = useState([]);
@@ -11,25 +14,22 @@ const Library = () => {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [selectedTab, setSelectedTab] = useState('assignments');
   const [filterClass, setFilterClass] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [refreshResources, setRefreshResources] = useState(true);
-
+  const [selectedResource, setSelectedResource] = useState(null);
   const [newResTitle, setNewResTitle] = useState("");
   const [newResSubject, setNewResSubject] = useState("");
-  const [newResClassLevel, setNewResClassLevel] = useState("");
+  const [newResClassLevel, setNewResClassLevel] = useState(9);
   const [newResDate, setNewResDate] = useState(Date.now());
+  const [user, setUser] = useState("");
+  const { getUser } = useAuth();
 
   useEffect(() => {
-    // Simulating a fetch request to the backend with dummy data
-    // setTimeout(() => {
-    //   const dummyData = [
-    //     { id: 1, title: 'Linear Equations', subject: 'Maths', class: 9 },
-    //     { id: 2, title: 'Cell structure and function', subject: 'Biology', class: 10 },
-    //     { id: 3, title: 'Atomic structure', subject: 'Chemistry', class: 11 },
-    //   ];
-    //   setResources(dummyData);
-    //   setLoading(false);
-    // }, 10); // Simulating network delay
+    const userData = getUser();
+    setUser(userData);
+  }, []);
 
+  useEffect(() => {
     const getAllResources = async () => {
       const response = await axiosInstance.get("/library/getallresource");
       setResources(response.data);
@@ -43,8 +43,14 @@ const Library = () => {
     setFilterClass(event.target.value);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
   const filteredResources = resources.filter(resource =>
-    filterClass ? resource.class.toString() === filterClass : true
+    (filterClass ? resource.classLevel.toString() === filterClass : true) &&
+    (searchTerm ? resource.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      resource.subject.toLowerCase().includes(searchTerm.toLowerCase()) : true)
   );
 
   const handleSave = async (e) => {
@@ -54,9 +60,13 @@ const Library = () => {
         title: newResTitle,
         subject: newResSubject,
         classLevel: newResClassLevel,
-        date: newResDate
+        date: newResDate,
+        createdBy: user._id
       });
-
+      toast.success("Resource Added!", {
+        position: "top-right",
+        autoClose: 1000
+      });
       setShowCreateResource(false);
       setRefreshResources(!refreshResources);
     }
@@ -65,10 +75,18 @@ const Library = () => {
   const handleDeleteResource = async (resourceId) => {
     try {
       const deletedResource = await axiosInstance.delete(`/library/deleteresource/${resourceId}`);
+      toast.error("Resource Deleted!", {
+        position: "top-right",
+        autoClose: 1000
+      });
       setRefreshResources(!refreshResources);
     } catch (error) {
       console.log(error);
     }
+  }
+
+  const handleResourceSelect = (resource) => {
+    setSelectedResource(resource);
   }
 
   const renderNoResources = () => (
@@ -85,7 +103,12 @@ const Library = () => {
         <button className="create-resource-button" onClick={() => setShowCreateResource(true)}>+ Create a resource</button>
       </div>
       <div className="filters">
-        <input type="text" placeholder="Search for topic of the subject" />
+        <input
+          type="text"
+          placeholder="Search for topic or subject"
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
         <select onChange={handleFilterChange} value={filterClass}>
           <option value="">Filter by class</option>
           <option value="9">Class 9</option>
@@ -100,13 +123,26 @@ const Library = () => {
       </div>
       <div className="resources-content">
         {filteredResources.map(resource => (
-          <div className="resource-card" key={resource._id}>
-            <div>
-              <img className="event-delete-button" onClick={() => handleDeleteResource(resource._id)} src="/icons/dustbin.png" alt="Quiz" />
+          <div className="card-lib" key={resource._id} onClick={() => handleResourceSelect(resource)}>
+            <div className="card-icon">
+              <img className="event-delete-button" src="/icons/file.png" alt="Quiz" />
             </div>
-            <h3>{resource.title}</h3>
-            <p>Subject: {resource.subject}</p>
-            <p>Class: {resource.class}</p>
+            <div className="card-content">
+              <h3 className="card-title">{resource.title}</h3>
+              <p className="card-subject"> {resource.subject}</p>
+              <p className="card-class">Class: {resource.classLevel} </p>
+            </div>
+            <div className="card-options">
+              <img
+                className="event-delete-button icon-options"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteResource(resource._id);
+                }}
+                src="/icons/dustbin.png"
+                alt="Delete"
+              />
+            </div>
           </div>
         ))}
       </div>
@@ -123,14 +159,14 @@ const Library = () => {
       <form>
         <div className="form-group">
           <label>Enter Note title</label>
-          <input type="text" value={newResTitle} onChange={(e) => setNewResTitle(e.target.value)}/>
+          <input type="text" value={newResTitle} onChange={(e) => setNewResTitle(e.target.value)} />
           <label>Enter Class Level</label>
-          <select onChange={(e) => setNewResClassLevel(e.target.value)} value={newResClassLevel}>
-          <option value="9">Class 9</option>
-          <option value="10">Class 10</option>
-          <option value="11">Class 11</option>
-          <option value="12">Class 12</option>
-        </select>
+          <select onChange={(e) => setNewResClassLevel(parseInt(e.target.value, 10))} value={newResClassLevel}>
+            <option value="9">Class 9</option>
+            <option value="10">Class 10</option>
+            <option value="11">Class 11</option>
+            <option value="12">Class 12</option>
+          </select>
         </div>
         <div className="form-group">
           <div className="rich-text-editor-toolbar">
@@ -201,14 +237,28 @@ const Library = () => {
     </div>
   );
 
+  const renderSelectedResource = () => (
+    <div className="selected-resource">
+      {/* <button onClick={() => setSelectedResource(null)}>Back to Library</button> */}
+      <button className="back-button-res" onClick={() => setSelectedResource(null)}>← Back</button>
+      <h2>{selectedResource.title}</h2>
+      {/* Add more details about the selected resource here */}
+    </div>
+  );
+
   if (loading) {
     return <p>Loading...</p>;
   }
 
   return (
     <div className="library-page">
-      {showCreateResource ? renderCreateResource() : (resources.length === 0 ? renderNoResources() : renderResources())}
+      {selectedResource ? renderSelectedResource() :
+        (showCreateResource ? renderCreateResource() :
+          (resources.length === 0 ? renderNoResources() : renderResources())
+        )
+      }
       {showUploadModal && renderUploadModal()}
+      <ToastContainer />
     </div>
   );
 };

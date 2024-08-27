@@ -1,123 +1,188 @@
 .quiz-page {
-    padding: 20px;
-    background-color: #f9f9f9;
-  
-    .no-quizzes,
-    .quizzes {
-      text-align: center;
-  
-      p {
-        font-size: 18px;
-        color: #666;
-      }
-  
-      .create-quiz-button {
-        padding: 10px 20px;
-        background-color: #ff9900;
-        border: none;
-        color: #fff;
-        font-size: 16px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-  
-        &:hover {
-          background-color: #e68a00;
-        }
+  padding: 20px;
+  background-color: #f9f9f9;
+
+  .no-quizzes,
+  .quizzes {
+    text-align: center;
+
+    p {
+      font-size: 18px;
+      color: #666;
+    }
+
+    .create-quiz-button {
+      padding: 10px 20px;
+      background-color: #ff9900;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #e68a00;
       }
     }
-  
-    .quizzes-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-  
-      h1 {
-        font-size: 24px;
-      }
-  
-      .create-quiz-button {
-        margin: 10px;
-        width: 210px;
-      }
+  }
+
+  .quizzes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h1 {
+      font-size: 24px;
     }
-  
-    .quizzes-controls {
+
+    .create-quiz-button {
+      margin: 10px;
+      width: 210px;
+    }
+  }
+
+  .quizzes-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+
+    .filters {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 20px 0;
-      
-      .filters {
-        display: flex;
-        gap: 10px;
-  
-        .filter-by-class,
-        .sort-by {
-          padding: 10px;
-          font-size: 16px;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          cursor: pointer;
-        }
-      }
-  
-      .search-bar {
+      gap: 10px;
+
+      .filter-by-class,
+      .sort-by {
         padding: 10px;
         font-size: 16px;
         border: 1px solid #ccc;
         border-radius: 5px;
-        width: 200px;
-      }
-    }
-  
-    .deleteRow {
-      width: 200px;
-  
-      .delete-quiz-button {
-        padding: 10px 20px;
-        background-color: #ff0000;
-        border: none;
-        color: #fff;
-        font-size: 16px;
-        border-radius: 5px;
         cursor: pointer;
-        transition: background-color 0.3s;
-        width: 100%;
-  
-        &:hover {
-          background-color: #cc0000;
-        }
-  
-        &:disabled {
-          background-color: #ccc;
-          cursor: not-allowed;
-        }
       }
     }
-  
-    table {
+
+    .search-bar {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 200px;
+    }
+  }
+
+  .deleteRow {
+    width: 200px;
+
+    .delete-quiz-button {
+      padding: 10px 20px;
+      background-color: #ff0000;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
       width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-  
-      th,
-      td {
-        padding: 10px;
-        text-align: left;
+
+      &:hover {
+        background-color: #cc0000;
       }
-  
-      th {
-        background-color: #f1f1f1;
-      }
-  
-      tbody tr:nth-child(even) {
-        background-color: #f9f9f9;
-      }
-  
-      tbody tr:hover {
-        background-color: #f1f1f1;
+
+      &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
       }
     }
   }
-  
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+
+    th,
+    td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f1f1f1;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+  }
+}
+
+
+
+.selectedQuiz {
+  padding: 20px;
+  background-color: white;
+
+  .back-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 20px;
+
+    &:hover {
+      color: #ff9900;
+    }
+  }
+
+  .selectedQuizTitle {
+    font-family: Tahoma, Geneva, sans-serif;
+    font-size: 26px;
+    letter-spacing: 0px;
+    word-spacing: 0px;
+    color: #000000;
+    font-weight: 600;
+    text-decoration: none;
+    font-style: normal;
+    font-variant: normal;
+    text-transform: capitalize;
+  }
+
+  .selectedQuizClass {
+    border-radius: 6px;
+    padding: 5px 10px 5px 10px;
+    background-color: #FFF3E0;
+    font-weight: 600;
+  }
+
+  // .cardBody {
+  //   display: flex;
+  //   flex-direction: row;
+  //   gap: 10px;
+  // }
+
+  // .selectedQuizCard {
+  //   border: 2px solid red;
+  //   margin-bottom: 10px;
+  //   background: #FAFAFA;
+  //   padding: 20px;
+  //   border-radius: 10px;
+  //   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  //   flex: 1;
+  // }
+  .cardQues {
+    // border: 1px solid blue;
+    margin-bottom: 20px;
+    background-color: #FAFAFA;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    display: flex;
+    // flex-direction: row;
+  }
+}

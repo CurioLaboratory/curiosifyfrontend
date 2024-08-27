@@ -1,43 +1,71 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import axiosInstance from '../../axiosInstance';
+import { useAuth } from '../auth/AuthContext';
+import Card from 'react-bootstrap/Card';
+import './Righttab.scss'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const RightTab = () => {
+const RightTab = (props) => {
     const [quizData, setQuizData] = useState([]);
+
+    const { getUser } = useAuth();
 
     useEffect(() => {
         const data = JSON.parse(localStorage.getItem('manualQuizData')) || [];
         setQuizData(data);
-    }, []);
+    }, [props.refreshLocalQuiz]);
 
-    const handlePublish = () => {
+    const handleReset = async () => {
+        toast.success("Quiz Reset successfully!", {
+            position: "top-right",
+            autoClose: 1000
+        });
+        // alert('Quiz Reset successfully!');
+        localStorage.removeItem('manualQuizData');
+        setQuizData([]);
+    }
+
+    const handlePublish = async () => {
         if (quizData.length === 0) {
-            alert('No questions to publish!');
+            toast.info("No questions to publish!", {
+                position: "top-right",
+                autoClose: 1000
+            });
+            // alert('No questions to publish!');
             return;
         }
-
+        // console.log(quizData[0]);
+        const user = getUser();
         const publishedQuiz = {
             title: quizData[0].title,
             date: new Date().toLocaleDateString(),
-            class: quizData[0].classLevel,
+            classLevel: quizData[0].classLevel,
             language: quizData[0].language,
             totalQuestions: quizData.length,
             questions: quizData.map(item => ({
                 question: item.question,
                 options: item.options,
                 answer: item.answer
-            }))
+            })),
+            createdBy: user.email
         };
 
-        const existingQuizzes = JSON.parse(localStorage.getItem('quizzes')) || [];
-        const updatedQuizzes = [...existingQuizzes, publishedQuiz];
-        localStorage.setItem('quizzes', JSON.stringify(updatedQuizzes));
+        const response = await axiosInstance.post("/quiz/createmanualquiz", publishedQuiz);
 
-        // Clear manualQuizData from localStorage
-        localStorage.removeItem('manualQuizData');
+        if (response.status === 201) {
+            toast.success("Quiz published successfully!", {
+                position: "top-right",
+                autoClose: 1000
+            });
+            // alert('Quiz published successfully!');
+            localStorage.removeItem('manualQuizData');
+            setQuizData([]);
+        }
 
-        // Clear the displayed quiz data
-        setQuizData([]);
-
-        alert('Quiz published successfully!');
+        if (response.status === 203) {
+            alert(response.data.message);
+        }
     };
 
     if (quizData.length === 0) {
@@ -46,31 +74,45 @@ const RightTab = () => {
 
     return (
         <>
-            <div className='right-header'>
-                <button type="button" className="publish-button" onClick={handlePublish}>
-                    Publish
-                </button>
+            <div className='top'>
+                <div>
+                    <button type="button" className="reset-button" onClick={handleReset}>
+                        Reset
+                    </button>
+                </div>
+                <h3> Review your Quiz</h3>
+                <div >
+                    <button type="button" className="publish-button" onClick={handlePublish}>
+                        Publish
+                    </button>
+                </div>
             </div>
             <div className="quiz-data-display">
-                <h1>{quizData[0].title}</h1>
-                <p>Language: {quizData[0].language}</p>
-                <p>Class: {quizData[0].classLevel}</p>
-                <p>Total Questions: {quizData.length}</p>
-                {quizData.map((item, index) => (
-                    <div key={index} className="quiz-question">
-                        <h3>Question {index + 1}</h3>
-                        <p>{item.question}</p>
-                        <ul>
-                            {item.options.map((option, optionIndex) => (
-                                <li key={optionIndex} style={{ color: option === item.answer ? 'green' : 'black' }}>
-                                    {String.fromCharCode(65 + optionIndex)}: {option}
-                                </li>
+                <Card className="text-center cardBody">
+                    <Card.Body>
+                        <Card.Title className='cardTitle '>
+                            {/* <h1>Title : {quizData[0].title}</h1> */}
+                        </Card.Title>
+                        <Card.Text >
+                            {quizData.map((item, index) => (
+                                <div key={index} className='cardQues'>
+                                    <h3>{index + 1}. {item.question} </h3>
+                                    <ul>
+                                        {item.options.map((option, optionIndex) => (
+                                            <li key={optionIndex} style={{ color: option === item.answer ? 'green' : 'black' }}>
+                                                {String.fromCharCode(65 + optionIndex)}: {option}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <p>Correct Answer: {item.answer}</p>
+                                    <p>Created on: {item.date}</p>
+                                </div>
                             ))}
-                        </ul>
-                        <p>Correct Answer: {item.answer}</p>
-                        <p>Date Added: {item.date}</p>
-                    </div>
-                ))}
+                        </Card.Text>
+
+                    </Card.Body>
+                </Card>
+                <ToastContainer />
             </div>
         </>
     )

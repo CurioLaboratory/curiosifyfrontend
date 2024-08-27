@@ -33,7 +33,7 @@ const HomePage = () => {
         return (
           <div className="content">
             <h1>Hi {user?.name}, Welcome back!</h1>
-            <Grid/>
+            <Grid />
           </div>
         );
       case 'quiz':
@@ -56,10 +56,8 @@ const HomePage = () => {
         return <div className="content"><h1>Content Not Found</h1></div>;
     }
   };
-
   return (
     <div className="home-page">
-      
       <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <div className="logo"><img src="/icons/logo.png" alt="Logo" /></div>
         <ul>
