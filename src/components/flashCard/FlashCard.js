@@ -1,30 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 // import './Quiz.scss';
+import axiosInstance from "../../axiosInstance";
 
 const FlashCard = ({ onCreateFlashCards }) => {
     const [flashCards, setflashCards] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedflashCards, setSelectedflashCards] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [selectedClass, setSelectedClass] = useState('');
-    const [sortOption, setSortOption] = useState('');
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedClass, setSelectedClass] = useState("");
+    const [sortOption, setSortOption] = useState("");
     const [selectedflashCard, setSelectedflashCard] = useState(null);
     const renderNoflashCards = () => (
         <div className="no-quizzes">
             <p>You don't have any flashcards</p>
-            <button className="create-quiz-button" onClick={onCreateFlashCards}>+ Create new flashcard</button>
+            <button className="create-quiz-button" onClick={onCreateFlashCards}>
+                + Create new flashcard
+            </button>
         </div>
     );
+
+    // useEffect(() => {
+    //     // Simulating a fetch request to the backend with dummy data
+    //     setTimeout(() => {
+    //         const dummyData = [
+    //             { id: 1, name: 'Evolution', numOfCards: 2, tags: [], createdAt: '01-03-2024', lastAttempted: "01-03-2024", lastAttemptedScore: "100%"},
+    //             // { id: 2, name: 'Laws of motion', numberOfQuestions: 1, class: 11, createdOn: '01-03-2024' },
+    //         ];
+    //         setflashCards(dummyData);
+    //         setLoading(false);
+    //     }, 10); // Simulating network delay
+    // }, []);
+
     useEffect(() => {
-        // Simulating a fetch request to the backend with dummy data
-        setTimeout(() => {
-            const dummyData = [
-                { id: 1, name: 'Evolution', numOfQuestions: 2, class: 12, createdOn: '01-03-2024' },
-                { id: 2, name: 'Laws of motion', numOfQuestions: 1, class: 11, createdOn: '01-03-2024' },
-            ];
-            setflashCards(dummyData);
-            setLoading(false);
-        }, 10); // Simulating network delay
+        const fetchFlashcards = async () => {
+            const response = await axiosInstance.get(
+                "/flashcard/getAllFlashcards"
+            );
+
+            // console.log(response)
+            if (response.status === 200) {
+                setflashCards(response.data.flashcards);
+                setLoading(false);
+            }
+        };
+
+        fetchFlashcards();
     }, []);
 
     const handleCheckboxChange = (id) => {
@@ -37,7 +57,9 @@ const FlashCard = ({ onCreateFlashCards }) => {
 
     const handleDelete = () => {
         setflashCards((prevflashCards) =>
-            prevflashCards.filter((flashCard) => !selectedflashCards.includes(flashCard.id))
+            prevflashCards.filter(
+                (flashCard) => !selectedflashCards.includes(flashCard.id)
+            )
         );
         setSelectedflashCards([]);
     };
@@ -46,18 +68,30 @@ const FlashCard = ({ onCreateFlashCards }) => {
         setSelectedflashCard(flashCard);
     };
 
+    const formatDateString = (dateString) => {
+        const date = new Date(Number(dateString));
+
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+
+        return `${day}/${month}/${year}`;
+    };
+
     const filteredflashCards = flashCards
         .filter((flashCard) =>
-            flashCard.name.toLowerCase().includes(searchTerm.toLowerCase())
+            flashCard.deckname.toLowerCase().includes(searchTerm.toLowerCase())
         )
         .filter((flashCard) =>
-            selectedClass ? flashCard.class === parseInt(selectedClass) : true
+            selectedClass
+                ? flashCard.targetClass === parseInt(selectedClass)
+                : true
         )
         .sort((a, b) => {
-            if (sortOption === 'date') {
-                return new Date(a.createdOn) - new Date(b.createdOn);
-            } else if (sortOption === 'questions') {
-                return b.numOfQuestions - a.numOfQuestions;
+            if (sortOption === "date") {
+                return new Date(a.createdAt) - new Date(b.createdAt);
+            } else if (sortOption === "questions") {
+                return b.numberOfQues - a.numberOfQues;
             }
             return 0;
         });
@@ -69,18 +103,30 @@ const FlashCard = ({ onCreateFlashCards }) => {
     if (selectedflashCard) {
         return (
             <div className="quiz-detail">
-                <button className="back-button" onClick={() => setSelectedflashCard(null)}>Back</button>
+                <button
+                    className="back-button"
+                    onClick={() => setSelectedflashCard(null)}
+                >
+                    Back
+                </button>
                 <h1>{selectedflashCard.name}</h1>
                 <h2>Published for Class {selectedflashCard.class}</h2>
                 <div>
-                    <h3>1. Which of the following is an example of evolution?</h3>
+                    <h3>
+                        1. Which of the following is an example of evolution?
+                    </h3>
                     <p>A deer growing antlers as it matures</p>
                     <p>A bird learning to sing a new song</p>
-                    <p>A fish changing colors to blend in with its surroundings</p>
+                    <p>
+                        A fish changing colors to blend in with its surroundings
+                    </p>
                     <p>A snake shedding its skin</p>
                 </div>
                 <div>
-                    <h3>2. What is the term for process which species evolve similar traits due to shared environmental pressures?</h3>
+                    <h3>
+                        2. What is the term for process which species evolve
+                        similar traits due to shared environmental pressures?
+                    </h3>
                     <p>Convergent evolution</p>
                     <p>Divergent evolution</p>
                     <p>Co-evolution</p>
@@ -98,7 +144,12 @@ const FlashCard = ({ onCreateFlashCards }) => {
                 <div className="quizzes">
                     <div className="quizzes-header">
                         <h1>FlashCards</h1>
-                            <button className="create-quiz-button" onClick={onCreateFlashCards}>+ Create new quiz</button>
+                        <button
+                            className="create-quiz-button"
+                            onClick={onCreateFlashCards}
+                        >
+                            + Create a flashcard
+                        </button>
                     </div>
                     <div className="quizzes-controls">
                         <input
@@ -112,11 +163,13 @@ const FlashCard = ({ onCreateFlashCards }) => {
                             <select
                                 className="filter-by-class"
                                 value={selectedClass}
-                                onChange={(e) => setSelectedClass(e.target.value)}
+                                onChange={(e) =>
+                                    setSelectedClass(e.target.value)
+                                }
                             >
-                                <option value="">Filter by Class</option>
-                                <option value="11">Class 11</option>
-                                <option value="12">Class 12</option>
+                                <option value="">Filter by Tags</option>
+                                <option value="tag-1">Tag 1</option>
+                                <option value="tag-2">Tag 2</option>
                             </select>
                             <select
                                 className="sort-by"
@@ -125,40 +178,68 @@ const FlashCard = ({ onCreateFlashCards }) => {
                             >
                                 <option value="">Sort by</option>
                                 <option value="date">Date</option>
-                                <option value="questions">Number of Questions</option>
+                                <option value="questions">
+                                    Number of Questions
+                                </option>
                             </select>
                         </div>
-
                     </div>
                     <div className="deleteRow">
-                            <button className="delete-quiz-button" onClick={handleDelete} disabled={selectedflashCards.length === 0}>Delete flashCard</button>
+                        <button
+                            className="delete-quiz-button"
+                            onClick={handleDelete}
+                            disabled={selectedflashCards.length === 0}
+                        >
+                            Delete flashCard
+                        </button>
                     </div>
                     <table>
                         <thead>
                             <tr>
                                 <th></th>
-                                <th>DECKNAME</th>
-                                <th>NO. OF QUESTIONS</th>
-                                <th>CLASS</th>
-                                <th>CREATED ON</th>
+                                <th>Deckname</th>
+                                <th>No. of questions</th>
+                                <th>Tags</th>
+                                <th>Created at</th>
+                                <th>Last attempted</th>
+                                <th>Last attempted score</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                                {filteredflashCards.map((flashCard) => (
-                                <tr key={flashCard.id} onClick={() => handleflashCardClick(flashCard)}>
+                            {filteredflashCards.map((flashCard) => (
+                                <tr
+                                    key={flashCard._id}
+                                    onClick={() =>
+                                        handleflashCardClick(flashCard)
+                                    }
+                                >
                                     <td>
                                         <input
                                             type="checkbox"
-                                                checked={selectedflashCards.includes(flashCard.id)}
-                                                onChange={() => handleCheckboxChange(flashCard.id)}
+                                            checked={selectedflashCards.includes(
+                                                flashCard._id
+                                            )}
+                                            onChange={() =>
+                                                handleCheckboxChange(
+                                                    flashCard._id
+                                                )
+                                            }
                                             onClick={(e) => e.stopPropagation()}
                                         />
                                     </td>
-                                        <td>{flashCard.name}</td>
-                                        <td>{flashCard.numOfQuestions}</td>
-                                        <td>{flashCard.class}</td>
-                                        <td>{flashCard.createdOn}</td>
+                                    <td>{flashCard.deckname}</td>
+                                    <td>{flashCard.numberOfQues}</td>
+                                    <td>
+                                        {flashCard.tags.length
+                                            ? flashCard.tags
+                                            : "None"}
+                                    </td>
+                                    <td>
+                                        {formatDateString(flashCard.createdAt)}
+                                    </td>
+                                    <td>{flashCard.lastAttempted}</td>
+                                    <td>{flashCard.lastAttemptScore}</td>
                                     <td>...</td>
                                 </tr>
                             ))}

@@ -10,6 +10,7 @@ import { useAuth } from './auth/AuthContext';
 import Grid from './Grid';
 import FlashCard from './flashCard/FlashCard';
 import CreateFlashCard from './flashCard/CreateFlashCard';
+
 const HomePage = () => {
   const [selectedMenu, setSelectedMenu] = useState('home');
   const [currentPage, setCurrentPage] = useState('home');
@@ -48,7 +49,7 @@ const HomePage = () => {
       case 'flashcards':
         return <FlashCard onCreateFlashCards={() => setCurrentPage('create-flashcards')} />
       case 'create-flashcards':
-        return <CreateFlashCard/>;
+        return <CreateFlashCard setCurrentPage={setCurrentPage} />;
       case 'student-management':
         return <StudentManagement />;
       default:
