@@ -9,6 +9,8 @@ import Library from './components/library/Library';
 import Events from './components/events/Events';
 import ScanAI from './components/scanAI/ScanAI';
 import StudentManagement from './components/studentManagement/StudentManagement';
+import StudentLogin from './components/stundentWebApp/StudentLogin'
+import StudentHome from './components/stundentWebApp/Studenthome';
 import './App.scss';
 import { AuthProvider } from './components/auth/AuthContext';
 
@@ -25,7 +27,10 @@ function App() {
           <Route path="/library" element={<Library />} />
           <Route path="/events" element={<Events />} />
           <Route path="/scanai" element={<ScanAI />} />
+          <Route path="/studentlogin" element={<StudentLogin />} />
+          <Route path="/studenthome" element={<StudentHome />} />
           <Route path="/studentmanagement" element={<StudentManagement />} />
+         
         </Routes>
       </Router>
     </AuthProvider>
