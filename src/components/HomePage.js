@@ -12,6 +12,7 @@ import FlashCard from './flashCard/FlashCard';
 import CreateFlashCard from './flashCard/CreateFlashCard';
 import CreateContent from './createContent/Createcontent';
 import Create_assigment from './createContent/Create_assigment'
+import Createcourses from './createContent/Createcourses';
 const HomePage = () => {
   const [selectedMenu, setSelectedMenu] = useState('home');
   const [currentPage, setCurrentPage] = useState('home');
@@ -52,9 +53,11 @@ const HomePage = () => {
       case 'create-flashcards':
         return <CreateFlashCard setCurrentPage={setCurrentPage} />;
       case 'create-content':
-        return <CreateContent onCreateAssigment={()=>setCurrentPage('create-assigment')}/>
+        return <CreateContent onCreateAssigment={()=>setCurrentPage('create-assigment')} OnCreateCourses={()=>setCurrentPage('create-courses')}/>
       case 'create-assigment':
-        return <Create_assigment/>    
+        return <Create_assigment/>  
+      case 'create-courses':
+        return <Createcourses />    
       case 'student-management':
         return <StudentManagement />;
       default:
