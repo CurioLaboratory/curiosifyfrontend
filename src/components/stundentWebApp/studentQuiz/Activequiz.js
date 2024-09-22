@@ -12,6 +12,16 @@ const StudentActivequiz = ({takequiz}) => {
     { title: "Intermolecular", subject: "Chemistry", questions: 9 },
     { title: "Newton's laws of motion", subject: "Physics", questions: 6 },
     { title: "Electromagnetic induction", subject: "Physics", questions: 8 },
+    { title: "Human Impact on the Environment", subject: "Biology", questions: 7 },
+    { title: "Type of chemical reactions", subject: "Chemistry", questions: 9 },
+    { title: "Intermolecular", subject: "Chemistry", questions: 9 },
+    { title: "Newton's laws of motion", subject: "Physics", questions: 6 },
+    { title: "Electromagnetic induction", subject: "Physics", questions: 8 },
+    { title: "Human Impact on the Environment", subject: "Biology", questions: 7 },
+    { title: "Type of chemical reactions", subject: "Chemistry", questions: 9 },
+    { title: "Intermolecular", subject: "Chemistry", questions: 9 },
+    { title: "Newton's laws of motion", subject: "Physics", questions: 6 },
+    { title: "Electromagnetic induction", subject: "Physics", questions: 8 },
   ];
 
   const handleQuizClick = (quiz) => {
@@ -25,6 +35,7 @@ const StudentActivequiz = ({takequiz}) => {
   };
 
   return (
+    <div className="Quiz-scrollable-container">
     <div className="Active-quiz-grid">
       {quizzes.map((quiz, index) => (
         <div key={index} className="quiz-card" onClick={() => handleQuizClick(quiz)}>
@@ -34,6 +45,7 @@ const StudentActivequiz = ({takequiz}) => {
         </div>
       ))}
       <QuizModal show={showModal} onClose={handleCloseModal} quiz={selectedQuiz} takequiz={takequiz} />
+    </div>
     </div>
   );
 };

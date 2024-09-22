@@ -20,7 +20,7 @@ const Studentquiz=({takequiz,setCompletedQuizpage})=>{
 
 
 return(
-    <div className="Student-quiz-container">
+    <div className="Student-quizz-container">
       <h1>Quiz</h1>
       <div className="tabs">
         <div className={currentPage === 'Activequiz' ? 'tab active' : 'tab'} onClick={() => {setCurrentPage('Activequiz')}}>Active Quizzes</div>

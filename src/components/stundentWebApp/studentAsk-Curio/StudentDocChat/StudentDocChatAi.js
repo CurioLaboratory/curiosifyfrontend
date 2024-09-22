@@ -1,15 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './StudentDocChatAi.scss'; // Import your SCSS file here
 
-const StudentDocChatAi = ({fileData}) => {
-  const [documents, setDocuments] = useState([fileData]);
+const StudentDocChatAi = ({ fileData }) => {
+  const [documents, setDocuments] = useState(fileData ? [fileData] : []); // Initialize with provided fileData
   const [question, setQuestion] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
+  const [fileInputKey, setFileInputKey] = useState(Date.now()); // Key to force re-render of input
+  const chatEndRef = useRef(null);
+  const fileInputRef = useRef(null); // Ref for the file input
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatMessages]);
 
   const handleFileUpload = (event) => {
     const newDocument = event.target.files[0];
     if (newDocument) {
       setDocuments([...documents, newDocument]);
+      resetFileInput(); // Reset input after file is selected
     }
   };
 
@@ -23,6 +31,10 @@ const StudentDocChatAi = ({fileData}) => {
       setQuestion("");
       // Add the logic for bot response here
     }
+  };
+
+  const resetFileInput = () => {
+    setFileInputKey(Date.now()); // Force re-render of the file input
   };
 
   return (
@@ -45,8 +57,10 @@ const StudentDocChatAi = ({fileData}) => {
             <input
               type="file"
               id="file-input"
+              key={fileInputKey} // Use key to force re-render
               hidden
               onChange={handleFileUpload}
+              ref={fileInputRef} // Attach ref
             />
             <label htmlFor="file-input" className="upload-label">
               Upload More Files
@@ -55,7 +69,7 @@ const StudentDocChatAi = ({fileData}) => {
         </div>
       </div>
 
-      <div className="Ai-chat-container">
+      <div className="Docchat-Ai-chat-container">
         <div className="chat-area">
           {chatMessages.length === 0 ? (
             <div className="chat-suggestions">
@@ -79,6 +93,7 @@ const StudentDocChatAi = ({fileData}) => {
               </div>
             ))
           )}
+          <div ref={chatEndRef} /> {/* Empty div for scrolling to bottom */}
         </div>
 
         <div className="question-section">

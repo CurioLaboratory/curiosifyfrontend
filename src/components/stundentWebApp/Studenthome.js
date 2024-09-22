@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import '../HomePage.scss';
 import { useAuth } from '../auth/AuthContext';
-import Studentquiz from './studentQuiz/Studentquiz';
+import Studentquiz from './studentquiz/Studentquiz';
 import StudentAskCurio from './studentAsk-Curio/StudentAskCurio';
 import Studentevents from './studentEvents/Studentevents';
 import Studentflashcard from './studentFlashcard/Studentflashcard';
 import Studentscanai from './studentScanai/Studentscanai';
 import Studentlibrary from './studentLibrary/Studentlibrary';
-import QuizPage from './studentQuiz/Quizpage';
-import SubmittedQuizPage from './studentQuiz/Submittedquiz';
+import QuizPage from './studentquiz/Quizpage';
+import SubmittedQuizPage from './studentquiz/Submittedquiz';
 import StudentDashboard from './studentdashboard/StudentDashboard';
 
 const StudentHome=()=>{
@@ -54,7 +54,7 @@ const StudentHome=()=>{
           case 'StudentAskCurio':
             return <StudentAskCurio/>
           default:
-            return <div className="content"><h1>Content Not Found</h1></div>;
+            return <div className="content"><h1>Content Not Found</h1></div>
         }
     };
 

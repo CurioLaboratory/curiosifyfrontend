@@ -9,23 +9,13 @@ return(
           <div className="innerdiv">
           </div>
           <div className="carddiv">
-            <div className="card card1">
-              <div className="card-image">
-                <img src={card1Image} alt="Courses" />
-              </div>
-              <div className="card-content">
-                <h3>Courses</h3>
-                <p>Create Courses with Curio AI.</p>
-              </div>
-            </div>
-    
             <div className="card card2" onClick={()=>{setCurrentPage('StudentAiTutor')}}>
               <div className="card-image">
                 <img src={card2Image} alt="Assignments" />
               </div>
               <div className="card-content">
-                <h3>Assignments</h3>
-                <p>Create assignments with Curio AI.</p>
+                <h3>Ai Tutor</h3>
+                <p>Stuck somewhere ask our AI tutor.</p>
               </div>
             </div>
 
