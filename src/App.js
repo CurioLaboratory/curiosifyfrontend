@@ -13,6 +13,8 @@ import StudentLogin from './components/stundentWebApp/StudentLogin'
 import StudentHome from './components/stundentWebApp/Studenthome';
 import './App.scss';
 import { AuthProvider } from './components/auth/AuthContext';
+import ProtectedRoute from './components/auth/Protectedroutes';
+import VerifyEmail from './components/auth/Verifyemail';
 
 function App() {
   return (
@@ -21,7 +23,7 @@ function App() {
         <Routes>
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<Login />} />
-          <Route path="/home" element={<HomePage />} />
+          <Route path="/home" element={<ProtectedRoute element={<HomePage />} />} />
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/createquiz" element={<CreateQuiz />} />
           <Route path="/library" element={<Library />} />
@@ -30,7 +32,7 @@ function App() {
           <Route path="/studentlogin" element={<StudentLogin />} />
           <Route path="/studenthome" element={<StudentHome />} />
           <Route path="/studentmanagement" element={<StudentManagement />} />
-         
+          <Route path="/verify-email" element={<VerifyEmail />} />
         </Routes>
       </Router>
     </AuthProvider>

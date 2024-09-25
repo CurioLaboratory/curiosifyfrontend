@@ -6,7 +6,7 @@ import './Login.scss';
 import axiosInstance from "../../axiosInstance";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import Spinner from '../Customspinner';
 const Login = () => {
   const [userType, setUserType] = useState('teacher');
   const [email, setEmail] = useState('');
@@ -15,10 +15,12 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [Loading,setLoading]= useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
     if (email.length !== 0 && password.length !== 0) {
       try {
         const response = await axiosInstance.post("/auth/login", {
@@ -52,12 +54,15 @@ const Login = () => {
           autoClose: 2000
         });
         console.log(error);
+      } finally{
+        setLoading(false);
       }
     }
   }
 
   return (
     <>
+    <div className="teacher-login">
       <div className="login-container">
         <div className="logo"><img src="/icons/logo.png" alt="Logo" /></div>
         <h2>Welcome Back!</h2>
@@ -102,7 +107,7 @@ const Login = () => {
               <a href="/forgot-password">Forgot Password?</a>
               <a href="/register">Register</a>
             </div>
-            <button className="form-button" type="submit">Login</button>
+            <button className="form-button" type="submit"> {Loading?<Spinner/>:"Login"}</button>
           </form> : <form onSubmit={handleSubmit}>
             {/* {error && <p style={{ color: 'red' }}>{error}</p>} */}
             <label>
@@ -127,9 +132,12 @@ const Login = () => {
               <a href="/forgot-password">Forgot Password?</a>
               <a href="/register">Register</a>
             </div>
-            <button className="form-button" type="submit">Login</button>
+            <button className="form-button" type="submit">
+              {Loading?<Spinner/>:"Login"}
+            </button>
           </form>}
         <ToastContainer />
+      </div>
       </div>
     </>
   );
