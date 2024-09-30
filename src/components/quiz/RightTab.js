@@ -50,7 +50,7 @@ const RightTab = (props) => {
             })),
             createdBy: user.email
         };
-
+          console.log(publishedQuiz);
         const response = await axiosInstance.post("/quiz/createmanualquiz", publishedQuiz);
 
         if (response.status === 201) {

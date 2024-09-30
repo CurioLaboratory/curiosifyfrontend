@@ -1,39 +1,50 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import './Studentquiz.scss';
+import axiosInstance from '../../../axiosInstance';
 
+const StudentActivequiz = ({ takequiz, setCompletedQuiz }) => {
+  const [completeQuizzes, setCompleteQuizzes] = useState([]);
 
-const StudentActivequiz = ({setCompletedQuizpage,takequiz}) => {
+  useEffect(() => {
+    const fetchQuizzes = async () => {
+      try {
+        const response = await axiosInstance.get("/student_quiz_attendance/getcompletedquizzes"); // Fetch quizzes from the backend
+        const data = response.data; // Accessing the data directly from Axios response
+        setCompleteQuizzes(data); // Set the fetched quizzes to the active quizzes state
+      } catch (error) {
+        console.error('Error fetching quizzes:', error);
+      }
+    };
 
-  const quizzes = [
-    { title: "Human Impact on the Environment", subject: "Biology", questions: 7 },
-    { title: "Type of chemical reactions", subject: "Chemistry", questions: 9 },
-    { title: "Intermolecular", subject: "Chemistry", questions: 9 },
-    { title: "Newton's laws of motion", subject: "Physics", questions: 6 },
-    { title: "Electromagnetic induction", subject: "Physics", questions: 8 },
-    { title: "Human Impact on the Environment", subject: "Biology", questions: 7 },
-    { title: "Type of chemical reactions", subject: "Chemistry", questions: 9 },
-    { title: "Intermolecular", subject: "Chemistry", questions: 9 },
-    { title: "Newton's laws of motion", subject: "Physics", questions: 6 },
-    { title: "Electromagnetic induction", subject: "Physics", questions: 8 },
-  ];
+    fetchQuizzes();
+  }, []);
 
   const handleQuizClick = (quiz) => {
-    setCompletedQuizpage(quiz);
-    takequiz('completed-quiz');
+    console.log(quiz);
+    takequiz('completed-quiz'); // Trigger the takequiz function with 'complete-quiz'
+    setCompletedQuiz(quiz); // Pass the quiz details to setCompletedQuiz
   };
 
   return (
     <div className="Quiz-scrollable-container">
-    <div className="Complete-quiz-grid">
-      {quizzes.map((quiz, index) => (
-        <div key={index} className="quiz-card" onClick={() => handleQuizClick(quiz)}>
-          <h3>{quiz.title}</h3>
-          <span className="badge">{quiz.subject}</span>
-          <p>{quiz.questions} questions • Published on 14/04/2024</p>
-          <span className="badge2">Score 100%</span>
-        </div>
-      ))}
-    </div>
+      <div className="Complete-quiz-grid">
+        {completeQuizzes.length === 0 ? (
+          <p>No quizzes available</p>
+        ) : (
+          completeQuizzes.map((quiz, index) => (
+            <div
+              key={index}
+              className="quiz-card"
+              onClick={() => handleQuizClick(quiz)} // Add onClick event
+            >
+              <h3>{quiz.quiz.title}</h3>
+              <span className="badge">{quiz.quiz.language}</span>
+              <p>{quiz.questions.length} questions • Published on {quiz.quiz.date}</p>
+              <span className="badge2">Score {quiz.score}</span>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 };

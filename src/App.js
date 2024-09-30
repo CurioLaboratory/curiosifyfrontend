@@ -9,12 +9,14 @@ import Library from './components/library/Library';
 import Events from './components/events/Events';
 import ScanAI from './components/scanAI/ScanAI';
 import StudentManagement from './components/studentManagement/StudentManagement';
-import StudentLogin from './components/stundentWebApp/StudentLogin'
+import StudentLogin from './components/stundentWebApp/StudentLogin';
 import StudentHome from './components/stundentWebApp/Studenthome';
 import './App.scss';
 import { AuthProvider } from './components/auth/AuthContext';
 import ProtectedRoute from './components/auth/Protectedroutes';
 import VerifyEmail from './components/auth/Verifyemail';
+import QuizPage from './components/stundentWebApp/studentquiz/Quizpage';
+import { QuizProvider } from './components/stundentWebApp/QuizContext';
 
 function App() {
   return (
@@ -30,9 +32,14 @@ function App() {
           <Route path="/events" element={<Events />} />
           <Route path="/scanai" element={<ScanAI />} />
           <Route path="/studentlogin" element={<StudentLogin />} />
-          <Route path="/studenthome" element={<StudentHome />} />
+          <Route path="/studenthome" element={
+            <QuizProvider>
+              <StudentHome />
+            </QuizProvider>
+          } />
           <Route path="/studentmanagement" element={<StudentManagement />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/take-quiz" element={<QuizPage />} />
         </Routes>
       </Router>
     </AuthProvider>
