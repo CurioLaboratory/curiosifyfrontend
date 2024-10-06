@@ -23,9 +23,6 @@ const QuizPage = ({ setCurrentPage, selectedQuiz}) => {
         // Calculate percentage
         const totalQuestions = selectedQuiz.questions.length;
         const percentageScore = (calculatedScore / totalQuestions) * 100;
-       
-       // setScore(percentageScore);
-
         const completedQuiz = {
             quizId: selectedQuiz._id,
             score: percentageScore,
@@ -34,15 +31,66 @@ const QuizPage = ({ setCurrentPage, selectedQuiz}) => {
         };
         const fetchQuizzes = async () => {
             try {
-                const response = await axiosInstance.post("/student_quiz_attendance/submitquiz",completedQuiz); // Fetch quizzes from the backend
+                const response = await axiosInstance.post("/student_quiz_attendance/submitquiz",completedQuiz); //for submitting the quiz 
                 console.log(response);
             } catch (error) {
                 console.error('Error fetching quizzes:', error);
             }
         };
-      
+
         fetchQuizzes();
-       setCurrentPage('Studentquiz');
+        setCurrentPage('Studentquiz');
+        //Upadate acttivity feed for user submitting quiz
+        const user = JSON.parse(localStorage.getItem("user")); // Parse the stored string into an object
+
+        if (user) {
+          const UserActivitydetail = {
+            userId: user.id,
+            email: user.email,
+            type: "quiz",
+            title: selectedQuiz.title
+          };
+        
+          //console.log(UserActivitydetail);
+        
+          const UpdateActivityFeed = async () => {
+            try {
+              const response = await axiosInstance.post("/useractivityFeed/addActivity", UserActivitydetail); // For submitting the quiz
+              console.log(response);
+            } catch (error) {
+              console.error('Error Updating Activity Feed', error);
+            }
+          };
+        
+          UpdateActivityFeed();
+        } else {
+          console.error('User not found in localStorage');
+        }
+        //
+
+        //for Studentperformation update
+        if (user) {
+            const Studentperformationdetail = {
+              userId: user.id,
+              email: user.email,
+              subjectName: selectedQuiz.subject,
+              score: percentageScore
+            };
+            const UpdateStudentperformationdetail = async () => {
+                try {
+                  const response = await axiosInstance.post("/quizperformance/updateOrAddSubjectScore", Studentperformationdetail); // For submitting the quiz
+                  console.log(response);
+                } catch (error) {
+                  console.error('Error Updating Student Performance', error);
+                }
+              };
+            
+              UpdateStudentperformationdetail();
+            } else {
+              console.error('User not found in localStorage');
+            }
+        
+       
     };
 
     // Early return if selectedQuiz is null or loading

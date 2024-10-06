@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function QuizForm(props) {
     const [language, setLanguage] = useState('English');
+    const [subject, setSubject] = useState('Physics');
     const [title, setTitle] = useState('');
     const [question, setQuestion] = useState('');
     const [options, setOptions] = useState(["", "", "", ""]);
@@ -59,6 +60,7 @@ function QuizForm(props) {
             options,
             answer,
             classLevel,
+            subject,
             totalQuestions,
             date: formatDate(new Date()),
         };
@@ -96,6 +98,17 @@ function QuizForm(props) {
                         <option value="English">English</option>
                         <option value="Spanish">Spanish</option>
                         <option value="French">French</option>
+                    </select>
+                </div>
+                <div className="form-group">
+                    <label>Choose Subject</label>
+                    <select value={subject} onChange={(e) => setSubject(e.target.value)}>
+                        <option value="Maths">Maths</option>
+                        <option value="Biology">Biology</option>
+                        <option value="English">English</option>
+                        <option value="Hindi">Hindi</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
                     </select>
                 </div>
                 <div className="form-group">

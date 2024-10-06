@@ -12,7 +12,9 @@ const Register = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    classLevel:'',
     password: '',
+
   });
   const [rePassword, setRePassword] = useState('');
   const [loading, setLoading] = useState(false); // Loading state
@@ -39,10 +41,11 @@ const Register = () => {
       });
     }else{
     if (formData.password.length !== 0 && (formData.password === rePassword)) {
+      console.log(formData);
       setLoading(true); // Set loading to true
       try {
         const user = await axiosInstance.post("/auth/signup", { ...formData, role: userType });
-        login(user);
+        console.log(user);
         toast.success("Please verify your email Address", {
           position: "top-right",
           autoClose: 2000
@@ -110,6 +113,17 @@ const Register = () => {
             required
           />
         </label>
+        {userType==='student' && <label>
+          Class
+          <input
+            type="text"
+            name="classLevel"
+            value={formData.classLevel}
+            onChange={handleChange}
+            placeholder="Class e.g. 9,10.."
+            required
+          />
+        </label>}
         <label>
           Password
           <input

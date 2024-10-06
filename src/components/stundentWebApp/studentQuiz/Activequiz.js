@@ -11,17 +11,24 @@ const StudentActivequiz = ({ takequiz,setSelectedQuiz}) => {
 
     useEffect(() => {
         const fetchQuizzes = async () => {
+            // Get classLevel from local storage
+            const user = JSON.parse(localStorage.getItem("user")); // Assuming user object is stored in local storage
+            const classLevel = user?.classLevel; // Get classLevel from the user object
+    
             try {
-                const response = await axiosInstance.get("/student_quiz_attendance/getactivequizzes"); // Fetch quizzes from the backend
-                const data = response.data; // Accessing the data directly from Axios response
+                // Make the GET request with classLevel as a query parameter
+                const response = await axiosInstance.get(`/student_quiz_attendance/getactivequizzes?classLevel=${classLevel}`);
+                
+                const data = response.data; // Accessing the data from Axios response
                 setActiveQuizzes(data); // Set the fetched quizzes to the active quizzes state
             } catch (error) {
                 console.error('Error fetching quizzes:', error);
             }
         };
-
-        fetchQuizzes();
-    }, []); 
+    
+        fetchQuizzes(); // Fetch quizzes on component mount
+    }, []);
+    
     const handleQuizClick = (quiz) => {
       setSelectedQuiz(quiz);
         setQuizcard(quiz);

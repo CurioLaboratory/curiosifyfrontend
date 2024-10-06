@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const VerifyEmail = () => {
+
   const [message, setMessage] = useState('');
   const location = useLocation();
   const navigate = useNavigate(); // Hook for navigation

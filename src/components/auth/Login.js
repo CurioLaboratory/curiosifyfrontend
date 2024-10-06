@@ -39,7 +39,7 @@ const Login = () => {
               position: "top-right",
               autoClose: 2000,
             });
-            navigate('/home');
+           {userType=='teacher'? navigate('/home'):navigate('/studenthome')}
           }, 2000);
         } else {
           toast.warn("Invalid Credentials", {

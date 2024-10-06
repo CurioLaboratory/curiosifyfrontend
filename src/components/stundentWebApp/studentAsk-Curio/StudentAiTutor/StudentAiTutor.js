@@ -146,7 +146,7 @@ const StudentAiTutor = ({ setCurrentPage, setAichattitle }) => {
               </option>
               <option value="Class 1">Class 1</option>
               <option value="Class 2">Class 2</option>
-              <option value="Class 3">Class 3</option>
+              <option value="Class 12">Class 12</option>
             </select>
           ) : (
             <select
@@ -157,7 +157,7 @@ const StudentAiTutor = ({ setCurrentPage, setAichattitle }) => {
               <option value="" disabled hidden>
                 Select Topic
               </option>
-              <option value="Algebra">Algebra</option>
+              <option value="Quantum Physics">Quantum Physics</option>
               <option value="Geometry">Geometry</option>
               <option value="Calculus">Calculus</option>
             </select>

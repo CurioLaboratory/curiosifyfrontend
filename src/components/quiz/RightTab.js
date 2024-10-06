@@ -41,6 +41,7 @@ const RightTab = (props) => {
             title: quizData[0].title,
             date: new Date().toLocaleDateString(),
             classLevel: quizData[0].classLevel,
+            subject:quizData[0].subject,
             language: quizData[0].language,
             totalQuestions: quizData.length,
             questions: quizData.map(item => ({

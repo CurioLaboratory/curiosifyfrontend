@@ -1,225 +1,225 @@
 .Ai-chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 81vh;
+  flex: 1;
+  min-width: 300px;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+
+  .chat-header {
+    position: relative;
     display: flex;
-    flex-direction: column;
-    height: 83vh;
-    flex: 1;
-    min-width: 300px;
-    background: white;
-    border-radius: 8px;
+    justify-content: space-between;
+    align-items: center;
+
+    .chat-title {
+      cursor: pointer;
+      margin-left: 40%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 18px;
+      color: #333;
+
+      .dropdown-icon {
+        margin-left: 10px;
+        transition: transform 0.3s ease;
+      }
+
+      .dropdown-icon.open {
+        transform: rotate(180deg);
+      }
+    }
+
+    .title-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 35%;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      z-index: 10;
+      width: 200px;
+      margin-top: 5px;
+
+      p {
+        margin: 5px 0;
+        font-size: 14px;
+        color: #555;
+      }
+    }
+
+    .side-menu-button {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #333;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #f39c12;
+      }
+    }
+  }
+
+  .side-menu {
+    position: fixed;
+    top: 0;
+    right: -330px;
+    height: 100vh;
+    width: 250px;
+    background: #f39c12;
+    color: white;
     padding: 20px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  
-    .chat-header {
-      position: relative;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-  
-      .chat-title {
-        cursor: pointer;
-        margin-left: 40%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-weight: bold;
-        font-size: 18px;
-        color: #333;
-  
-        .dropdown-icon {
-          margin-left: 10px;
-          transition: transform 0.3s ease;
-        }
-  
-        .dropdown-icon.open {
-          transform: rotate(180deg);
-        }
-      }
-  
-      .title-dropdown {
-        position: absolute;
-        top: 100%; /* Positioning the dropdown below the chat title */
-        left:35%;
-        background: white;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        padding: 10px;
-        z-index: 10;
-        width: 200px; /* Adjust as needed */
-        margin-top: 5px; /* Small space below the title */
-  
-        p {
-          margin: 5px 0;
-          font-size: 14px;
-          color: #555;
-        }
-      }
-  
-      .side-menu-button {
-        background: none;
-        border: none;
-        font-size: 24px;
-        cursor: pointer;
-        color: #333;
-        transition: color 0.3s ease;
-  
-        &:hover {
-          color: #f39c12;
-        }
-      }
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease;
+
+    &.open {
+      right: 0;
     }
-  
-    .side-menu {
-      position: fixed;
-      top: 0;
-      right: -330px;
-      height: 100vh;
-      width: 250px;
-      background: #f39c12;
+
+    .close-menu-button {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
       color: white;
-      padding: 20px;
-      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-      transition: right 0.3s ease;
-  
-      &.open {
-        right: 0;
+      margin-bottom: 20px;
+
+      &:hover {
+        color: #d78b0d;
       }
-  
-      .close-menu-button {
-        background: none;
-        border: none;
-        font-size: 24px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        margin: 15px 0;
         cursor: pointer;
-        color: white;
-        margin-bottom: 20px;
-  
+        transition: color 0.3s ease;
+
         &:hover {
-          color: #d78b0d;
-        }
-      }
-  
-      ul {
-        list-style: none;
-        padding: 0;
-  
-        li {
-          margin: 15px 0;
-          cursor: pointer;
-          transition: color 0.3s ease;
-  
-          &:hover {
-            color: #ddd;
-          }
-        }
-      }
-    }
-  
-    .chat-area {
-      flex-grow: 1;
-      overflow-y: auto;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-  
-      .chat-suggestions {
-        text-align: center;
-        color: #666;
-  
-        h3 {
-          margin-bottom: 10px;
-          font-weight: bold;
-          font-size: 20px;
-          color: #333;
-        }
-  
-        ul {
-          list-style: none;
-          padding: 0;
-  
-          li {
-            padding: 10px 20px;
-            margin: 10px 0;
-            background-color: #fff;
-            border-radius: 16px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            font-size: 16px;
-            color: #333;
-  
-            &:hover {
-              background-color: #f39c12;
-              color: white;
-            }
-          }
-        }
-      }
-  
-      .chat-message {
-        max-width: 60%;
-        padding: 15px;
-        border-radius: 16px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  
-        &.user {
-          align-self: flex-end;
-          background-color: #f39c12;
-          color: #fff;
-        }
-  
-        &.bot {
-          align-self: flex-start;
-          background-color: #fff;
-          color: #333;
-          border: 1px solid #ddd;
-        }
-      }
-    }
-  
-    .question-section {
-      padding: 8px 18px;
-      background-color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-  
-      .question-input {
-        display: flex;
-        width: 100%;
-        max-width: 1200px;
-  
-        input {
-          flex-grow: 1;
-          padding: 12px 20px;
-          border: 1px solid #ddd;
-          border-radius: 30px 0 0 30px;
-          font-size: 16px;
-          outline: none;
-          transition: border-color 0.3s ease;
-  
-          &:focus {
-            border-color: #f39c12;
-          }
-        }
-  
-        button {
-          padding: 12px 20px;
-          background-color: #f39c12;
-          border: none;
-          border-radius: 0 30px 30px 0;
-          color: #fff;
-          font-weight: bold;
-          cursor: pointer;
-          transition: background-color 0.3s ease;
-  
-          &:hover {
-            background-color: #e3890d;
-          }
+          color: #ddd;
         }
       }
     }
   }
-  
+
+  .chat-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Changed from center to flex-start */
+    align-items: center;
+    gap: 10px;
+
+    .chat-suggestions {
+      text-align: center;
+      color: #666;
+
+      h3 {
+        margin-bottom: 10px;
+        font-weight: bold;
+        font-size: 20px;
+        color: #333;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+          padding: 10px 20px;
+          margin: 10px 0;
+          background-color: #fff;
+          border-radius: 16px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+          font-size: 16px;
+          color: #333;
+
+          &:hover {
+            background-color: #f39c12;
+            color: white;
+          }
+        }
+      }
+    }
+
+    .chat-message {
+      max-width: 60%;
+      padding: 15px;
+      border-radius: 16px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin: 5px 0; /* Added margin to create space between messages */
+
+      &.user {
+        align-self: flex-end;
+        background-color: #f39c12;
+        color: #fff;
+      }
+
+      &.bot {
+        align-self: flex-start;
+        background-color: #fff;
+        color: #333;
+        border: 1px solid #ddd;
+      }
+    }
+  }
+
+  .question-section {
+    padding: 8px 18px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .question-input {
+      display: flex;
+      width: 100%;
+      max-width: 1200px;
+
+      input {
+        flex-grow: 1;
+        padding: 12px 20px;
+        border: 1px solid #ddd;
+        border-radius: 30px 0 0 30px;
+        font-size: 16px;
+        outline: none;
+        transition: border-color 0.3s ease;
+
+        &:focus {
+          border-color: #f39c12;
+        }
+      }
+
+      button {
+        padding: 12px 20px;
+        background-color: #f39c12;
+        border: none;
+        border-radius: 0 30px 30px 0;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #e3890d;
+        }
+      }
+    }
+  }
+}

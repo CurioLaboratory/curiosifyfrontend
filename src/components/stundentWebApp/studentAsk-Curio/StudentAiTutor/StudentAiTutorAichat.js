@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from "react";
+import axios from "axios"; // Import Axios
 import './StudentAiTutorAichat.scss'; // Import your SCSS file here
 
 const StudentAiTutorAichat = ({ Aichattitle }) => {
@@ -6,12 +7,57 @@ const StudentAiTutorAichat = ({ Aichattitle }) => {
   const [chatMessages, setChatMessages] = useState([]);
   const [isTitleDropdownOpen, setIsTitleDropdownOpen] = useState(false);
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false); // State to handle side menu toggle
+  const [isLoading, setIsLoading] = useState(false); // State for loading spinner
+  const chatAreaRef = useRef(null); // Create a ref for the chat area
 
-  const handleAskQuestion = () => {
+  const handleAskQuestion = async () => {
     if (question) {
-      setChatMessages([...chatMessages, { sender: "user", text: question }]);
+      const userMessage = { sender: "user", text: question };
+      setChatMessages([...chatMessages, userMessage]);
       setQuestion(""); // Reset question input
-      // Add logic for bot responses here if necessary
+      setIsLoading(true); // Set loading spinner while waiting for bot response
+
+      try {
+        // Prepare a detailed message for the chat completion API
+        const messages = [
+          { role: "system", content: "You are a friendly and helpful tutor named Curio Ai." },
+          {
+            role: "user",
+            content: `Subject: ${Aichattitle.subject}\nLanguage: ${Aichattitle.language}\nClass: ${Aichattitle.class}\nTopic: ${Aichattitle.topic}\n\nQuestion: ${question}\n\nPlease provide a friendly, educational, and detailed answer.`,
+          },
+        ];
+
+        // Call OpenAI Chat Completion API for bot response
+        const response = await axios.post(
+          "https://api.openai.com/v1/chat/completions",
+          {
+            model: "gpt-3.5-turbo",
+            messages: messages,
+            max_tokens: 150,
+          },
+          {
+            headers: {
+              Authorization: `Bearer sk-fCTQ0PeogLBJ-iZswUO7dWtDx0z3AcbU1ywQWGq63MT3BlbkFJyk_Xb9X_AeGkG8_Ish7mUHE3JmhGV0yPr_ODirkLwA`, // Use your API key here
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const botMessage = {
+          sender: "bot",
+          text: response.data.choices[0].message.content.trim(), // Get bot response from the API response
+        };
+
+        setChatMessages((prevMessages) => [...prevMessages, botMessage]);
+      } catch (error) {
+        console.error("Error fetching bot response:", error);
+        setChatMessages((prevMessages) => [
+          ...prevMessages,
+          { sender: "bot", text: "Oops! Something went wrong. Please try again." },
+        ]);
+      } finally {
+        setIsLoading(false); // Stop loading spinner
+      }
     }
   };
 
@@ -20,8 +66,15 @@ const StudentAiTutorAichat = ({ Aichattitle }) => {
     handleAskQuestion();
   };
 
+  // Scroll to the bottom of the chat area whenever chatMessages change
+  useEffect(() => {
+    if (chatAreaRef.current) {
+      chatAreaRef.current.scrollTop = chatAreaRef.current.scrollHeight;
+    }
+  }, [chatMessages]);
+
   return (
-    <div style={{ backgroundColor: 'white', height: '86vh' }}>
+    <div style={{ backgroundColor: "white", height: "86vh" }}>
       <div className="Ai-chat-container">
         <div className="chat-header">
           <div
@@ -29,25 +82,40 @@ const StudentAiTutorAichat = ({ Aichattitle }) => {
             onClick={() => setIsTitleDropdownOpen(!isTitleDropdownOpen)}
           >
             Chat Title
-            <span className={`dropdown-icon ${isTitleDropdownOpen ? 'open' : ''}`}>&#9660;</span>
+            <span className={`dropdown-icon ${isTitleDropdownOpen ? "open" : ""}`}>
+              &#9660;
+            </span>
           </div>
           {isTitleDropdownOpen && (
             <div className="title-dropdown">
-              <p><strong>Subject:</strong> {Aichattitle.subject}</p>
-              <p><strong>Language:</strong> {Aichattitle.language}</p>
-              <p><strong>Class:</strong> {Aichattitle.class}</p>
-              <p><strong>Topic:</strong> {Aichattitle.topic}</p>
+              <p>
+                <strong>Subject:</strong> {Aichattitle.subject}
+              </p>
+              <p>
+                <strong>Language:</strong> {Aichattitle.language}
+              </p>
+              <p>
+                <strong>Class:</strong> {Aichattitle.class}
+              </p>
+              <p>
+                <strong>Topic:</strong> {Aichattitle.topic}
+              </p>
             </div>
           )}
-          {/* Side Menu Button */}
-          <button className="side-menu-button" onClick={() => setIsSideMenuOpen(!isSideMenuOpen)}>
-            &#9776; {/* Hamburger icon */}
+          <button
+            className="side-menu-button"
+            onClick={() => setIsSideMenuOpen(!isSideMenuOpen)}
+          >
+            &#9776;
           </button>
         </div>
 
-        <div className={`side-menu ${isSideMenuOpen ? 'open' : ''}`}>
-          <button className="close-menu-button" onClick={() => setIsSideMenuOpen(false)}>
-            &times; {/* Close icon */}
+        <div className={`side-menu ${isSideMenuOpen ? "open" : ""}`}>
+          <button
+            className="close-menu-button"
+            onClick={() => setIsSideMenuOpen(false)}
+          >
+            &times;
           </button>
           <ul>
             <li>Menu Item 1</li>
@@ -56,7 +124,7 @@ const StudentAiTutorAichat = ({ Aichattitle }) => {
           </ul>
         </div>
 
-        <div className="chat-area">
+        <div className="chat-area" ref={chatAreaRef}>
           {chatMessages.length === 0 ? (
             <div className="chat-suggestions">
               <h3>Start a conversation!</h3>
@@ -76,6 +144,7 @@ const StudentAiTutorAichat = ({ Aichattitle }) => {
               </div>
             ))
           )}
+          {isLoading && <div className="loading-spinner">Loading...</div>}
         </div>
 
         <div className="question-section">
