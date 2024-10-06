@@ -5,8 +5,7 @@ import Card from "react-bootstrap/Card";
 import "./Righttab.scss";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ClipLoader from "react-spinners/ClipLoader";
-
+import ProgressSteps from "./Loader";
 const RightTab = (props) => {
   const [quizData, setQuizData] = useState([]);
   const [quizAiData, setAiQuizData] = useState({});
@@ -21,9 +20,9 @@ const RightTab = (props) => {
   useEffect(() => {
     if (props.activeTab === "Text/AI") {
       const data = JSON.parse(localStorage.getItem("textAiTabQuiz")) || {};
-      console.log("Loaded textAiTabQuiz data:", data);
+      // console.log("Loaded textAiTabQuiz data:", data);
       setAiQuizData(data);
-      console.log(quizAiData.totalQuestions);
+       //console.log(quizAiData);
     }
   }, [props.aiQuizGenerated]);
   
@@ -46,11 +45,11 @@ const RightTab = (props) => {
       localStorage.removeItem("manualQuizData");
       setQuizData([]);
     }
-    if (props.activeTab === "Text/AI") {
+   else if (props.activeTab === "Text/AI") {
       localStorage.removeItem("textAiTabQuiz");
       setAiQuizData({});
     }
-    if (props.activeTab === "Upload") {
+   else if (props.activeTab === "Upload") {
       localStorage.removeItem("uploadTabQuiz");
       setuploadQuizData({});
     }
@@ -235,13 +234,7 @@ const RightTab = (props) => {
                 </div>
               )}
               {props.loading&&props.activeTab === "Text/AI" ? (
-                <div className="loading-spinner">
-                  <p>
-                    <span className="sr-only">
-                      <ClipLoader size={100} />
-                    </span>
-                  </p>
-                </div>
+               <div className="loader-animation"><ProgressSteps/></div> 
               ) : (
                 props.activeTab === "Text/AI" &&
                 quizAiData.totalQuestions && (
@@ -249,36 +242,39 @@ const RightTab = (props) => {
                     {quizAiData.questions.map((item, index) => (
                       <div key={index} className="cardQues">
                         <h3>
-                          {index + 1}.{item.question}
+                          {index + 1}. {item.question}
                         </h3>
-                        <ul>
-                          {item.options.map((option, optionIndex) => (
-                            <li
-                              key={optionIndex}
-                              style={{
-                                color:
-                                  option === item.answer ? "green" : "black",
-                              }}
-                            >
-                              {String.fromCharCode(65 + optionIndex)}: {option}
-                            </li>
-                          ))}
-                        </ul>
-                        <p>Correct Answer: {item.answer}</p>
+                        {item.type === "MCQ" && (
+                          <>
+                            <ul>
+                              {item.options.map((option, optionIndex) => (
+                                <li
+                                  key={optionIndex}
+                                  style={{
+                                    color: option === item.answer ? "green" : "black",
+                                  }}
+                                >
+                                  {String.fromCharCode(65 + optionIndex)}: {option}
+                                </li>
+                              ))}
+                            </ul>
+                            <p>Correct Answer: {item.answer}</p>
+                          </>
+                        )}
+                        {item.type === "Subjective" && (
+                          <>
+                            <p>correctAnswer: {item.answer}</p>
+                          </>
+                        )}
                         <p>Created on: {quizAiData.date}</p>
                       </div>
                     ))}
                   </div>
                 )
+                
               )}
                {props.loading&&props.activeTab === "Upload" ? (
-                <div className="loading-spinner">
-                  <p>
-                    <span className="sr-only">
-                      <ClipLoader size={100} />
-                    </span>
-                  </p>
-                </div>
+                 <div className="loader-animation"><ProgressSteps/></div> 
               ) : (
                 props.activeTab === "Upload" &&
                 quizuploadData.totalQuestions && (
@@ -286,22 +282,30 @@ const RightTab = (props) => {
                     {quizuploadData.questions.map((item, index) => (
                       <div key={index} className="cardQues">
                         <h3>
-                          {index + 1}.{item.question}
+                          {index + 1}. {item.question}
                         </h3>
-                        <ul>
-                          {item.options.map((option, optionIndex) => (
-                            <li
-                              key={optionIndex}
-                              style={{
-                                color:
-                                  option === item.answer ? "green" : "black",
-                              }}
-                            >
-                              {String.fromCharCode(65 + optionIndex)}: {option}
-                            </li>
-                          ))}
-                        </ul>
-                        <p>Correct Answer: {item.answer}</p>
+                        {item.type === "MCQ" && (
+                          <>
+                            <ul>
+                              {item.options.map((option, optionIndex) => (
+                                <li
+                                  key={optionIndex}
+                                  style={{
+                                    color: option === item.answer ? "green" : "black",
+                                  }}
+                                >
+                                  {String.fromCharCode(65 + optionIndex)}: {option}
+                                </li>
+                              ))}
+                            </ul>
+                            <p>Correct Answer: {item.answer}</p>
+                          </>
+                        )}
+                        {item.type === "Subjective" && (
+                          <>
+                            <p>correctAnswer: {item.answer}</p>
+                          </>
+                        )}
                         <p>Created on: {quizuploadData.date}</p>
                       </div>
                     ))}

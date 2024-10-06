@@ -8,7 +8,7 @@ import { useAuth } from '../auth/AuthContext';
 function TextAiTab(props) {
     const [language, setLanguage] = useState('English');
     const [title, setTitle] = useState('');
-    const [questionType, setQuestionType] = useState('Multiple single choice');
+    const [questionType, setQuestionType] = useState('MCQ');
     const [numQuestions, setNumQuestions] = useState(1);
     const [level, setLevel] = useState('Easy');
     const [topic, setTopic] = useState('');
@@ -17,20 +17,40 @@ function TextAiTab(props) {
   
   
     const handleGenerateQuiz = async () => {
+       localStorage.removeItem("textAiTabQuiz");
+     // props.setAiQuizGenerated(!props.aiQuizGenerated);
+
+      if(!title || !level || !numQuestions  || !language){
+        toast.info("Fields are missing!", {
+          position: "top-right",
+          autoClose: 1000,
+        });
+        return;
+      }
       props.setLoading(true);
+
+      // Define the endpoint based on the language
+  let endpointURL;
+  if (language.toLowerCase() === "english") {
+    endpointURL = "https://nsyqsyo2bm6csijtfl4cl5cjvu0annrl.lambda-url.us-east-1.on.aws/";
+  } else {
+    endpointURL = "https://bhghddzlvw7366bldu3vpzmj4u0dordd.lambda-url.us-east-1.on.aws/";
+  }
       // Handle quiz generation logic
+
       const quizRequestData = {
         subject: title,
         ton: level,
         numQuestions: numQuestions,
-        questionType: "MCQ",
+        questionType: questionType,
         youtubeURL: topic,
-        language: language
+        ...(language.toLowerCase() !== "english" && { language: language }), // Conditionally add language
       };
-    
+    console.log(questionType)
+    // console.log(quizRequestData)
       try {
         // 1. Make a POST request to the external API to generate the quiz
-        const externalResponse = await fetch("https://bhghddzlvw7366bldu3vpzmj4u0dordd.lambda-url.us-east-1.on.aws/", {
+        const externalResponse = await fetch(endpointURL, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -43,20 +63,37 @@ function TextAiTab(props) {
         }
     
         const quizdata = await externalResponse.json();
-        console.log(quizdata)
+       console.log(quizdata)
   
         const user = getUser();
+
+        // Generate the quiz based on the type
+        const questions = quizdata.map((item) => {
+          if (item.option1) {
+              // MCQ Question
+              return {
+                  type: "MCQ",
+                  question: item.question,
+                  options: [item.option1, item.option2, item.option3, item.option4],
+                  answer: item.correctOption,
+              };
+          } else if (item.correctAnswer) {
+              // Subjective Question
+              return {
+                  type: "Subjective",
+                  question: item.Question,
+                  answer: item.correctAnswer,
+              };
+          }
+      });
+console.log(questions)
         // this data will send to backend for saving into database
         const publishedQuiz = {
           title: quizRequestData.subject, 
           date: new Date().toLocaleDateString(),
           language: quizRequestData.language,
           totalQuestions: quizdata.length,
-          questions: quizdata.map(item => ({
-              question: item.question,
-              options: [item.option1, item.option2, item.option3, item.option4],
-              answer: item.correctOption
-          })),
+          questions: questions,
           createdBy: user.email
       };
       console.log(publishedQuiz)
@@ -66,7 +103,7 @@ function TextAiTab(props) {
 
       props.setAiQuizGenerated(!props.aiQuizGenerated);
       setTitle('')
-      setQuestionType('Multiple single choice')
+      setQuestionType("MCQ")
       setNumQuestions('1')
       setLevel('easy')
       setSubject('')
@@ -75,19 +112,11 @@ function TextAiTab(props) {
           autoClose: 1000
       });
   
-      //   const response = await axiosInstance.post("/quiz/createAIquiz",publishedQuiz)
-    
-      //   if (response.status !== 201) { // Check for status code 201 for successful creation
-      //     throw new Error("Failed to save quiz in the backend database");
-      //   }
-    
-      //   const savedQuizData = await response.data;
-    
-        
-      //   console.log("Quiz generated and saved successfully:", savedQuizData);
-    
       } catch (error) {
-      
+        toast.error("Error Fetching, try again!", {
+          position: "top-right",
+          autoClose: 1000,
+        });
         console.error("Error:", error.message);
       }
       finally {
@@ -96,12 +125,7 @@ function TextAiTab(props) {
     };
 
 
-
-
-
-
-
-     
+  
   return <div className="form-container">
   <form>
     <div className="form-group">
@@ -127,9 +151,9 @@ function TextAiTab(props) {
     <div className="form-group">
       <label>Question type</label>
       <select value={questionType} onChange={(e) => setQuestionType(e.target.value)}>
-        <option value="Multiple single choice">Multiple single choice</option>
-        <option value="Multiple multiple choice">Multiple multiple choice</option>
-        <option value="True/False">True/False</option>
+        <option value="MCQ">Multiple single choice</option>
+        <option value="Subjective">Subjective</option>
+        <option value="MCQ+Subjective">Subjective + MCQ</option>
       </select>
     </div>
     <div className="form-group">

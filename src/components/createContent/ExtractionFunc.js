@@ -47,39 +47,39 @@ function extractChaptersAndModules(text) {
 
 
 // Output of this Input
-//   [
-//    {
-//     "Chapter":"Introduction to Light",
-//     "Modules":[
-//         {
-//             "Name":"The Nature of Light",
-//             "Explainantion":"Light is a form of electromagnetic radiation that is visible to the human eye. It travels in waves, with properties of both particles and waves. This dual nature of light is known as wave-particle duality. Real-world examples include the colors we see and the rainbow phenomenon. A common misconception is that light only travels in straight lines, but it can also bend around corners in a process known as diffraction."
-//         },
-//         {
-//             "Name":"Speed of Light",
-//             "Explainantion":"The speed of light in a vacuum is a fundamental constant of nature, approximately 299,792 kilometers per second. It changes when light passes through different mediums, this change in speed leads to a phenomenon called refraction. Practical applications include fiber optic communication systems. A common challenge is understanding that light doesn't slow down in a medium, rather it takes more time due to the interaction with the medium's particles."
-//         },
-//         {
-//             "Name":"Electromagnetic Spectrum",
-//             "Explainantion":"The electromagnetic spectrum includes all types of electromagnetic radiation, from radio waves to gamma rays. Visible light is just a small portion of this spectrum. Real-world applications include radio and television broadcasting, and medical imaging technologies like X-rays and MRIs. A common misconception is that all electromagnetic waves are visible to the human eye, when in fact, only a small portion is."
-//         }
-//     ]
-//    },
-//    {
-//    "Chapter":"Interaction of Light with Matter",
-//     "Modules":[
-//         {
-//             "Name":"Reflection",
-//             "Explainantion":"Reflection occurs when light bounces off a surface. The angle of incidence equals the angle of reflection. Practical applications include mirrors and periscopes. A common challenge is understanding the difference between regular and diffuse reflection."
-//         },
-//         {
-//             "Name":"Refraction",
-//             "Explainantion":"Refraction is the bending of light as it passes from one medium to another. It's responsible for phenomena like the apparent bending of a straw in a glass of water. Practical applications include lenses and prisms. A common misconception is that light bends towards the normal in all mediums, but it depends on the optical density of the medium."
-//         },
-//         {
-//             "Name":"Diffraction and Interference",
-//             "Explainantion":"Diffraction is the bending of light around corners, and interference is the interaction of multiple waves. They are responsible for phenomena like rainbow colors and the pattern seen in a soap bubble. Practical applications include holography and the design of optical instruments. A common challenge is understanding the complex wave patterns resulting from interference."
-//         }
-//     ]
-//    }
-// ]
+  [
+   {
+    "Chapter":"",
+    "Modules":[
+        {
+            "Name":"",
+            "Explainantion":""
+        },
+        {
+            "Name":"",
+            "Explainantion":""
+        },
+        {
+            "Name":"",
+            "Explainantion":""
+        }
+    ]
+   },
+   {
+   "Chapter":"",
+    "Modules":[
+        {
+            "Name":"",
+            "Explainantion":""
+        },
+        {
+            "Name":"",
+            "Explainantion":""
+        },
+        {
+            "Name":"",
+            "Explainantion":""
+        }
+    ]
+   }
+]

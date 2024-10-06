@@ -1,31 +1,111 @@
 import React, { useState } from "react";
 import "./Createcontent.scss";
-
+import PreviewCourse from "./PreviewCourse";
 
 //store the values of each dropdown
-const Createcourses = () => {
+const CreateCourse = ({ setCurrentPage, setChapterModuleData }) => {
   const [selectedOption, setSelectedOption] = useState({
     learningObjectives: "",
-    assignmentType: "",
-    grading: "",
+    subject: "",
     class: "",
     language: "",
   });
+  const [courseGenerated, setCourseGenerated] = useState(false);
+  // const data = [
+  //   {
+  //     Chapter: "Introduction to Light and Matter",
+  //     Modules: [
+  //       {
+  //         Name: "The Nature of Light",
+  //         Explanation:
+  //           "Light is a form of electromagnetic radiation that is visible to the human eye. ...",
+  //       },
+  //       {
+  //         Name: "Interaction of Light with Matter",
+  //         Explanation:
+  //           "When light encounters matter, it can be absorbed, reflected, transmitted, or refracted. ...",
+  //       },
+  //       {
+  //         Name: "The Electromagnetic Spectrum",
+  //         Explanation:
+  //           "The electromagnetic spectrum is the range of all possible frequencies of electromagnetic radiation, ...",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     Chapter: "Principles of Optics",
+  //     Modules: [
+  //       {
+  //         Name: "Reflection and Refraction",
+  //         Explanation:
+  //           "Reflection is the process by which light bounces off a surface. ...",
+  //       },
+  //       {
+  //         Name: "Diffraction and Interference",
+  //         Explanation:
+  //           "Diffraction is the bending of light around obstacles, resulting in the spreading out of light waves. ...",
+  //       },
+  //       {
+  //         Name: "Polarization",
+  //         Explanation:
+  //           "Polarization is the process by which the oscillations of a light wave are confined to a certain direction. ...",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     Chapter: "Optical Instruments",
+  //     Modules: [
+  //       {
+  //         Name: "Lenses and Mirrors",
+  //         Explanation:
+  //           "Lenses and mirrors are optical instruments that manipulate light to form images. ...",
+  //       },
+  //       {
+  //         Name: "Microscopes and Telescopes",
+  //         Explanation:
+  //           "Microscopes and telescopes are optical instruments that magnify objects. ...",
+  //       },
+  //       {
+  //         Name: "Optical Communications",
+  //         Explanation:
+  //           "Optical communications involve transmitting information using light. ...",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     Chapter: "Advanced Topics in Optics",
+  //     Modules: [
+  //       {
+  //         Name: "Quantum Optics",
+  //         Explanation:
+  //           "Quantum optics is the study of the quantum mechanical properties of light. ...",
+  //       },
+  //       {
+  //         Name: "Nonlinear Optics",
+  //         Explanation:
+  //           "Nonlinear optics is the study of the interaction of light with matter in which the response of the material is nonlinear. ...",
+  //       },
+  //       {
+  //         Name: "Photonics",
+  //         Explanation:
+  //           "Photonics is the science and technology of generating, controlling, and detecting photons, the particles of light. ...",
+  //       },
+  //     ],
+  //   },
+  // ];
 
   // this usestate is to store the file in learning object dropdown
-  const [file, setFile] = useState(null);  
-
-
+  const [file, setFile] = useState(null);
+  const[loading,setLoading]=useState(false);
   //this usestate is used for toggle dropdown
   const [dropdownOpen, setDropdownOpen] = useState({
     learningObjectives: false,
-    assignmentType: false,
-    grading: false,
+    subject: false,
     class: false,
     language: false,
   });
 
-//function to toggle dropdown
+  //function to toggle dropdown
   const toggleDropdown = (option) => {
     setDropdownOpen((prev) => ({
       ...prev,
@@ -33,21 +113,20 @@ const Createcourses = () => {
     }));
   };
 
-//function to handle textarea
+  //function to handle textarea
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setSelectedOption((prev) => ({
       ...prev,
       [name]: value,
     }));
-   // console.log(selectedOption.grading);
+    // console.log(selectedOption.subject);
   };
 
- //function to upload file 
+  //function to upload file
   const handleFileUpload = (e) => {
     setFile(e.target.files[0]);
   };
-
 
   //function to select values from dropdown and store them in corresponding usestate
   const handleOptionSelect = (option, value) => {
@@ -59,30 +138,98 @@ const Createcourses = () => {
     //console.log(option, value);
   };
 
-
   //Function to handle next click in learningobject dropdown
   const handleNext = () => {
     // Check if textarea has a value or a file is attached
     if (selectedOption.learningObjectives.trim()) {
       // Proceed to next step
-      console.log(selectedOption.learningObjectives);
-      if(file){
+      // console.log(selectedOption.learningObjectives);
+      if (file) {
         //to display file in console
-        console.log("File",file);
-    } 
-    } 
-    else {
+        console.log("File", file);
+      }
+    } else {
       // Display error or handle accordingly
       console.log("Please enter learning objectives or attach a file");
     }
   };
+  function convertData(data) {
+    return data.map((chapterObj) => {
+      const chapterName = Object.keys(chapterObj)[0]; // Get chapter name
+      // console.log(chapterName)
+      const modules = chapterObj[chapterName]; // Get the module contents
+      // console.log(modules)
 
-  
+      const moduleList = Object.keys(modules).map((moduleName) => {
+        return {
+          Name: moduleName.split(": ")[1], // Extract the name after "Module X: "
+          Explanation: modules[moduleName], // Get the explanation from the original object
+        };
+      });
+
+      return {
+        Chapter: Object.keys(modules)[0].replace(`Module 1`, "").split(": ")[1],
+        Modules: moduleList,
+      };
+    });
+  }
+  const handleGenerateCourse = async () => {
+    localStorage.removeItem("createCourses");
+    setLoading(true);
+    const url =
+      "https://favcy4ohbl4h3tye7itgi7ju7i0spbfm.lambda-url.us-east-1.on.aws/";
+
+    // The data you need to send in the request body
+    const requestData = {
+      httpMethod: "POST",
+      subject: selectedOption.subject,
+      learning_objectives: selectedOption.learningObjectives,
+      language: selectedOption.language,
+    };
+
+    try {
+      // Fetch data from the endpoint using POST
+      const response = await fetch(url, {
+        method: "POST", // Use POST method
+        headers: {
+          "Content-Type": "application/json", // Set the request headers
+        },
+        body: JSON.stringify(requestData), // Send the request data as JSON
+      });
+
+      // Check if the response is OK (status code 200)
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      // Get the response first, if it's a string
+      const responseText = await response.json();
+console.log(typeof(responseText))
+      // Convert the string response to JSON
+       const data = JSON.parse(responseText);
+       console.log(typeof(data))
+     /// const result = convertData(data);
+      //console.log(result)
+      // const ans = JSON.stringify(result, null, 2);
+      // const ans2 = JSON.parse(ans);
+      // console.log(ans2);
+      // Store the fetched data in localStorage with key "createCourses"
+      // localStorage.setItem("createCourses", JSON.stringify(ans2));
+
+      setCourseGenerated(!courseGenerated);
+      console.log("Data successfully fetched and stored in localStorage!");
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+    finally{
+      setLoading(false)
+    }
+  };
 
   return (
     <div className="parentdiv">
       <div className="heading">
-        <h2>Create Assignment</h2>
+        <h2>Create Course</h2>
       </div>
 
       <div className="assignment-container">
@@ -126,7 +273,9 @@ const Createcourses = () => {
                       style={{ display: "none" }}
                       onChange={handleFileUpload}
                     />
-                    <button className="attach-file-button"  onClick={handleNext}>Next</button>
+                    <button className="attach-file-button" onClick={handleNext}>
+                      Next
+                    </button>
                   </div>
                 </div>
               )}
@@ -136,56 +285,25 @@ const Createcourses = () => {
             <div className="dropdown">
               <button
                 className="option-button"
-                onClick={() => toggleDropdown("assignmentType")}
+                onClick={() => toggleDropdown("subject")}
               >
-                {selectedOption.assignmentType || "Assignment type"}
+                {selectedOption.subject || "subject"}
               </button>
-              {dropdownOpen.assignmentType && (
+              {dropdownOpen.subject && (
                 <div className="dropdown-content">
                   <div
                     className="dropdown-item"
-                    onClick={() =>
-                      handleOptionSelect("assignmentType", "Short form")
-                    }
+                    onClick={() => handleOptionSelect("subject", "Optics")}
                   >
-                    Short form
+                    Optics
                   </div>
                   <div
                     className="dropdown-item"
-                    onClick={() =>
-                      handleOptionSelect("assignmentType", "Long form")
-                    }
+                    onClick={() => handleOptionSelect("subject", "English")}
                   >
-                    Long form
+                    English
                   </div>
                 </div>
-              )}
-            </div>
-          </div>
-          <div className="option">
-            <div className="dropdown">
-              <button
-                className="option-button"
-                onClick={() => toggleDropdown("grading")}
-              >
-                {selectedOption.grading.name || "Grading"}
-              </button>
-              {dropdownOpen.grading && (
-                <div className="learning-objectives-section">
-                <label htmlFor="learningObjectives" className="label-text">
-                 Grading Criteria
-                </label>
-                <textarea
-                  id="grading"
-                  name="grading"
-                  value={
-                    selectedOption.grading.name ||
-                    selectedOption.grading
-                  }
-                  onChange={handleInputChange}
-                  className="learning-objectives-textarea"
-                />
-              </div>
               )}
             </div>
           </div>
@@ -243,16 +361,23 @@ const Createcourses = () => {
           </div>
         </div>
         <div className="assignment-preview">
-          <h3>Preview</h3>
-          <p>Complete required fields to preview assignment.</p>
+          {/* <p>Complete required fields to preview assignment.</p>  */}
+          <PreviewCourse
+            setCurrentPage={setCurrentPage}
+            setChapterModuleData={setChapterModuleData}
+            courseGenerated={courseGenerated}
+            loading={loading}
+          />
         </div>
       </div>
       <div className="assignment-actions">
-        <button className="regenerate-button">Regenerate</button>
+        <button className="regenerate-button" onClick={handleGenerateCourse}>
+          Regenerate
+        </button>
         <button className="create-button">Create</button>
       </div>
     </div>
   );
 };
 
-export default Createcourses;
+export default CreateCourse;

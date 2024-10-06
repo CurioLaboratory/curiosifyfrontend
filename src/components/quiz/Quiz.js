@@ -1,30 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import './Quiz.scss';
+import React, { useState, useEffect } from "react";
+import "./Quiz.scss";
 import axiosInstance from "../../axiosInstance";
-import Table from 'react-bootstrap/Table';
-import Card from 'react-bootstrap/Card';
-
+import Table from "react-bootstrap/Table";
+import Card from "react-bootstrap/Card";
+import { useAuth } from "../auth/AuthContext";
 const Quiz = ({ onCreateQuiz }) => {
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedQuizzes, setSelectedQuizzes] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedClass, setSelectedClass] = useState('');
-  const [sortOption, setSortOption] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedClass, setSelectedClass] = useState("");
+  const [sortOption, setSortOption] = useState("");
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [refreshAllQuiz, setRefreshAllQuiz] = useState(true);
-
+  const { getUser } = useAuth();
   const renderNoQuizzes = () => (
     <div className="no-quizzes">
       <p>You don't have any quiz</p>
-      <button className="create-quiz-button" onClick={onCreateQuiz}>+ Create new quiz</button>
+      <button className="create-quiz-button" onClick={onCreateQuiz}>
+        + Create new quiz
+      </button>
     </div>
   );
   useEffect(() => {
-
+    const user = getUser();
     const getAllQuiz = async () => {
-      const response = await axiosInstance.get("/quiz/getallquiz");
-      setQuizzes(response.data);
+      const response = await axiosInstance.get("/quiz/getallquiz", {
+        params: {
+          userId: user.email, // pass user id as a query parameter
+        },
+      });
+      if (response.data.length > 0) {
+        // Check if quizzes are returned
+        console.log(response.data[0]?.createdBy); // Safely access createdBy
+        setQuizzes(response.data);
+      } else {
+        // console.log('No quizzes found for this user');
+        setQuizzes([]); // Set quizzes to an empty array if none are found
+      }
       setLoading(false);
     };
 
@@ -61,22 +74,22 @@ const Quiz = ({ onCreateQuiz }) => {
     let filteredQuizzes = quizzes;
 
     if (searchTerm) {
-      filteredQuizzes = filteredQuizzes.filter(quiz =>
+      filteredQuizzes = filteredQuizzes.filter((quiz) =>
         quiz.title.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     if (selectedClass) {
-      filteredQuizzes = filteredQuizzes.filter(quiz =>
-        quiz.classLevel.toString() === selectedClass
+      filteredQuizzes = filteredQuizzes.filter(
+        (quiz) => quiz.classLevel.toString() === selectedClass
       );
     }
 
     if (sortOption) {
       filteredQuizzes.sort((a, b) => {
-        if (sortOption === 'date') {
+        if (sortOption === "date") {
           return new Date(b.date) - new Date(a.date);
-        } else if (sortOption === 'questions') {
+        } else if (sortOption === "questions") {
           return b.totalQuestions - a.totalQuestions;
         }
         return 0;
@@ -88,23 +101,43 @@ const Quiz = ({ onCreateQuiz }) => {
 
   if (selectedQuiz) {
     return (
-      <div className="selectedQuiz" >
-        <button className="back-button" onClick={() => setSelectedQuiz(null)}>← Back</button>
+      <div className="selectedQuiz">
+        <button className="back-button" onClick={() => setSelectedQuiz(null)}>
+          ← Back
+        </button>
         <p className="selectedQuizTitle">{selectedQuiz.title}</p>
-        <p >Published for <span className="selectedQuizClass">Class {selectedQuiz.classLevel}</span></p>
+        <p>
+          Published for{" "}
+          <span className="selectedQuizClass">
+            Class {selectedQuiz.classLevel}
+          </span>
+        </p>
 
         <Card className="text-center cardBody">
           <Card.Body>
-              {selectedQuiz.questions && selectedQuiz.questions.map((question, index) => (
-                <div className='cardQues' key={index}>
-                  <Card.Text >
-                  <h3>Q{index + 1}. {question.question}</h3>
-                  {question.options.map((option, optionIndex) => (
-                    <p key={optionIndex}>
-                      {String.fromCharCode(65 + optionIndex)}. {option}
-                    </p>
-                  ))}
-                </Card.Text>
+            {console.log(selectedQuiz)}
+            {selectedQuiz.questions &&
+              selectedQuiz.questions.map((question, index) => (
+                <div className="cardQues" key={index}>
+                  <Card.Text>
+                    <h3>
+                      Q{index + 1}. {question.question}
+                    </h3>
+                    {question.options && (
+                      <>
+                        {question.options.map((option, optionIndex) => (
+                          <p key={optionIndex}>
+                            {String.fromCharCode(65 + optionIndex)}. {option}
+                          </p>
+                        ))}
+                      </>
+                    )}
+                    {question.type === "Subjective" && (
+                      <p>
+                        <strong>Answer:</strong> {question.answer}
+                      </p>
+                    )}
+                  </Card.Text>
                 </div>
               ))}
           </Card.Body>
@@ -120,7 +153,9 @@ const Quiz = ({ onCreateQuiz }) => {
         <div className="quizzes">
           <div className="quizzes-header">
             <h1>Quiz</h1>
-            <button className="create-quiz-button" onClick={onCreateQuiz}>+ Create new quiz</button>
+            <button className="create-quiz-button" onClick={onCreateQuiz}>
+              + Create new quiz
+            </button>
           </div>
           <div className="quizzes-controls">
             <input
@@ -165,7 +200,11 @@ const Quiz = ({ onCreateQuiz }) => {
             </thead>
             <tbody>
               {getFilteredAndSortedQuizzes().map((quiz, quizIndex) => (
-                <tr key={quizIndex} onClick={() => handleQuizClick(quiz)} style={{ cursor: 'pointer' }}>
+                <tr
+                  key={quizIndex}
+                  onClick={() => handleQuizClick(quiz)}
+                  style={{ cursor: "pointer" }}
+                >
                   <td>{quiz.title}</td>
                   <td>{quiz.totalQuestions}</td>
                   <td>{quiz.classLevel}</td>

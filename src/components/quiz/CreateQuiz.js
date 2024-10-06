@@ -23,7 +23,6 @@ const CreateQuiz = () => {
   const [loading, setLoading] = useState(false); 
   const [uploadQuizGenerated, setuploadQuizGenerated] = useState(true);
 
-  const { getUser } = useAuth();
   const handleDocumentUpload = (event) => {
     setDocument(event.target.files[0]);
   };
