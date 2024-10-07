@@ -12,6 +12,8 @@ import FlashCard from './flashCard/FlashCard';
 import CreateFlashCard from './flashCard/CreateFlashCard';
 import CreateContent from './createContent/Createcontent';
 import Create_assigment from './createContent/Create_assigment'
+import Createcourses from './createContent/Createcourses';
+import ModulePage from './createContent/ModulePage';
 const HomePage = () => {
   const [selectedMenu, setSelectedMenu] = useState('home');
   const [currentPage, setCurrentPage] = useState('home');
@@ -19,6 +21,8 @@ const HomePage = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [user, setUser] = useState();
+  const [chapterModuleData,setChapterModuleData]=useState({});
+
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -50,11 +54,15 @@ const HomePage = () => {
       case 'flashcards':
         return <FlashCard onCreateFlashCards={() => setCurrentPage('create-flashcards')} />
       case 'create-flashcards':
-        return <CreateFlashCard />;
+        return <CreateFlashCard setCurrentPage={setCurrentPage} />;
       case 'create-content':
-        return <CreateContent onCreateAssigment={()=>setCurrentPage('create-assigment')}/>
+        return <CreateContent onCreateAssigment={()=>setCurrentPage('create-assigment')} OnCreateCourses={()=>setCurrentPage('create-courses')}/>
       case 'create-assigment':
-        return <Create_assigment/>    
+        return <Create_assigment/>  
+      case 'create-courses':
+        return <Createcourses setCurrentPage={setCurrentPage} setChapterModuleData={setChapterModuleData}/>    
+      case 'create-content-module':
+        return <ModulePage chapterModuleData={chapterModuleData} />;  
       case 'student-management':
         return <StudentManagement />;
       default:

@@ -3,14 +3,14 @@ import "./Createcontent.scss";
 import card1Image from "./card1.png";
 import card2Image from "./card2.png";
 
-const CreateContent = ({ onCreateAssigment }) => {
+const CreateContent = ({ onCreateAssigment,OnCreateCourses }) => {
   return (
     <div className="maindiv">
       <div className="innerdiv">
         <h2>Create content with Curio AI</h2>
       </div>
       <div className="carddiv">
-        <div className="card card1">
+        <div className="card card1" onClick={OnCreateCourses}>
           <div className="card-image">
             <img src={card1Image} alt="Courses" />
           </div>

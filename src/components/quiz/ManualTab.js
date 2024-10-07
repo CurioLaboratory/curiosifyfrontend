@@ -68,6 +68,7 @@ function QuizForm(props) {
         const existingQuizData = JSON.parse(localStorage.getItem('manualQuizData')) || [];
         const updatedQuizData = [...existingQuizData, quizItem];
         localStorage.setItem('manualQuizData', JSON.stringify(updatedQuizData));
+        
         props.setRefreshLocalQuiz(!props.refreshLocalQuiz);
 
         // Reset form fields
