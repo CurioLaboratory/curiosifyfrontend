@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 function QuizForm(props) {
     const [language, setLanguage] = useState('English');
     const [title, setTitle] = useState('');
@@ -58,6 +59,7 @@ function QuizForm(props) {
         const existingQuizData = JSON.parse(localStorage.getItem('manualQuizData')) || [];
         const updatedQuizData = [...existingQuizData, quizItem];
         localStorage.setItem('manualQuizData', JSON.stringify(updatedQuizData));
+        
         props.setRefreshLocalQuiz(!props.refreshLocalQuiz);
 
         setLanguage('English');

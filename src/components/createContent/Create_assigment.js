@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import "./Createcontent.scss";
-
-
+import PreviewAssignment from "./PreviewAssignment";
+import { jsPDF } from 'jspdf';
+import { useAuth } from "../auth/AuthContext";
+import axiosInstance from "../../axiosInstance";
+import { ToastContainer, toast } from "react-toastify";
 //store the values of each dropdown
 const CreateAssignment = () => {
+  const [assignmentGenerated, setAssignmentGenerated] = useState(false);
+  const [assignment,setAssignment]=useState({});
   const [selectedOption, setSelectedOption] = useState({
     learningObjectives: "",
     assignmentType: "",
@@ -11,6 +16,8 @@ const CreateAssignment = () => {
     class: "",
     language: "",
   });
+  const [loading,setLoading]=useState(false);
+  const { getUser } = useAuth();
 
   // this usestate is to store the file in learning object dropdown
   const [file, setFile] = useState(null);  
@@ -77,8 +84,144 @@ const CreateAssignment = () => {
     }
   };
 
-  
+  const handleGenerateAssignment=async()=>{
+    // console.log("--------------------")
+    setLoading(true)
+    const url =
+      "https://ddtbgcci6phatqfgjsqturhtem0ieubd.lambda-url.us-east-1.on.aws/";
 
+    // The data you need to send in the request body
+    const requestData = {
+      httpMethod: "POST",
+      assignment_type:selectedOption.assignmentType,
+      grading:selectedOption.grading,
+      learning_objectives:selectedOption.learningObjectives,
+      language:selectedOption.language
+    };
+
+    try {
+      // Fetch data from the endpoint using POST
+      const response = await fetch(url, {
+        method: "POST", // Use POST method
+        headers: {
+          "Content-Type": "application/json", // Set the request headers
+        },
+        body: JSON.stringify(requestData), // Send the request data as JSON
+      });
+      // Check if the response is OK (status code 200)
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      // Get the response first, if it's a string
+      const responseText = await response.json();
+      setLoading(false)
+      const data = JSON.parse(responseText);
+      console.log(data)
+      setAssignment(data);
+      setAssignmentGenerated(!assignmentGenerated);
+  }
+  catch(err){
+    console.log(err);
+  }
+  finally{
+    setLoading(false);
+  }
+  }
+
+  const handleCreateAssignment=async ()=>{
+    if(!assignment){
+      return;
+    }
+    const user = getUser();
+    const publishedAssignment ={
+      assignmentTitle:assignment["Assignment Title"],
+      assignmentObjective:assignment.Objective,
+      assignmentGrading:assignment.Grading,
+      Instructions:assignment.Instructions?.map((instruction, index) => (
+        {
+          index: index + 1, // Assign an index to each instruction
+          title: instruction,
+        }
+    )),
+    createdBy: user.email,
+
+    }
+
+    const response = await axiosInstance.post(
+      "/createCourse/saveAssignmentData",
+      publishedAssignment
+    );
+    if (response.status === 201) {
+      toast.success("Assignment saved successfully!", {
+        position: "top-right",
+        autoClose: 1000,
+      });
+      // alert('Quiz published successfully!');
+      
+      setAssignment({});
+    }
+
+    if (response.status === 203) {
+      alert(response.data.message);
+    }
+  }
+  const handleDownload=()=>{
+     const data = assignment;
+     
+     const doc = new jsPDF();
+     const pageHeight = doc.internal.pageSize.height;
+     const pageWidth = doc.internal.pageSize.width;
+     let currentY = 10; // Initial Y position
+     const lineHeight = 10; // Line height
+ 
+     const addWrappedText = (text, x, y, maxWidth) => {
+       const lines = doc.splitTextToSize(text, maxWidth);
+       lines.forEach((line) => {
+         // Add a new page if the content exceeds the page height
+         if (y + lineHeight > pageHeight) {
+           doc.addPage();
+           y = 10; // Reset Y position for new page
+         }
+         doc.text(line, x, y);
+         y += lineHeight; // Increment Y position for the next line
+       });
+       return y; // Return the updated Y position
+     };
+ 
+     try {
+       // Add the assignment title
+       doc.setFontSize(16);
+       currentY = addWrappedText('Assignment Title:', 10, currentY, pageWidth - 20);
+       doc.setFontSize(12);
+       currentY = addWrappedText(String(data["Assignment Title"] || ''), 10, currentY, pageWidth - 20);
+ 
+       // Add the objective
+       doc.setFontSize(16);
+       currentY = addWrappedText('Objective:', 10, currentY, pageWidth - 20);
+       doc.setFontSize(12);
+       currentY = addWrappedText(String(data["Objective"] || ''), 10, currentY, pageWidth - 20);
+ 
+       // Add the grading
+       doc.setFontSize(16);
+       currentY = addWrappedText('Grading:', 10, currentY, pageWidth - 20);
+       doc.setFontSize(12);
+       currentY = addWrappedText(String(data["Grading"] || ''), 10, currentY, pageWidth - 20);
+ 
+       // Add the instructions
+       doc.setFontSize(16);
+       currentY = addWrappedText('Instructions:', 10, currentY, pageWidth - 20);
+       doc.setFontSize(12);
+       (data["Instructions"] || []).forEach((instruction, index) => {
+         currentY = addWrappedText(`${index + 1}. ${String(instruction)}`, 10, currentY, pageWidth - 20);
+       });
+ 
+       // Download the PDF
+       doc.save(`${data["Assignment Title"]}.pdf`);
+     } catch (error) {
+       console.error('Error creating PDF:', error);
+     }
+  }
   return (
     <div className="parentdiv">
       <div className="heading">
@@ -243,13 +386,16 @@ const CreateAssignment = () => {
           </div>
         </div>
         <div className="assignment-preview">
+          <div className="PreviewContainer">
           <h3>Preview</h3>
-          <p>Complete required fields to preview assignment.</p>
+          <button className="downloadButton" onClick={handleDownload}>D</button>
+          </div>
+          <PreviewAssignment assignmentGenerated={assignmentGenerated} assignment={assignment} loading={loading}/>
         </div>
       </div>
       <div className="assignment-actions">
-        <button className="regenerate-button">Regenerate</button>
-        <button className="create-button">Create</button>
+        <button className="regenerate-button" onClick={handleGenerateAssignment}>Regenerate</button>
+        <button className="create-button" onClick={handleCreateAssignment}>Create</button>
       </div>
     </div>
   );
