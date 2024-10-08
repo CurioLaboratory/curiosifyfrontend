@@ -71,6 +71,7 @@ const RightTab = (props) => {
         title: quizData[0].title,
         date: new Date().toLocaleDateString(),
         classLevel: quizData[0].classLevel,
+        subject: quizData[0].subject,
         language: quizData[0].language,
         totalQuestions: quizData.length,
         questions: quizData.map((item) => ({
@@ -80,6 +81,8 @@ const RightTab = (props) => {
         })),
         createdBy: user.email,
       };
+     // console.log("Published Quiz Data:", publishedQuiz);
+
 
       const response = await axiosInstance.post(
         "/quiz/createmanualquiz",
