@@ -15,7 +15,7 @@ import './App.scss';
 import { AuthProvider } from './components/auth/AuthContext';
 import { TeacherProtectedRoute, StudentProtectedRoute } from './components/auth/Protectedroutes'; // Adjust the path as necessary
 import VerifyEmail from './components/auth/Verifyemail';
-import QuizPage from './components/stundentWebApp/studentquiz/Quizpage';
+import QuizPage from './components/stundentWebApp/studentQuiz/Quizpage';
 import { QuizProvider } from './components/stundentWebApp/QuizContext';
 
 function App() {

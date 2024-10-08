@@ -11,7 +11,7 @@ function UploadTab(props) {
   const [level, setLevel] = useState('Easy');
   const [startPage, setStartPage] = useState('');
   const [endPage, setEndPage] = useState('');
-  
+  const [classLevel, setClassLevel] = useState('9');
 
   const { getUser } = useAuth();
 
@@ -62,7 +62,7 @@ function UploadTab(props) {
                 type: "MCQ",
                 question: item.question,
                 options: [item.option1, item.option2, item.option3, item.option4],
-                answer: item.correctOption,
+                answer: item[item.correctOption.toLowerCase()] 
             };
         } else if (item.correctAnswer) {
             // Subjective Question
@@ -75,10 +75,12 @@ function UploadTab(props) {
     });
       // this data will send to backend for saving into database
       const publishedQuiz = {
-        title: quizRequestData.subject, 
+        title: quizRequestData.title,
+        subject: quizRequestData.subject,
         date: new Date().toLocaleDateString(),
-        language: quizRequestData.language,
+        language: language,
         totalQuestions: quizdata.length,
+        classLevel:classLevel,
         questions: questions,
         createdBy: user.email
     };
@@ -136,6 +138,15 @@ function UploadTab(props) {
       <label>Enter a title</label>
       <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
     </div>
+    <div className="form-group">
+                    <label>Choose Class</label>
+                    <select value={classLevel} onChange={(e) => setClassLevel(e.target.value)}>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                    </select>
+                </div>
     <div className="form-group">
       <label>Upload a document</label>
       <button type="button" onClick={() => props.setUploadModalOpen(true)}>Upload a doc</button>
