@@ -98,6 +98,7 @@ const Events = () => {
       };
 
       const newEvent = await axiosInstance.post("/event/addevent", {
+        poster:newEventPoster,
         title: newEventTitle,
         summary: newEventSummary,
         date: newEventDate 
