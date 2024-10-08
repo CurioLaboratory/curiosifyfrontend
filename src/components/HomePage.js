@@ -62,7 +62,7 @@ const HomePage = () => {
       case 'create-courses':
         return <Createcourses setCurrentPage={setCurrentPage} setChapterModuleData={setChapterModuleData}/>    
       case 'create-content-module':
-        return <ModulePage chapterModuleData={chapterModuleData} />;  
+        return <ModulePage chapterModuleData={chapterModuleData} setCurrentPage={setCurrentPage} />;  
       case 'student-management':
         return <StudentManagement />;
       default:

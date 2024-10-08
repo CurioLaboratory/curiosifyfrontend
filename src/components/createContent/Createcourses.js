@@ -204,7 +204,7 @@ const CreateCourse = ({ setCurrentPage, setChapterModuleData }) => {
 
       // Get the response first, if it's a string
       const responseText = await response.json();
-console.log(typeof(responseText))
+console.log(responseText)
       // Convert the string response to JSON
        const data = JSON.parse(responseText);
        console.log(typeof(data))
@@ -225,7 +225,9 @@ console.log(typeof(responseText))
       setLoading(false)
     }
   };
-
+const handleCreateCourse=()=>{
+  
+}
   return (
     <div className="parentdiv">
       <div className="heading">
@@ -374,7 +376,7 @@ console.log(typeof(responseText))
         <button className="regenerate-button" onClick={handleGenerateCourse}>
           Regenerate
         </button>
-        <button className="create-button">Create</button>
+        <button className="create-button" onClick={handleCreateCourse}>Create</button>
       </div>
     </div>
   );
