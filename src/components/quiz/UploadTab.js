@@ -12,6 +12,7 @@ function UploadTab(props) {
   const [startPage, setStartPage] = useState('');
   const [endPage, setEndPage] = useState('');
   const [classLevel, setClassLevel] = useState('9');
+  const [subject, setSubject] = useState('');
 
   const { getUser } = useAuth();
 
@@ -28,7 +29,7 @@ function UploadTab(props) {
 
     // Handle quiz generation logic
     const quizRequestData = {
-      subject: title,
+      subject: subject+" "+title,
       ton: level,
       numQuestions: numQuestions,
       questionType: questionType,
@@ -75,8 +76,8 @@ function UploadTab(props) {
     });
       // this data will send to backend for saving into database
       const publishedQuiz = {
-        title: quizRequestData.title,
-        subject: quizRequestData.subject,
+        title: title,
+        subject: subject,
         date: new Date().toLocaleDateString(),
         language: language,
         totalQuestions: quizdata.length,
@@ -137,6 +138,10 @@ function UploadTab(props) {
     <div className="form-group">
       <label>Enter a title</label>
       <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+    </div>
+    <div className="form-group">
+      <label>Subject</label>
+      <input type="text" value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="e.g. Biology" />
     </div>
     <div className="form-group">
                     <label>Choose Class</label>

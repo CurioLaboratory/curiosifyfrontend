@@ -39,7 +39,7 @@ function TextAiTab(props) {
       // Handle quiz generation logic
 
       const quizRequestData = {
-        subject: subject,
+        subject: subject+" "+title,
         ton: level,
         numQuestions: numQuestions,
         questionType: questionType,
@@ -90,7 +90,7 @@ console.log(questions)
         // this data will send to backend for saving into database
         const publishedQuiz = {
           title: title,
-          subject: quizRequestData.subject,
+          subject: subject,
           date: new Date().toLocaleDateString(),
           language: language,
           totalQuestions: quizdata.length,
