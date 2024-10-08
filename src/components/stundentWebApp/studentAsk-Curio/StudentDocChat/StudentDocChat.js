@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./StudentDocChat.scss";
 
 const StudentDocChat = ({ setCurrentPage, setFileData }) => {
@@ -6,6 +6,7 @@ const StudentDocChat = ({ setCurrentPage, setFileData }) => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef(null); // Use a ref for the file input
 
   // Maximum allowed file size in bytes (10 MB)
   const MAX_FILE_SIZE = 10 * 1024 * 1024;
@@ -51,7 +52,17 @@ const StudentDocChat = ({ setCurrentPage, setFileData }) => {
     if (file) {
       // Pass file data to the parent component or context
       setFileData(file); // Assuming setFileData is a function that stores file data
-      setCurrentPage('StudentDocChatAi'); // Navigate to the next page
+      setCurrentPage("StudentDocChatAi"); // Navigate to the next page
+    }
+  };
+
+  // Handle cancel action to reset file and success message
+  const handleCancel = () => {
+    setFile(null);
+    setSuccessMessage(""); // Reset success message
+    setError(""); // Clear any existing errors
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // Reset the file input value
     }
   };
 
@@ -62,24 +73,38 @@ const StudentDocChat = ({ setCurrentPage, setFileData }) => {
         Upload lecture notes, articles, any document, really, and Curiosify will help you
         understand them. You can chat with multiple documents at the same time.
       </p>
-      <div 
-        className={`upload-box ${isDragging ? "dragging" : ""}`} 
+      <div
+        className={`upload-box ${isDragging ? "dragging" : ""}`}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
       >
         <h3>Upload a document</h3>
         <div className="file-upload">
-          <input type="file" id="file-input" hidden onChange={handleFileChange} />
+          <input
+            type="file"
+            id="file-input"
+            hidden
+            onChange={handleFileChange}
+            ref={fileInputRef} // Attach the ref to the input element
+          />
           <label htmlFor="file-input" className="file-drop">
-            <span>Drag and drop or <span className="choose-file">Choose File</span></span>
+            <span>
+              Drag and drop or <span className="choose-file">Choose File</span>
+            </span>
           </label>
-          <p className="file-types">DOCX, JPEG, JPG, PNG and PDF formats (up to 10 MB)</p>
+          <p className="file-types">DOCX, JPEG, JPG, PNG, and PDF formats (up to 10 MB)</p>
         </div>
         <div className="button-container">
-          <button className="cancel-button" onClick={() => setFile(null)}>Cancel</button>
-          <button className="continue-button" disabled={!file} onClick={handleContinue}>Continue</button>
+          <button className="cancel-button" onClick={handleCancel}>
+            Cancel
+          </button>
+          <button className="continue-button" disabled={!file} onClick={handleContinue}>
+            Continue
+          </button>
         </div>
+      </div>
+      <div>
         {error && <p className="error-message">{error}</p>}
         {successMessage && <p className="success-message">{successMessage}</p>}
       </div>

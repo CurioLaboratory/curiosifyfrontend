@@ -6,7 +6,8 @@ import Widget3 from './studentwidget/widget3/Widget3'
 import Widget4 from './studentwidget/widget4/Widget4'
 const StudentDashboard = () => {
     return (
-        <div className="widgets">
+        <div className="StudentDashboard">
+            <div className="widgets">
             <div className="widget">
                 <Widget1 />
             </div>
@@ -17,6 +18,7 @@ const StudentDashboard = () => {
             </div>
             <div className="widget">
                 <Widget4 />
+            </div>
             </div>
         </div>
     )

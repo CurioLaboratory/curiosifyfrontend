@@ -49,7 +49,8 @@
           align-items: center;
           border: 2px dashed #ccc;
           border-radius: 8px;
-          width: 100%;
+          width: 360px;
+          height: 125px;
           padding: 20px;
           cursor: pointer;
           color: #666;
@@ -102,17 +103,27 @@
         }
       }
   
-      .error-message {
-        color: red;
-        margin-top: 10px;
-        font-size: 14px;
-      }
-  
-      .success-message {
-        color: green;
-        margin-top: 10px;
-        font-size: 14px;
-      }
+    }
+    .error-message {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
+      margin: 6px;
+      border: 1px solid black;
+      border-radius: 30px;
+      padding: 5px;
+    width: 400px;
+    }
+
+    .success-message {
+      color: green;
+      margin-top: 10px;
+      font-size: 14px;
+      margin: 6px;
+      border-radius: 30px; 
+      border: 1px solid black;
+      padding: 5px;
+    width: 400px;
     }
   }
   

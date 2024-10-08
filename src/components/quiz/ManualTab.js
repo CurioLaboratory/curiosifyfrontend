@@ -4,18 +4,16 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function QuizForm(props) {
     const [language, setLanguage] = useState('English');
+    const [subject, setSubject] = useState('Physics');
     const [title, setTitle] = useState('');
     const [question, setQuestion] = useState('');
-    const [options, setOptions] = useState(['', '', '', '']);
-    const [answer, setAnswer] = useState('');
+    const [options, setOptions] = useState(["", "", "", ""]);
+    const [answer, setAnswer] = useState("");
     const [classLevel, setClassLevel] = useState('9');
     const [totalQuestions, setTotalQuestions] = useState(0);
-    const [existingTitle, setExistingTitle] = useState('');
+    const [existingTitle, setExistingTitle] = useState("");
 
     useEffect(() => {
-        if (answer === '' && options[0] !== '') {
-            setAnswer(options[0]);
-        }
         // Load total questions count and existing title from localStorage
         const existingQuizData = JSON.parse(localStorage.getItem('manualQuizData')) || [];
         setTotalQuestions(existingQuizData.length);
@@ -23,12 +21,22 @@ function QuizForm(props) {
             setExistingTitle(existingQuizData[0].title);
             setTitle(existingQuizData[0].title);
         }
+        
+        // Default to the first option if none is selected
+        if (options[0] && answer === "") {
+            setAnswer(options[0]);
+        }
     }, [options, answer]);
 
     const handleOptionChange = (index, value) => {
         const newOptions = [...options];
         newOptions[index] = value;
         setOptions(newOptions);
+
+        // Reset the answer if the current answer is invalid
+        if (answer === options[index] || value === "") {
+            setAnswer(newOptions[0] || ""); // Reset to the first option or empty
+        }
     };
 
     const formatDate = (date) => {
@@ -52,8 +60,9 @@ function QuizForm(props) {
             options,
             answer,
             classLevel,
+            subject,
             totalQuestions,
-            date: formatDate(new Date())
+            date: formatDate(new Date()),
         };
 
         const existingQuizData = JSON.parse(localStorage.getItem('manualQuizData')) || [];
@@ -62,21 +71,22 @@ function QuizForm(props) {
         
         props.setRefreshLocalQuiz(!props.refreshLocalQuiz);
 
+        // Reset form fields
         setLanguage('English');
         setQuestion('');
         setOptions(['', '', '', '']);
-        setAnswer('');
+        setAnswer(""); // Reset answer
         setClassLevel('9');
         setTotalQuestions(updatedQuizData.length);
 
         if (!existingTitle) {
             setExistingTitle(title);
         }
-        toast.success("Quiz question added successfully!", {
-            position: "top-right",
-            autoClose: 1000
+
+        toast.success('Quiz question added successfully!', {
+            position: 'top-right',
+            autoClose: 1000,
         });
-        // alert('Quiz question added successfully!');
     };
 
     return (
@@ -89,6 +99,17 @@ function QuizForm(props) {
                         <option value="English">English</option>
                         <option value="Spanish">Spanish</option>
                         <option value="French">French</option>
+                    </select>
+                </div>
+                <div className="form-group">
+                    <label>Choose Subject</label>
+                    <select value={subject} onChange={(e) => setSubject(e.target.value)}>
+                        <option value="Maths">Maths</option>
+                        <option value="Biology">Biology</option>
+                        <option value="English">English</option>
+                        <option value="Hindi">Hindi</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
                     </select>
                 </div>
                 <div className="form-group">
@@ -130,9 +151,15 @@ function QuizForm(props) {
                 ))}
                 <div className="form-group">
                     <label>Answer</label>
-                    <select value={answer} onChange={(e) => setAnswer(e.target.value)}>
+                    <select
+                        value={options.indexOf(answer) !== -1 ? options.indexOf(answer) : 0} // Set index or default to 0
+                        onChange={(e) => {
+                            const selectedIndex = parseInt(e.target.value);
+                            setAnswer(options[selectedIndex] || ""); // Use full option value
+                        }}
+                    >
                         {options.map((option, index) => (
-                            <option key={index} value={option}>
+                            <option key={index} value={index}>
                                 Option {String.fromCharCode(65 + index)}
                             </option>
                         ))}

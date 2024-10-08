@@ -1,18 +1,33 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    
-    const getUser = () => {
+
+    // On initial load, check localStorage for a user and set the state
+    useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             setUser(JSON.parse(storedUser));
         }
-        
-        return JSON.parse(storedUser);
-    }
+    }, []); // This effect will run only once, on mount
+
+    // Return user from state if it exists
+    const getUser = () => {
+        if (user) {
+            return user;
+        }
+
+        // If the user isn't in state but is in localStorage, fetch it
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            const parsedUser = JSON.parse(storedUser);
+            setUser(parsedUser); // Update the state
+            return parsedUser;
+        }
+        return null; // No user found
+    };
 
     const login = (userData) => {
         setUser(userData);

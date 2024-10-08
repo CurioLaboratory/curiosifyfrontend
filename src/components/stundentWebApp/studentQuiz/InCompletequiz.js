@@ -1,45 +1,41 @@
 import React from "react";
 import './Studentquiz.scss';
-const StudentInCompletequiz=()=>{
-    return(
-        <div className="InComplete-quiz-grid">
-        <div className="quiz-card">
-          <h3>InCompletequiz</h3>
-          <span className="badge">Biology</span>
-          <p>5 questions • Published on 14/04/2024</p>
-          <div className="progress-bar">
-           <div className="progress" style={{ width: '30%' }}></div>
-         </div>
-        </div>
-        <div className="quiz-card">
-          <h3>Human Impact on the Environment</h3>
-          <span className="badge">Biology</span>
-          <p>7 questions • Published on 14/04/2024</p>
-        </div>
-        <div className="quiz-card">
-          <h3>Type of chemical reactions</h3>
-          <span className="badge">Chemistry</span>
-          <p>9 questions • Published on 14/04/2024</p>
-        </div>
-        <div className="quiz-card">
-          <h3>Intermolecular</h3>
-          <span className="badge">Chemistry</span>
-          <p>9 questions • Published on 14/04/2024</p>
-        </div>
-        <div className="quiz-card">
-          <h3>Newton's laws of motion</h3>
-          <span className="badge">Physics</span>
-          <p>6 questions • Published on 14/04/2024</p>
-        </div>
-        <div className="quiz-card">
-          <h3>Electromagnetic induction</h3>
-          <span className="badge">Physics</span>
-          <p>8 questions • Published on 14/04/2024</p>
-        </div>
+
+const StudentInCompletequiz = () => {
+
+  const incompleteQuizzes = [
+    { title: "InCompletequiz", subject: "Biology", questions: 5, progress: 30 },
+    { title: "Human Impact on the Environment", subject: "Biology", questions: 7, progress: 0 },
+    { title: "Type of chemical reactions", subject: "Chemistry", questions: 9, progress: 0 },
+    { title: "Intermolecular", subject: "Chemistry", questions: 9, progress: 0 },
+    { title: "Newton's laws of motion", subject: "Physics", questions: 6, progress: 0 },
+    { title: "Electromagnetic induction", subject: "Physics", questions: 8, progress: 0 },
+    { title: "InCompletequiz", subject: "Biology", questions: 5, progress: 30 },
+    { title: "Human Impact on the Environment", subject: "Biology", questions: 7, progress: 0 },
+    { title: "Type of chemical reactions", subject: "Chemistry", questions: 9, progress: 0 },
+    { title: "Intermolecular", subject: "Chemistry", questions: 9, progress: 0 },
+    { title: "Newton's laws of motion", subject: "Physics", questions: 6, progress: 0 },
+    { title: "Electromagnetic induction", subject: "Physics", questions: 8, progress: 0 },
+  ];
+
+  return (
+    <div className="Quiz-scrollable-container">
+      <div className="InComplete-quiz-grid">
+        {incompleteQuizzes.map((quiz, index) => (
+          <div key={index} className="quiz-card">
+            <h3>{quiz.title}</h3>
+            <span className="badge">{quiz.subject}</span>
+            <p>{quiz.questions} questions • Published on 14/04/2024</p>
+            {quiz.progress > 0 && (
+              <div className="progress-bar">
+                <div className="progress" style={{ width: `${quiz.progress}%` }}></div>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
-    );
+    </div>
+  );
 }
 
 export default StudentInCompletequiz;
-
-
