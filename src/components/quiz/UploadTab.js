@@ -17,6 +17,14 @@ function UploadTab(props) {
   const { getUser } = useAuth();
 
   const handleGenerateQuiz = async () => {
+
+    if(!title || !level || !numQuestions  || !language || !subject){
+      toast.info("Fields are missing!", {
+        position: "top-right",
+        autoClose: 1000,
+      });
+      return;
+    }
     localStorage.removeItem("uploadTabQuiz");
     // props.setuploadQuizGenerated(!props.uploadQuizGenerated);
     props.setLoading(true);

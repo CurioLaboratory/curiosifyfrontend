@@ -158,19 +158,17 @@ const CreateCourse = ({ setCurrentPage, setChapterModuleData }) => {
   function convertData(data) {
     return data.map((chapterObj) => {
       const chapterName = Object.keys(chapterObj)[0]; // Get chapter name
-      // console.log(chapterName)
       const modules = chapterObj[chapterName]; // Get the module contents
-      // console.log(modules)
-
+  
       const moduleList = Object.keys(modules).map((moduleName) => {
         return {
           Name: moduleName.split(": ")[1], // Extract the name after "Module X: "
           Explanation: modules[moduleName], // Get the explanation from the original object
         };
       });
-
+  
       return {
-        Chapter: Object.keys(modules)[0].replace(`Module 1`, "").split(": ")[1],
+        Chapter: chapterName.split(": ")[1], // Extract the chapter name after "Chapter X: "
         Modules: moduleList,
       };
     });

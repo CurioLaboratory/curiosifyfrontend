@@ -48,6 +48,7 @@ const Login = () => {
           });
         }
       } catch (error) {
+        console.log(error)
         setError(error.response.data.message);
         toast.error("Invalid Credentials", {
           position: "top-left",
