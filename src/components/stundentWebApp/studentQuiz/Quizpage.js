@@ -40,6 +40,7 @@ const QuizPage = ({ setCurrentPage, selectedQuiz}) => {
 
         fetchQuizzes();
         setCurrentPage('Studentquiz');
+        
         //Upadate acttivity feed for user submitting quiz
         const user = JSON.parse(localStorage.getItem("user")); // Parse the stored string into an object
 

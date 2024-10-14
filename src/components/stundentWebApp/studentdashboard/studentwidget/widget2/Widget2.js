@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Widget2.scss';
+import './Widget2.scss'; // Import the scss file
 import axiosInstance from '../../../../../axiosInstance';
 
 const Widget2 = () => {
@@ -21,35 +21,61 @@ const Widget2 = () => {
         fetchActivityFeed(); // Call the function when component mounts
     }, []);
 
+    // Function to get the icon based on the activity type
+    const getActivityIcon = (type) => {
+        switch (type) {
+            case 'quiz':
+                return '📂'; // Placeholder icon for quizzes
+            case 'assignment':
+                return '📚'; // Placeholder icon for assignments
+            case 'event':
+                return '📅'; // Placeholder icon for events
+            default:
+                return '📄'; // Generic document icon
+        }
+    };
+
     return (
         <div className="widget2">
-            <div className="header2">
+            <div className="widget2__header">
                 <h2>Activity feed</h2>
-                <button className="filter-button">All ▼</button>
+                <button className="filter-button">
+                    All <span>▼</span>
+                </button>
             </div>
-            <div className="activity-list">
+            <div className="widget2__activities">
                 {activities.length > 0 ? (
                     activities
                         .slice() // Create a shallow copy of the activities array
                         .reverse() // Reverse the copied array
                         .map((activity, index) => (
                             <div key={index} className="activity-item">
-                                {/* Display icon based on type, you can customize this logic */}
-                                <span className="activity-icon">
-                                    {activity.type === 'quiz' ? '📄' : activity.type === 'assignment' ? '📚' : '📚'}
-                                </span>
-                                <span className="activity-text">
-                                    You have {activity.type === 'quiz' ? 'completed the quiz on title' : activity.type === 'assignment' ? 'submitted the assignment for' : 'attempted a flashcard on title '} "{activity.title}"
-                                </span>
-                                <span className="activity-time">
-                                    {/* Format the date and time */}
-                                    {new Date(activity.timestamp).toLocaleDateString()}{' '}
-                                    {new Date(activity.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                </span>
+                                {/* Dynamically display icon based on activity type */}
+                                <div className="icon">
+                                    {getActivityIcon(activity.type)}
+                                </div>
+                                <div className="details">
+                                    <span className="type">
+                                        {activity.type.charAt(0).toUpperCase() + activity.type.slice(1)}
+                                    </span>
+                                    <span className="time">
+                                        {new Date(activity.timestamp).toLocaleDateString()}{' '}
+                                        {new Date(activity.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                    </span>
+                                    <p className="description">
+                                        {activity.type === 'quiz'
+                                            ? `You attempted a quiz on "${activity.title}"`
+                                            : activity.type === 'assignment'
+                                            ? `You attempted an assignment on "${activity.title}"`
+                                            : activity.type === 'event'
+                                            ? `You see an event: "${activity.title}"`
+                                            : `You performed an action on "${activity.title}"`}
+                                    </p>
+                                </div>
                             </div>
                         ))
                 ) : (
-                    <p>No recent activities</p> // In case there are no activities
+                    <p>No recent activities</p>
                 )}
             </div>
         </div>

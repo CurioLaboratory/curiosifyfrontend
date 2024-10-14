@@ -1,3 +1,7 @@
+
+.dashboard{
+    overflow-y: auto;  // Enable vertical scrolling when content overflows
+    max-height:78vh;  // Adjust based on the space needed for other content (e.g., header and tabs)
 .widgets {
     display: grid;
     align-content: center;
@@ -6,8 +10,6 @@
     grid-template-rows: repeat(2, 1fr);
     gap: 20px;
     padding: 20px;
-    height: calc(100vh - 40px);
-    box-sizing: border-box;
 
     .widget {
         background-color: #fff;
@@ -17,5 +19,7 @@
         flex-direction: column;
         overflow: auto;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        height: 234px;
     }
+}
 }

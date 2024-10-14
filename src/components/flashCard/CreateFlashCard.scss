@@ -1,3 +1,6 @@
+.create-flashcard-maindiv{
+max-height: 87vh;
+overflow-y: auto;
 .source-div {
     width: 40%;
     padding: 0 2rem;
@@ -24,4 +27,5 @@
 
 .next-btn {
     width: 30%;
+}
 }

@@ -1,11 +1,12 @@
 import React from 'react'
 import './Grid.scss'
 import W1 from './widgets/w1/W1'
-import W2 from './widgets/W2'
-import W3 from './widgets/W3'
+import W2 from './widgets/w2/W2'
+import W3 from './widgets/w3/W3'
 import W4 from './widgets/w4/W4'
 const Grid = () => {
     return (
+        <div className="dashboard">
         <div className="widgets">
             <div className="widget">
                 <W1 />
@@ -18,6 +19,7 @@ const Grid = () => {
             <div className="widget">
                 <W4 />
             </div>
+        </div>
         </div>
     )
 }
