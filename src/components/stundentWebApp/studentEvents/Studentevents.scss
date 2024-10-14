@@ -2,7 +2,8 @@
     font-family: 'Poppins', sans-serif;
     background-color: white;
     width: 100%;
-    min-height: 100vh;
+    max-height: 87vh;
+    overflow-y:auto;
   
     .innerdiv {
       margin: 20px;

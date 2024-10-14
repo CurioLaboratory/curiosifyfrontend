@@ -4,11 +4,12 @@ body {
   margin: 0;
   padding: 0;
 }
-
+.events-dash{
+  max-height: 87vh;
+  overflow-y: auto;
 .events-page {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
   padding: 20px;
 
   .events-header {
@@ -48,7 +49,7 @@ body {
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       flex: 1 1 calc(30.333% - 20px);
-      max-width: calc(33.333% - 20px);
+      max-width: calc(33.333% - 56px);
 
       .event-card-img {
         width: 100%;
@@ -108,6 +109,8 @@ body {
 
   .create-event,
   .edit-event {
+    overflow-y: auto;  // Enable vertical scrolling when content overflows
+    max-height:78vh;
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
@@ -175,4 +178,5 @@ body {
       }
     }
   }
+}
 }

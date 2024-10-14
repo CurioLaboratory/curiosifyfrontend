@@ -5,7 +5,7 @@ import card2Image from "./card2.png";
 
 const CreateContent = ({ onCreateAssigment,OnCreateCourses }) => {
   return (
-    <div className="maindiv">
+    <div className="Createcontent-maindiv">
       <div className="innerdiv">
         <h2>Create content with Curio AI</h2>
       </div>

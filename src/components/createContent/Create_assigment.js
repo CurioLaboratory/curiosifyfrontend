@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Createcontent.scss";
+import "./Create_assigment.scss";
 import PreviewAssignment from "./PreviewAssignment";
 import { jsPDF } from 'jspdf';
 import { useAuth } from "../auth/AuthContext";
@@ -223,7 +223,7 @@ const CreateAssignment = () => {
      }
   }
   return (
-    <div className="parentdiv">
+    <div className="craeteassigment-parentdiv">
       <div className="heading">
         <h2>Create Assignment</h2>
       </div>

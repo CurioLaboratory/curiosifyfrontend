@@ -89,6 +89,32 @@ const RightTab = (props) => {
         publishedQuiz
       );
 
+       //Upadate acttivity feed for user publish quiz
+       const userdetail = JSON.parse(localStorage.getItem("user")); // Parse the stored string into an object
+
+       if (userdetail) {
+         const UserActivitydetail = {
+           userId: userdetail.id,
+           email: userdetail.email,
+           type: "quiz",
+           title: publishedQuiz.title
+         };
+         
+         const UpdateActivityFeed = async () => {
+           try {
+             const response = await axiosInstance.post("/useractivityFeed/addActivity", UserActivitydetail); // For submitting the quiz
+             console.log(response);
+           } catch (error) {
+             console.error('Error Updating Activity Feed', error);
+           }
+         };
+       
+         UpdateActivityFeed();
+       } else {
+         console.error('User not found in localStorage');
+       }
+       //
+
       if (response.status === 201) {
         toast.success("Quiz published successfully!", {
           position: "top-right",
@@ -123,6 +149,35 @@ const RightTab = (props) => {
       }
 
       const savedQuizData = await response.data;
+  
+       //Upadate acttivity feed for user publish quiz
+       const userdetail = JSON.parse(localStorage.getItem("user")); // Parse the stored string into an object
+
+       if (userdetail) {
+         const UserActivitydetail = {
+           userId: userdetail.id,
+           email: userdetail.email,
+           type: "quiz",
+           title: quizAiData.title
+         };
+       
+         //console.log(UserActivitydetail);
+       
+         const UpdateActivityFeed = async () => {
+           try {
+             const response = await axiosInstance.post("/useractivityFeed/addActivity", UserActivitydetail); // For submitting the quiz
+             console.log(response);
+           } catch (error) {
+             console.error('Error Updating Activity Feed', error);
+           }
+         };
+       
+         UpdateActivityFeed();
+       } else {
+         console.error('User not found in localStorage');
+       }
+       //
+
       if (response.status === 201) {
         toast.success("Quiz published successfully!", {
           position: "top-right",
@@ -160,6 +215,35 @@ const RightTab = (props) => {
       }
 
       const savedQuizData = await response.data;
+
+    //Upadate acttivity feed for user publish quiz
+    const userdetail = JSON.parse(localStorage.getItem("user")); // Parse the stored string into an object
+
+    if (userdetail) {
+      const UserActivitydetail = {
+        userId: userdetail.id,
+        email: userdetail.email,
+        type: "quiz",
+        title: quizuploadData.title
+      };
+    
+      //console.log(UserActivitydetail);
+    
+      const UpdateActivityFeed = async () => {
+        try {
+          const response = await axiosInstance.post("/useractivityFeed/addActivity", UserActivitydetail); // For submitting the quiz
+          console.log(response);
+        } catch (error) {
+          console.error('Error Updating Activity Feed', error);
+        }
+      };
+    
+      UpdateActivityFeed();
+    } else {
+      console.error('User not found in localStorage');
+    }
+    //
+
       if (response.status === 201) {
         toast.success("Quiz published successfully!", {
           position: "top-right",

@@ -1,8 +1,9 @@
-.maindiv{
+.Createcontent-maindiv{
    font-family: 'poppins';
    background-color: white;
    width: 100%;
-   min-height: 100vh;
+   min-height: 87vh;
+   overflow-y: auto;
    .innerdiv{
     margin: 20px;
    }
@@ -56,9 +57,10 @@
   
 
 }
-.parentdiv {
+.createcourse-parentdiv {
   padding: 20px;
-  height: 100vh;
+ max-height: 80vh;
+ overflow-y: auto;
   background-color: rgb(240, 240, 240)
 }
 .heading{

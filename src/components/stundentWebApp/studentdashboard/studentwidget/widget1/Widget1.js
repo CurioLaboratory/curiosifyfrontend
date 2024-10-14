@@ -44,6 +44,10 @@ const Widget1 = () => {
                             <span className="update-text">
                                 {notification.message}
                             </span>
+                            <span className="update-time">
+                                        {new Date(notification.createdAt).toLocaleDateString()}{' '}
+                                        {new Date(notification.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
                         </div>
                     ))}
                 </div>

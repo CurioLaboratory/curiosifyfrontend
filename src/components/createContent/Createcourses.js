@@ -227,7 +227,7 @@ console.log(typeof(responseText))
   };
 
   return (
-    <div className="parentdiv">
+    <div className="createcourse-parentdiv">
       <div className="heading">
         <h2>Create Course</h2>
       </div>
