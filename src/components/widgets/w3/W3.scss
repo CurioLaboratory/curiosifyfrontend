@@ -1,0 +1,78 @@
+.activity-feed {
+    width: 100%;
+    background-color: white;
+  
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+  
+      h2 {
+        font-size: 24px;
+        font-weight: bold;
+      }
+  
+      .filter-button {
+        background-color: #f1f1f1;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+  
+        span {
+          margin-left: 8px;
+        }
+      }
+    }
+  
+    &__activities {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+  
+      .activity {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 5px;
+        border-left: 4px solid #ff9400;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+  
+        .icon {
+          font-size: 18px;
+          background-color: #fff3e6;
+          border-radius: 50%;
+          width: 30px;
+          height: 30px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          
+        }
+  
+        .details {
+          .type {
+            font-weight: bold;
+            font-size: 14px;
+            margin-right: 30px;
+          }
+  
+          .time {
+            color: #999;
+            font-size: 12px;
+          }
+  
+          .description {
+            font-size: 12px;
+            color: #333;
+          }
+        }
+      }
+    }
+  }
+  

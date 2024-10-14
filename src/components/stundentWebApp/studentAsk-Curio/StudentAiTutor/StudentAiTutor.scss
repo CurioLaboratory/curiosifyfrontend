@@ -1,13 +1,24 @@
 .StudentAiTutorcontainer {
     padding: 20px;
     font-family: Arial, sans-serif;
+    background-color: white;
+    height: 82vh;
+    display: flex;
+    justify-content: center;
+
+    .StudentAitTutorContent{
+      width: 550px;
+      margin-top: 100px;
+    
   
     .welcome-text {
       font-size: 24px;
       font-weight: bold;
       margin-bottom: 20px;
     }
-  
+     .SelectedItemsDropdown{
+     display: flex;
+
     .subject-display,
     .language-display {
       font-size: 18px;
@@ -18,15 +29,19 @@
       span {
         display: inline-flex;
         align-items: center;
-  
+  margin-right: 10px;
+    cursor: pointer;
         img {
           margin-left: 5px;
           cursor: pointer;
           width: 16px;
           height: 16px;
+          
         }
       }
+
     }
+  }
   
     .input-container {
       display: flex;
@@ -39,10 +54,11 @@
         border: 1px solid #ccc;
         border-radius: 5px;
         font-size: 16px;
-        margin-right: 10px;
+        border-bottom-right-radius: 0px;
+        border-top-right-radius: 0px;
   
         &:disabled {
-          background-color: #f9f9f9;
+          background-color: white;
           cursor: not-allowed;
         }
       }
@@ -53,6 +69,9 @@
         border-radius: 5px;
         font-size: 16px;
         cursor: pointer;
+        border-bottom-left-radius: 0px;
+        border-top-left-radius: 0px;
+        border-left: none;
       }
     }
   
@@ -64,8 +83,9 @@
       .subject-button {
         padding: 10px 20px;
         border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #f0f0f0;
+        border-radius: 20px;
+        background-color: white;
+
         cursor: pointer;
         font-size: 16px;
         transition: background-color 0.3s ease;
@@ -88,8 +108,8 @@
       .recent-button {
         padding: 10px 20px;
         border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #f0f0f0;
+        border-radius: 20px;
+        background-color: white;
         cursor: pointer;
         font-size: 16px;
         transition: background-color 0.3s ease;
@@ -99,5 +119,6 @@
         }
       }
     }
+  }
   }
   

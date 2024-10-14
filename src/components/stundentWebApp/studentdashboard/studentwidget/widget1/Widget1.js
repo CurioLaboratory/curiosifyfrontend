@@ -1,49 +1,74 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Widget1.scss'; // Import the SCSS file for styling
+import axiosInstance from '../../../../../axiosInstance';
 
-class Widget1 extends Component {
-    render() {
-        const updates = [
-            {
-                date: 'Today',
-                items: [
-                    { type: 'quiz', title: 'Electromagnetism' },
-                    { type: 'quiz', title: 'Chemical reaction' },
-                ],
-            },
-            {
-                date: 'Yesterday',
-                items: [
-                    { type: 'course', title: 'Laws of motion' },
-                   
-                ],
-            },
-        ];
+const Widget1 = () => {
+    const [todayNotifications, setTodayNotifications] = useState([]);
+    const [otherNotifications, setOtherNotifications] = useState([]);
 
-        const iconMapping = {
-            quiz: '📄',  
-            course: '📝',
+    // Fetch notifications when the component mounts
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            try {
+                const response = await axiosInstance.get("/notification/getallnotification"); // Fetch notifications from the backend
+                const data = response.data; // Accessing the data directly from Axios response
+                setTodayNotifications(data.todayNotifications); 
+                setOtherNotifications(data.otherNotifications);
+            } catch (error) {
+                console.error('Error fetching notifications:', error);
+            }
         };
 
-        return (
-            <div className="widget1">
-                <h2>Updates</h2>
-                {updates.map((update, index) => (
-                    <div key={index}>
-                        <h3 className="update-date">{update.date}</h3>
-                        {update.items.map((item, idx) => (
-                            <div key={idx} className="update-item">
-                                <span className="update-icon">{iconMapping[item.type]}</span>
-                                <span className="update-text">
-                                    {item.type === 'quiz' ? `Quiz on "${item.title}" added` : `New course on "${item.title}" added`}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
-                ))}
-            </div>
-        );
-    }
-}
+        fetchNotifications();
+    }, []);
+
+    // Icon mapping for different types of notifications
+    const iconMapping = {
+        quiz: '📄',
+        flashcard: '📚',
+        event: '📅',
+        course: '📝',
+    };
+
+    return (
+        <div className="widget1">
+            <h2>Updates</h2>
+
+            {/* Today's Notifications */}
+            {todayNotifications.length > 0 && (
+                <div>
+                    <h3 className="update-date">Today</h3>
+                    {todayNotifications.map((notification, idx) => (
+                        <div key={idx} className="update-item">
+                            <span className="update-icon">{iconMapping[notification.type] || '🔔'}</span>
+                            <span className="update-text">
+                                {notification.message}
+                            </span>
+                            <span className="update-time">
+                                        {new Date(notification.createdAt).toLocaleDateString()}{' '}
+                                        {new Date(notification.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {/* Other Notifications */}
+            {otherNotifications.length > 0 && (
+                <div>
+                    <h3 className="update-date">Other</h3>
+                    {otherNotifications.map((notification, idx) => (
+                        <div key={idx} className="update-item">
+                            <span className="update-icon">{iconMapping[notification.type] || '🔔'}</span>
+                            <span className="update-text">
+                               {notification.message}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
 
 export default Widget1;

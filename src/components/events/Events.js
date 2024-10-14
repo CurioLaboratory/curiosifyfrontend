@@ -98,10 +98,40 @@ const Events = () => {
       };
 
       const newEvent = await axiosInstance.post("/event/addevent", {
+        poster:newEventPoster,
         title: newEventTitle,
         summary: newEventSummary,
         date: newEventDate 
       });
+
+     //Update activity feed for user event creation
+    const userdetail = JSON.parse(localStorage.getItem("user")); // Parse the stored string into an object
+
+    if (userdetail) {
+      const UserActivitydetail = {
+        userId: userdetail.id,
+        email: userdetail.email,
+        type: "event",
+        title: newEventTitle
+      };
+    
+      //console.log(UserActivitydetail);
+    
+      const UpdateActivityFeed = async () => {
+        try {
+          const response = await axiosInstance.post("/useractivityFeed/addActivity", UserActivitydetail); // For submitting the quiz
+          console.log(response);
+        } catch (error) {
+          console.error('Error Updating Activity Feed', error);
+        }
+      };
+    
+      UpdateActivityFeed();
+    } else {
+      console.error('User not found in localStorage');
+    }
+    //
+
       toast.success("Event Added Successfull", {
         position: "top-right",
         autoClose: 1000
@@ -189,9 +219,11 @@ const Events = () => {
   }
 
   return (
+    <div className="events-dash">
     <div className="events-page">
       {showCreateEvent ? renderCreateEvent() : showEditEvent ? renderEditEvent() : (events.length === 0 ? renderNoEvents() : renderEvents())}
       <ToastContainer />
+    </div>
     </div>
   );
 };

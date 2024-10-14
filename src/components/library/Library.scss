@@ -4,6 +4,8 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;  // Enable vertical scrolling when content overflows
+  max-height:78vh;
 
   .resources-header {
     display: flex;

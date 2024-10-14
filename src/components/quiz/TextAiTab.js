@@ -14,7 +14,7 @@ function TextAiTab(props) {
     const [topic, setTopic] = useState('');
     const [subject, setSubject] = useState('');
     const { getUser } = useAuth();
-  
+    const [classLevel, setClassLevel] = useState('9');
   
     const handleGenerateQuiz = async () => {
        localStorage.removeItem("textAiTabQuiz");
@@ -39,7 +39,7 @@ function TextAiTab(props) {
       // Handle quiz generation logic
 
       const quizRequestData = {
-        subject: title,
+        subject: subject+" "+title,
         ton: level,
         numQuestions: numQuestions,
         questionType: questionType,
@@ -72,11 +72,11 @@ function TextAiTab(props) {
           if (item.option1) {
               // MCQ Question
               return {
-                  type: "MCQ",
-                  question: item.question,
-                  options: [item.option1, item.option2, item.option3, item.option4],
-                  answer: item.correctOption,
-              };
+                type: "MCQ",
+                question: item.question,
+                options: [item.option1, item.option2, item.option3, item.option4],
+                answer: item[item.correctOption.toLowerCase()] 
+            };
           } else if (item.correctAnswer) {
               // Subjective Question
               return {
@@ -89,12 +89,15 @@ function TextAiTab(props) {
 console.log(questions)
         // this data will send to backend for saving into database
         const publishedQuiz = {
-          title: quizRequestData.subject, 
+          title: title,
+          subject: subject,
           date: new Date().toLocaleDateString(),
-          language: quizRequestData.language,
+          language: language,
           totalQuestions: quizdata.length,
           questions: questions,
-          createdBy: user.email
+          classLevel:classLevel,
+          createdBy: user.email,
+          collegeName:user.collegeName
       };
       console.log(publishedQuiz)
   
@@ -144,6 +147,15 @@ console.log(questions)
       <label>Subject</label>
       <input type="text" value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="e.g. Biology" />
     </div>
+    <div className="form-group">
+                    <label>Choose Class</label>
+                    <select value={classLevel} onChange={(e) => setClassLevel(e.target.value)}>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                    </select>
+                </div>
     <div className="form-group">
       <label>Enter a topic or link</label>
       <input type="text" value={topic} onChange={(e) => setTopic(e.target.value)} />

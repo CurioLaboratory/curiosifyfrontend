@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-
+import ProgressSteps from "./Loader";
 const PreviewAssignment = ({ assignment,loading }) => {
     if (loading) {
-        return <div>Loading...</div>; // Show loading state while data is being fetched
+        return <ProgressSteps/>; // Show loading state while data is being fetched
       }
     if (!assignment || Object.keys(assignment).length === 0) {
         return (

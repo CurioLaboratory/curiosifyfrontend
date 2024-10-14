@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import "./Createcontent.scss";
+import "./Create_assigment.scss";
 import PreviewAssignment from "./PreviewAssignment";
 import { jsPDF } from 'jspdf';
 import { useAuth } from "../auth/AuthContext";
 import axiosInstance from "../../axiosInstance";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 //store the values of each dropdown
 const CreateAssignment = () => {
   const [assignmentGenerated, setAssignmentGenerated] = useState(false);
@@ -85,7 +85,17 @@ const CreateAssignment = () => {
   };
 
   const handleGenerateAssignment=async()=>{
-    // console.log("--------------------")
+    
+    if (
+      !selectedOption.assignmentType || 
+      !selectedOption.grading || 
+      !selectedOption.learningObjectives || 
+      !selectedOption.language || 
+      !selectedOption.class
+    ) {
+
+      return;
+    }
     setLoading(true)
     const url =
       "https://ddtbgcci6phatqfgjsqturhtem0ieubd.lambda-url.us-east-1.on.aws/";
@@ -223,7 +233,7 @@ const CreateAssignment = () => {
      }
   }
   return (
-    <div className="parentdiv">
+    <div className="craeteassigment-parentdiv">
       <div className="heading">
         <h2>Create Assignment</h2>
       </div>

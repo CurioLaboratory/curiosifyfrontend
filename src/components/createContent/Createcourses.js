@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./Createcontent.scss";
 import PreviewCourse from "./PreviewCourse";
-
+import { useAuth } from "../auth/AuthContext";
+import axiosInstance from "../../axiosInstance";
 //store the values of each dropdown
 const CreateCourse = ({ setCurrentPage, setChapterModuleData }) => {
   const [selectedOption, setSelectedOption] = useState({
@@ -10,89 +11,90 @@ const CreateCourse = ({ setCurrentPage, setChapterModuleData }) => {
     class: "",
     language: "",
   });
+  const { getUser } = useAuth();
   const [courseGenerated, setCourseGenerated] = useState(false);
-  // const data = [
-  //   {
-  //     Chapter: "Introduction to Light and Matter",
-  //     Modules: [
-  //       {
-  //         Name: "The Nature of Light",
-  //         Explanation:
-  //           "Light is a form of electromagnetic radiation that is visible to the human eye. ...",
-  //       },
-  //       {
-  //         Name: "Interaction of Light with Matter",
-  //         Explanation:
-  //           "When light encounters matter, it can be absorbed, reflected, transmitted, or refracted. ...",
-  //       },
-  //       {
-  //         Name: "The Electromagnetic Spectrum",
-  //         Explanation:
-  //           "The electromagnetic spectrum is the range of all possible frequencies of electromagnetic radiation, ...",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     Chapter: "Principles of Optics",
-  //     Modules: [
-  //       {
-  //         Name: "Reflection and Refraction",
-  //         Explanation:
-  //           "Reflection is the process by which light bounces off a surface. ...",
-  //       },
-  //       {
-  //         Name: "Diffraction and Interference",
-  //         Explanation:
-  //           "Diffraction is the bending of light around obstacles, resulting in the spreading out of light waves. ...",
-  //       },
-  //       {
-  //         Name: "Polarization",
-  //         Explanation:
-  //           "Polarization is the process by which the oscillations of a light wave are confined to a certain direction. ...",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     Chapter: "Optical Instruments",
-  //     Modules: [
-  //       {
-  //         Name: "Lenses and Mirrors",
-  //         Explanation:
-  //           "Lenses and mirrors are optical instruments that manipulate light to form images. ...",
-  //       },
-  //       {
-  //         Name: "Microscopes and Telescopes",
-  //         Explanation:
-  //           "Microscopes and telescopes are optical instruments that magnify objects. ...",
-  //       },
-  //       {
-  //         Name: "Optical Communications",
-  //         Explanation:
-  //           "Optical communications involve transmitting information using light. ...",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     Chapter: "Advanced Topics in Optics",
-  //     Modules: [
-  //       {
-  //         Name: "Quantum Optics",
-  //         Explanation:
-  //           "Quantum optics is the study of the quantum mechanical properties of light. ...",
-  //       },
-  //       {
-  //         Name: "Nonlinear Optics",
-  //         Explanation:
-  //           "Nonlinear optics is the study of the interaction of light with matter in which the response of the material is nonlinear. ...",
-  //       },
-  //       {
-  //         Name: "Photonics",
-  //         Explanation:
-  //           "Photonics is the science and technology of generating, controlling, and detecting photons, the particles of light. ...",
-  //       },
-  //     ],
-  //   },
-  // ];
+  const data = [
+    {
+      Chapter: "Introduction to Light and Matter",
+      Modules: [
+        {
+          Name: "The Nature of Light",
+          Explanation:
+            "Light is a form of electromagnetic radiation that is visible to the human eye. ...",
+        },
+        {
+          Name: "Interaction of Light with Matter",
+          Explanation:
+            "When light encounters matter, it can be absorbed, reflected, transmitted, or refracted. ...",
+        },
+        {
+          Name: "The Electromagnetic Spectrum",
+          Explanation:
+            "The electromagnetic spectrum is the range of all possible frequencies of electromagnetic radiation, ...",
+        },
+      ],
+    },
+    {
+      Chapter: "Principles of Optics",
+      Modules: [
+        {
+          Name: "Reflection and Refraction",
+          Explanation:
+            "Reflection is the process by which light bounces off a surface. ...",
+        },
+        {
+          Name: "Diffraction and Interference",
+          Explanation:
+            "Diffraction is the bending of light around obstacles, resulting in the spreading out of light waves. ...",
+        },
+        {
+          Name: "Polarization",
+          Explanation:
+            "Polarization is the process by which the oscillations of a light wave are confined to a certain direction. ...",
+        },
+      ],
+    },
+    {
+      Chapter: "Optical Instruments",
+      Modules: [
+        {
+          Name: "Lenses and Mirrors",
+          Explanation:
+            "Lenses and mirrors are optical instruments that manipulate light to form images. ...",
+        },
+        {
+          Name: "Microscopes and Telescopes",
+          Explanation:
+            "Microscopes and telescopes are optical instruments that magnify objects. ...",
+        },
+        {
+          Name: "Optical Communications",
+          Explanation:
+            "Optical communications involve transmitting information using light. ...",
+        },
+      ],
+    },
+    {
+      Chapter: "Advanced Topics in Optics",
+      Modules: [
+        {
+          Name: "Quantum Optics",
+          Explanation:
+            "Quantum optics is the study of the quantum mechanical properties of light. ...",
+        },
+        {
+          Name: "Nonlinear Optics",
+          Explanation:
+            "Nonlinear optics is the study of the interaction of light with matter in which the response of the material is nonlinear. ...",
+        },
+        {
+          Name: "Photonics",
+          Explanation:
+            "Photonics is the science and technology of generating, controlling, and detecting photons, the particles of light. ...",
+        },
+      ],
+    },
+  ];
 
   // this usestate is to store the file in learning object dropdown
   const [file, setFile] = useState(null);
@@ -156,19 +158,17 @@ const CreateCourse = ({ setCurrentPage, setChapterModuleData }) => {
   function convertData(data) {
     return data.map((chapterObj) => {
       const chapterName = Object.keys(chapterObj)[0]; // Get chapter name
-      // console.log(chapterName)
       const modules = chapterObj[chapterName]; // Get the module contents
-      // console.log(modules)
-
+  
       const moduleList = Object.keys(modules).map((moduleName) => {
         return {
           Name: moduleName.split(": ")[1], // Extract the name after "Module X: "
           Explanation: modules[moduleName], // Get the explanation from the original object
         };
       });
-
+  
       return {
-        Chapter: Object.keys(modules)[0].replace(`Module 1`, "").split(": ")[1],
+        Chapter: chapterName.split(": ")[1], // Extract the chapter name after "Chapter X: "
         Modules: moduleList,
       };
     });
@@ -204,7 +204,7 @@ const CreateCourse = ({ setCurrentPage, setChapterModuleData }) => {
 
       // Get the response first, if it's a string
       const responseText = await response.json();
-console.log(typeof(responseText))
+console.log(responseText)
       // Convert the string response to JSON
        const data = JSON.parse(responseText);
        console.log(typeof(data))
@@ -225,9 +225,23 @@ console.log(typeof(responseText))
       setLoading(false)
     }
   };
-
+const handleCreateCourse= async()=>{
+  const user = getUser();
+  console.log(user)
+  const saveData = {
+    Chapters: data,  // This is the chapters array you've already defined
+    createdBy: user.email  // Assuming user.email holds the creator's email
+  };
+  const response = await axiosInstance.post(
+    "/createCourse/saveChapterData",
+    saveData
+  )
+  if (response.status === 201){
+    console.log("good")
+  }
+}
   return (
-    <div className="parentdiv">
+    <div className="createcourse-parentdiv">
       <div className="heading">
         <h2>Create Course</h2>
       </div>
@@ -374,7 +388,7 @@ console.log(typeof(responseText))
         <button className="regenerate-button" onClick={handleGenerateCourse}>
           Regenerate
         </button>
-        <button className="create-button">Create</button>
+        <button className="create-button" onClick={handleCreateCourse}>Create</button>
       </div>
     </div>
   );

@@ -1,0 +1,193 @@
+html, body {
+    height: 100%;  // Ensure the body and HTML elements take up the full height
+    margin: 0;  // Remove default margin
+  }
+  
+  .Student-library-container {
+    display: flex;
+    flex-direction: column;
+    height: 81vh;  // Use viewport height to make sure it fits the screen
+    padding: 20px;
+  
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+  
+    .tabs {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+  
+      .tab {
+        padding: 10px 20px;
+        font-weight: 500;
+        cursor: pointer;
+        color: #555;
+        border-bottom: 2px solid transparent;
+  
+        &.active {
+          color: #000;
+          border-bottom: 2px solid #ffcc00;
+        }
+      }
+    }
+  
+    .search-filter-container {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+  
+      .search-box {
+        flex: 1;
+        padding: 9px;
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+  
+      .filter-box {
+        font-size: 16px;
+      }
+    }
+  
+    .Studentlibrary-scrollable-container {
+      flex: 1;  // Allow this container to grow and shrink as needed
+      overflow-y: auto;
+  
+      .Studentlibrary-assignment-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        padding: 20px;
+  
+        .assignment-card {
+          border: 1px solid #ccc;
+          border-radius: 8px;
+          padding: 20px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          background-color: #fff;
+          transition: transform 0.2s ease-in-out;
+          position: relative;
+  
+          &:hover {
+            transform: scale(1.05);
+          }
+  
+          .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+  
+            .icon {
+              background-color: #fcefd9;
+              padding: 10px;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 24px;
+              margin-top: -55px;
+            }
+  
+            .menu-dots {
+              font-size: 20px;
+              cursor: pointer;
+              margin-top: -88px;
+            }
+            .context-menu {
+                position: absolute;
+                top: 30px;
+                right: 10px;
+                background: white;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                display: flex;
+                flex-direction: column;
+                padding:5px;
+                button {
+                    background: none;
+                    border: none;
+                    padding: 8px 12px;
+                    cursor: pointer;
+                    text-align: left;
+                    color: #555;
+                  }
+                  button:hover {
+                    background-color: #f0f0f0;
+                  }
+            }
+
+              
+            .header-content {
+              flex: 1;
+              margin-left: 20px;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+  
+              .title {
+                font-size: 18px;
+                font-weight: bold;
+                color: #333;
+                margin-bottom: 15px;
+                min-height: 40px;
+              }
+  
+              .details {
+                color: #555;
+                font-size: 14px;
+  
+                p {
+                  margin: 5px 0;
+                }
+              }
+            }
+          }
+  
+          h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+          }
+  
+          p {
+            margin: 5px 0;
+            color: #555;
+            font-size: 14px;
+          }
+        }
+      }
+  
+      // Responsive behavior
+      @media (max-width: 768px) {
+        .Studentlibrary-assignment-grid {
+          grid-template-columns: 1fr;
+        }
+  
+        .assignment-card {
+          width: 100%;
+        }
+      }
+  
+      @media (max-width: 576px) {
+        .search-filter-container {
+          flex-direction: column;
+  
+          .search-box {
+            margin-bottom: 10px;
+            width: 100%;
+          }
+  
+          .filter-box {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+  

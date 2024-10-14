@@ -1,8 +1,9 @@
-.maindiv{
+.Createcontent-maindiv{
    font-family: 'poppins';
    background-color: white;
    width: 100%;
-   min-height: 100vh;
+   min-height: 87vh;
+   overflow-y: auto;
    .innerdiv{
     margin: 20px;
    }
@@ -56,9 +57,10 @@
   
 
 }
-.parentdiv {
+.createcourse-parentdiv {
   padding: 20px;
-  height: 100vh;
+ max-height: 80vh;
+ overflow-y: auto;
   background-color: rgb(240, 240, 240)
 }
 .heading{
@@ -239,5 +241,21 @@
   justify-content: center; /* Center horizontally */
   font-size: 16px;   /* Font size */
   cursor: pointer;
+  
+}
+.MainContainer{
+  margin-left: 20px;
+  margin-top: 40px;
+}
+.backButton{
+  background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 20px;
+
+    &:hover {
+      color: #ff9900;
+    }
   
 }

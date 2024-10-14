@@ -426,7 +426,7 @@ const CreateFlashCard = (props) => {
     };
 
     return (
-        <>
+        <div className="create-flashcard-maindiv">
             <div className="source-div">
                 <h3>Select source</h3>
                 <div className="source-inputs">
@@ -501,7 +501,7 @@ const CreateFlashCard = (props) => {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

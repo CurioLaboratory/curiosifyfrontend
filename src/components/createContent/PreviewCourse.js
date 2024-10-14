@@ -20,6 +20,43 @@ const PreviewCourse = ({ setCurrentPage ,setChapterModuleData,courseGenerated,lo
           // console.log(quizAiData.totalQuestions);
         
       }, [courseGenerated]);
+      const data=[
+        {
+          Chapter: "Introduction to Physics",
+          Modules: [
+            {
+              Name: "Basics of Motion",
+              Explanation: "This module explains the basics of motion, including velocity and acceleration."
+            },
+            {
+              Name: "Newton's Laws",
+              Explanation: "This module covers Newton's three laws of motion."
+            },
+            {
+              Name: "Forces and Friction",
+              Explanation: "This module explores different types of forces and the concept of friction."
+            }
+          ]
+        },
+        {
+          Chapter: "Thermodynamics",
+          Modules: [
+            {
+              Name: "Introduction to Thermodynamics",
+              Explanation: "This module introduces thermodynamic principles."
+            },
+            {
+              Name: "Laws of Thermodynamics",
+              Explanation: "This module explains the first, second, and third laws of thermodynamics."
+            },
+            {
+              Name: "Applications of Thermodynamics",
+              Explanation: "This module discusses real-life applications of thermodynamic principles."
+            }
+          ]
+        }
+      ]
+      
 if(loading) return <div>Loading</div>
   return (
     
