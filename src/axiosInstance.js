@@ -1,7 +1,8 @@
 import axios from "axios";
 
 //const baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:5000/api";
- const baseURL ="https://api.usecuriosify.in/api";
+// const baseURL ="https://api.usecuriosify.in/api";
+const baseURL ="http://localhost:5000/api";
 
 const instance = axios.create({
     baseURL,

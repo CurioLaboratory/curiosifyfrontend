@@ -91,7 +91,8 @@ function UploadTab(props) {
         totalQuestions: quizdata.length,
         classLevel:classLevel,
         questions: questions,
-        createdBy: user.email
+        createdBy: user.email,
+        collegeName:user.collegeName
     };
     console.log(publishedQuiz)
 

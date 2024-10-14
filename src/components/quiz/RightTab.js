@@ -80,9 +80,10 @@ const RightTab = (props) => {
           answer: item.answer,
         })),
         createdBy: user.email,
+        collegeName:user.collegeName,
       };
      // console.log("Published Quiz Data:", publishedQuiz);
-
+   
 
       const response = await axiosInstance.post(
         "/quiz/createmanualquiz",
@@ -103,6 +104,7 @@ const RightTab = (props) => {
         alert(response.data.message);
       }
     }
+    
     if (props.activeTab === "Text/AI") {
       if (Object.keys(quizAiData).length === 0 || quizAiData.totalQuestions === 0) { //Object.keys(quizAiData).length === 0
         toast.info("No questions to publish!", {

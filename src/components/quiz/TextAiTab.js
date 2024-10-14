@@ -96,7 +96,8 @@ console.log(questions)
           totalQuestions: quizdata.length,
           questions: questions,
           classLevel:classLevel,
-          createdBy: user.email
+          createdBy: user.email,
+          collegeName:user.collegeName
       };
       console.log(publishedQuiz)
   

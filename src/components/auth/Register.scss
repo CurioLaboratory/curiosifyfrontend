@@ -62,12 +62,13 @@ body {
         margin-bottom: 12px;
     }
 
-    input {
+    input,select {
         width: calc(100% - 20px);
         padding: 10px;
         margin-top: 5px;
         border: 1px solid #ccc;
         border-radius: 5px;
+        box-sizing: border-box;
     }
 
     .form-button {
@@ -122,3 +123,5 @@ body {
         }
     }
 }
+
+

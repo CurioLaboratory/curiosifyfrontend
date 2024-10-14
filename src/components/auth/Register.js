@@ -14,13 +14,13 @@ const Register = () => {
     email: '',
     classLevel:'',
     password: '',
+    collegeName:'',
 
   });
   const [rePassword, setRePassword] = useState('');
   const [loading, setLoading] = useState(false); // Loading state
   const { login } = useAuth();
   const navigate = useNavigate();
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -124,6 +124,15 @@ const Register = () => {
             required
           />
         </label>}
+       
+                    <label>Choose College
+                    <select name="collegeName" value={formData.collegeName} onChange={handleChange}>
+                        <option value="VIT">VIT</option>
+                        <option value="IIT Guwahati">IIT Guwahati</option>
+                    </select>
+                    </label>
+                    
+                
         <label>
           Password
           <input
