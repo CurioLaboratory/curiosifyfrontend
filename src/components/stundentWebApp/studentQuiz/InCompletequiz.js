@@ -1,41 +1,46 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import './Studentquiz.scss';
+import axiosInstance from '../../../axiosInstance';
 
 const StudentInCompletequiz = () => {
+  const [incompleteQuizzes, setIncompleteQuizzes] = useState([]);
 
-  const incompleteQuizzes = [
-    { title: "InCompletequiz", subject: "Biology", questions: 5, progress: 30 },
-    { title: "Human Impact on the Environment", subject: "Biology", questions: 7, progress: 0 },
-    { title: "Type of chemical reactions", subject: "Chemistry", questions: 9, progress: 0 },
-    { title: "Intermolecular", subject: "Chemistry", questions: 9, progress: 0 },
-    { title: "Newton's laws of motion", subject: "Physics", questions: 6, progress: 0 },
-    { title: "Electromagnetic induction", subject: "Physics", questions: 8, progress: 0 },
-    { title: "InCompletequiz", subject: "Biology", questions: 5, progress: 30 },
-    { title: "Human Impact on the Environment", subject: "Biology", questions: 7, progress: 0 },
-    { title: "Type of chemical reactions", subject: "Chemistry", questions: 9, progress: 0 },
-    { title: "Intermolecular", subject: "Chemistry", questions: 9, progress: 0 },
-    { title: "Newton's laws of motion", subject: "Physics", questions: 6, progress: 0 },
-    { title: "Electromagnetic induction", subject: "Physics", questions: 8, progress: 0 },
-  ];
+  useEffect(() => {
+    const fetchIncompleteQuizzes = async () => {
+      try {
+        const response = await axiosInstance.get("/student_quiz_attendance/getincompletequizzes"); // Fetch incomplete quizzes from the backend
+        const data = response.data; // Accessing the data directly from Axios response
+        setIncompleteQuizzes(data); // Set the fetched incomplete quizzes to the state
+      } catch (error) {
+        console.error('Error fetching incomplete quizzes:', error);
+      }
+    };
+
+    fetchIncompleteQuizzes();
+  }, []);
 
   return (
     <div className="Quiz-scrollable-container">
       <div className="InComplete-quiz-grid">
-        {incompleteQuizzes.map((quiz, index) => (
-          <div key={index} className="quiz-card">
-            <h3>{quiz.title}</h3>
-            <span className="badge">{quiz.subject}</span>
-            <p>{quiz.questions} questions • Published on 14/04/2024</p>
-            {quiz.progress > 0 && (
-              <div className="progress-bar">
-                <div className="progress" style={{ width: `${quiz.progress}%` }}></div>
-              </div>
-            )}
-          </div>
-        ))}
+        {incompleteQuizzes.length === 0 ? (
+          <p>No incomplete quizzes available</p>
+        ) : (
+          incompleteQuizzes.map((quiz, index) => (
+            <div key={index} className="quiz-card">
+              <h3>{quiz.quizId.title}</h3>
+              <span className="badge">{quiz.quizId.subject}</span>
+              <p>{quiz.quizId.questions.length} questions • Published on {quiz.quizId.date}</p>
+              {quiz.progress > 0 && (
+                <div className="progress-bar">
+                  <div className="progress" style={{ width: `${quiz.progress}%` }}></div>
+                </div>
+              )}
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
-}
+};
 
 export default StudentInCompletequiz;

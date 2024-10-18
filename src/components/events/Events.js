@@ -43,15 +43,14 @@ const Events = () => {
   };
 
   const handleDeleteEvent = async (eventId) => {
-    try{const deletedEvent = await axiosInstance.delete(`/event/deleteevent/${eventId}`);
+    const deletedEvent = await axiosInstance.delete(`/event/deleteevent/${eventId}`);
     toast.error("Event Deleted", {
       position: "top-right",
       autoClose: 1000
     });
+    
+    // Refresh the events list
     setRefreshEvents(!refreshEvents);
-  }catch(err){
-    console.log(err)
-  }
   };
 
   const renderNoEvents = () => (

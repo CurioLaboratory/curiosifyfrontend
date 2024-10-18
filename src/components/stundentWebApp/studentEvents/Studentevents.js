@@ -10,8 +10,11 @@ const Studentevents = () => {
   // Fetch events from backend
   useEffect(() => {
     const fetchEvents = async () => {
+      const user = JSON.parse(localStorage.getItem("user")); // Assuming user object is stored in local storage
+            const email = user?.email; // Get email from the user object
+           
       try {
-        const response = await axiosInstance.get(`/event/getallevent?email=${user.email}`); // Adjust the API endpoint as needed
+        const response = await axiosInstance.get("/event/getallevent"); // Adjust the API endpoint as needed
 
         setEvents(response.data); // Assuming response.data contains an array of events
       } catch (error) {
