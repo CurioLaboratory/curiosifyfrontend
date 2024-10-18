@@ -14,10 +14,17 @@ const StudentActivequiz = ({ takequiz,setSelectedQuiz}) => {
             // Get classLevel from local storage
             const user = JSON.parse(localStorage.getItem("user")); // Assuming user object is stored in local storage
             const classLevel = user?.classLevel; // Get classLevel from the user object
+            const collegeName = user?.collegeName; // Get collegeName from the user object
     
             try {
-                // Make the GET request with classLevel as a query parameter
-                const response = await axiosInstance.get(`/student_quiz_attendance/getactivequizzes?classLevel=${classLevel}`);
+                // Make the GET request with classLevel and collegeName as a query parameter
+                const response = await axiosInstance.get(`/student_quiz_attendance/getactivequizzes`, {
+                    params: {
+                      classLevel: classLevel,
+                      collegeName: collegeName
+                    }
+                  });
+                  
                 
                 const data = response.data; // Accessing the data from Axios response
                 setActiveQuizzes(data); // Set the fetched quizzes to the active quizzes state

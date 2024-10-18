@@ -14,7 +14,7 @@ const Register = () => {
     email: '',
     classLevel:'',
     password: '',
-    collegeName:'',
+    collegeName:'VIT',
 
   });
   const [rePassword, setRePassword] = useState('');
