@@ -1,0 +1,86 @@
+.schedule-container {
+
+    .month-year {
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+    .week-carousel {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+
+        .arrow {
+            font-size: 1rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .week-date {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 10px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+
+            &.selected {
+                background-color: #ffa726;
+                color: white;
+            }
+
+            .day {
+                font-weight: bold;
+            }
+
+            .date {
+                font-size: 1.2rem;
+                
+            }
+        }
+    }
+
+    .upcoming-events {
+        h4 {
+            margin-top: 20px;
+        }
+
+        .event-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .event-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .no-events {
+            font-size: 1.2rem;
+            color: #999;
+        }
+    }
+}
+
+.calendar-container {
+    position: relative; // Make this the parent for positioning the DatePicker
+
+    .datepicker-wrapper {
+        position: absolute; // Enable absolute positioning
+        top: 100%; // Adjust as needed to move the calendar below the current element
+        left: 0; // Adjust as needed for left alignment, or use right: 0; for right alignment
+        z-index: 1000; // Ensure it appears above other content
+        // Style to match the surrounding area
+        border: 1px solid #ccc;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+}

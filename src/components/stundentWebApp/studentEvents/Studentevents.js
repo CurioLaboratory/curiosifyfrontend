@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 import "./Studentevents.scss";
 import cardImage from "./card1.png"; // Default image if needed
 import axiosInstance from "../../../axiosInstance"; // Adjust the path as needed
-
+import {useAuth} from "../../auth/AuthContext"
 const Studentevents = () => {
   const [events, setEvents] = useState([]);
-
+  const { getUser } = useAuth();
+  const user = getUser();
   // Fetch events from backend
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axiosInstance.get("/event/getallevent"); // Adjust the API endpoint as needed
+        const response = await axiosInstance.get(`/event/getallevent?email=${user.email}`); // Adjust the API endpoint as needed
 
         setEvents(response.data); // Assuming response.data contains an array of events
       } catch (error) {

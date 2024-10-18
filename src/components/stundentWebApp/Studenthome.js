@@ -11,6 +11,7 @@ import QuizPage from './studentQuiz/Quizpage';
 import SubmittedQuizPage from './studentQuiz/Submittedquiz';
 import StudentDashboard from './studentdashboard/StudentDashboard';
 import { useQuiz } from './QuizContext';
+import AccountSettings from '../../components/Profile/AccountSettings'
 const StudentHome = () => {
     const [selectedMenu, setSelectedMenu] = useState('home');
     const {completedQuiz,setCompletedQuiz}= useQuiz();
@@ -65,6 +66,8 @@ const StudentHome = () => {
                 return <Studentflashcard />;
             case 'StudentAskCurio':
                 return <StudentAskCurio />;
+            case 'account-settings':
+                return <AccountSettings />    
             default:
                 return <div className="content"><h1>Content Not Found</h1></div>;
         }
@@ -112,7 +115,7 @@ const StudentHome = () => {
                             {showProfileMenu && (
                                 <div className="profile-dropdown">
                                     <ul>
-                                        <li>Profile</li>
+                                        <li  onClick={()=>setCurrentPage('account-settings')}>Profile</li>
                                         <li>Settings</li>
                                         <li onClick={logout}><a href="/">Logout</a></li>
                                     </ul>
