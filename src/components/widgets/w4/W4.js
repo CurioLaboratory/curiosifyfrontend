@@ -2,7 +2,7 @@ import React from 'react'
 
 const W4 = () => {
   return (
-      <div> <h2>Schedule</h2>
+      <div> <h3>Schedule</h3>
           <p>No Events Scheduled</p></div>
   )
 }

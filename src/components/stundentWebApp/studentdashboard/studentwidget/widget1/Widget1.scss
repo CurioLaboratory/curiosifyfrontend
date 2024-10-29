@@ -4,7 +4,7 @@
     border-radius: 8px;
 
     h2 {
-        font-size: 24px;
+        font-size: 1em;
         font-weight: bold;
         color: #333;
         margin-bottom: 20px;
@@ -23,7 +23,6 @@
         align-items: flex-start;
         gap: 16px;
         padding: 10px;
-        border-left: 4px solid #ff9400;
         background-color: #f9f9f9;
         border-radius: 8px;
         margin-bottom: 15px;
@@ -37,7 +36,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 2px solid rgb(211, 128, 46);
+ 
         }
 
         .update-text {
