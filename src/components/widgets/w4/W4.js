@@ -93,7 +93,7 @@ const W4 = () => {
                         className={`week-date ${formatDate(date) === formatDate(selectedDate) ? 'selected' : ''}`}
                         onClick={() => setSelectedDate(date)}
                     >
-                        <div className="day">{date.toLocaleString('default', { weekday: 'short' })}</div>
+                        <div className="day">{date.toLocaleString('default', { weekday: 'short' }).toUpperCase()}</div>
                         <div className="date">{date.getDate()}</div>
                     </div>
                 ))}

@@ -91,6 +91,13 @@ const Events = () => {
   const renderCreateEvent = () => {
     const handleSubmit = async (e) => {
       e.preventDefault();
+      if(!newEventTitle  || !newEventPoster || !newEventSummary || !newEventDate){
+        toast.info("Missing Fields", {
+          position: "top-right",
+          autoClose: 1000
+        });
+        return ;
+      }
       const newEventDetails = {
         id: Date.now(),
         title: newEventTitle,

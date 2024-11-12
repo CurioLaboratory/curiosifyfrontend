@@ -24,28 +24,43 @@
             align-items: center;
             margin: 0 10px;
             cursor: pointer;
-            padding: 10px;
+            padding: 2px;
             border-radius: 8px;
-
-            &.selected {
-                background-color: #ffa726;
-                color: white;
-            }
-
+        
             .day {
-                font-weight: bold;
+                font-weight: lighter;
+                color: #626262;
             }
-
+        
             .date {
                 font-size: 1.2rem;
-                
+                border-radius: 50%; /* Optional: to make it circular */
+            }
+        
+            /* Apply the selected background color only to the date */
+            &.selected {
+                .day {
+                    color: #ffa726; /* Change day color when selected */
+                }
+        
+                .date {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background-color: #ffa726;
+                    color: white; /* Change text color in date */
+                    width: 40px;
+                    height: 40px; /* Adjust padding if needed */
+                }
             }
         }
+        
     }
 
     .upcoming-events {
         h4 {
             margin-top: 20px;
+            font-weight: lighter;
         }
 
         .event-list {

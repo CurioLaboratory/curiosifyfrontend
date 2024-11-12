@@ -15,6 +15,7 @@
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.4",
     "curiosifyfrontend": "file:",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
     "jspdf": "^2.5.2",
     "pdfjs-dist": "^4.7.76",

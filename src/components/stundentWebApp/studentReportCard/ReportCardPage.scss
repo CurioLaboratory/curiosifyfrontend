@@ -1,0 +1,265 @@
+// Color Variables
+$primary-color: #007bff;
+$secondary-color: #4caf50;
+$background-color: #f5f5f5;
+$text-color: #333;
+$card-background: #fff;
+$shadow-color: rgba(0, 0, 0, 0.1);
+$highlight-background: #4fda6d;
+$highlight-text: white;
+$accent-orange: #ff6600;
+$grey-light: #f0f0f0;
+$font-family: Arial, sans-serif;
+
+// General Layout
+
+
+.report-card-page {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+
+  .card {
+    background: $card-background;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px $shadow-color;
+  }
+
+  // Student Details Section
+  .student-details {
+    @extend .card;
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 20px;
+    align-items: center;
+
+    .student-photo {
+      width: 100px;
+      height: 100px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .student-info {
+      display: grid;
+      grid-template-columns: repeat(3, auto);
+      column-gap: 30px;
+      row-gap: 8px;
+
+      p {
+        margin: 0;
+        font-size: 14px;
+
+        .label {
+          font-weight: bold;
+          color: $text-color;
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+
+  // Main Content Area
+  .main-content2 {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+  }
+
+  // Marking Details Section
+  .marking-details {
+    @extend .card;
+
+    h3 {
+      margin-bottom: 10px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .term-selection {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      font-size: 14px;
+      color: $primary-color;
+      margin-bottom: 10px;
+    }
+
+    .marks-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      th {
+        background-color: $grey-light;
+        font-weight: bold;
+      }
+    }
+
+    .download-button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: $primary-color;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      text-align: center;
+      width: 100%;
+      font-weight: bold;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+      }
+    }
+  }
+
+  // Score Details Section
+  .score-details {
+    @extend .card;
+    text-align: center;
+    padding-bottom: 30px;
+
+    h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .score-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background-color: lighten($accent-orange, 30%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: $accent-orange;
+      font-weight: bold;
+      margin: 0 auto 10px;
+      border: 2px solid $accent-orange;
+    }
+
+    .grade-text {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    p {
+      font-size: 12px;
+      color: #777;
+      margin-top: 5px;
+    }
+  }
+
+  // Activities and Conduct Section
+  .activities-conduct {
+    @extend .card;
+    
+
+    h3 {
+      margin-bottom: 15px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .activity {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 10px 0;
+
+      p {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .progress-bar {
+        width: 100%;
+        background-color: $grey-light;
+        height: 8px;
+        border-radius: 5px;
+        overflow: hidden;
+        margin-left: 10px;
+
+        .progress {
+          height: 100%;
+          background-color: $primary-color;
+          border-radius: 5px;
+        }
+      }
+    }
+  }
+
+  // Grades Section
+  .grades {
+    @extend .card;
+
+    h3 {
+      margin-bottom: 15px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .grades-table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      th {
+        background-color: $grey-light;
+        font-weight: bold;
+      }
+    }
+  }
+
+  // Grading Scale Section
+  .grading-scale {
+    background: $highlight-background;
+    color: $highlight-text;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px $shadow-color;
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    .grading-range{
+        display: flex;
+        justify-content: space-evenly;
+    }
+    h3 {
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 14px;
+    }
+  }
+}

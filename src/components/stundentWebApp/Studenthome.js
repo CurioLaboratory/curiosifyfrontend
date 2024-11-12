@@ -12,6 +12,8 @@ import SubmittedQuizPage from './studentQuiz/Submittedquiz';
 import StudentDashboard from './studentdashboard/StudentDashboard';
 import { useQuiz } from './QuizContext';
 import AccountSettings from '../../components/Profile/AccountSettings'
+import ReportCardPage from './studentReportCard/ReportCardPage';
+import WelcomeBanner from './studentdashboard/WelcomeBanner';
 const StudentHome = () => {
     const [selectedMenu, setSelectedMenu] = useState('home');
     const {completedQuiz,setCompletedQuiz}= useQuiz();
@@ -35,7 +37,7 @@ const StudentHome = () => {
             case 'home':
                 return (
                     <div className="content">
-                        <h1>Hi {user?.name}, Welcome back!</h1>
+                        <WelcomeBanner user={user}/>
                         <StudentDashboard />
                     </div>
                 );
@@ -67,7 +69,9 @@ const StudentHome = () => {
             case 'StudentAskCurio':
                 return <StudentAskCurio />;
             case 'account-settings':
-                return <AccountSettings />    
+                return <AccountSettings />
+            case 'report-card':
+                return <ReportCardPage/>        
             default:
                 return <div className="content"><h1>Content Not Found</h1></div>;
         }
@@ -95,6 +99,9 @@ const StudentHome = () => {
                     </li>
                     <li onClick={() => { setSelectedMenu('StudentAskCurio'); setCurrentPage('StudentAskCurio'); }} className={selectedMenu === 'StudentAskCurio' ? 'active' : ''}>
                         <img src="/icons/create-content.png" alt="Ask Curio AI" /> Ask Curio AI
+                    </li>
+                    <li onClick={() => { setSelectedMenu('report-card'); setCurrentPage('report-card'); }} className={selectedMenu === 'report-card' ? 'active' : ''}>
+                        <img src="/icons/create-content.png" alt="report-card" />  Report Card
                     </li>
                 </ul>
             </div>
