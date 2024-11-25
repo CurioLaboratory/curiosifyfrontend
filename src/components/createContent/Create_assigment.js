@@ -179,6 +179,10 @@ const CreateAssignment = () => {
   const handleDownload=()=>{
      const data = assignment;
      
+     if(Object.keys(data).length === 0){
+      return;
+     }
+     
      const doc = new jsPDF();
      const pageHeight = doc.internal.pageSize.height;
      const pageWidth = doc.internal.pageSize.width;

@@ -3,7 +3,7 @@ import './Events.scss';
 import axiosInstance from "../../axiosInstance";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { useAuth } from "../auth/AuthContext";
 const Events = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,16 +11,16 @@ const Events = () => {
   const [showEditEvent, setShowEditEvent] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [refreshEvents, setRefreshEvents] = useState(true);
-
+  const { getUser } = useAuth();
   // State for create event form
   const [newEventTitle, setNewEventTitle] = useState('');
   const [newEventPoster, setNewEventPoster] = useState('');
   const [newEventSummary, setNewEventSummary] = useState('');
   const [newEventDate, setNewEventDate] = useState('');
-
+  const user = getUser();
   useEffect(() => {
     const getAllEvents = async () => {
-      const response = await axiosInstance.get("/event/getallevent");
+      const response = await axiosInstance.get(`/event/getallevent?email=${user.email}`);
       setEvents(response.data);
       setLoading(false);
     }
@@ -48,6 +48,8 @@ const Events = () => {
       position: "top-right",
       autoClose: 1000
     });
+    
+    // Refresh the events list
     setRefreshEvents(!refreshEvents);
   };
 
@@ -89,6 +91,13 @@ const Events = () => {
   const renderCreateEvent = () => {
     const handleSubmit = async (e) => {
       e.preventDefault();
+      if(!newEventTitle  || !newEventPoster || !newEventSummary || !newEventDate){
+        toast.info("Missing Fields", {
+          position: "top-right",
+          autoClose: 1000
+        });
+        return ;
+      }
       const newEventDetails = {
         id: Date.now(),
         title: newEventTitle,
@@ -103,6 +112,7 @@ const Events = () => {
         summary: newEventSummary,
         date: newEventDate 
       });
+      console.log(newEvent.data._id)
 
      //Update activity feed for user event creation
     const userdetail = JSON.parse(localStorage.getItem("user")); // Parse the stored string into an object
@@ -115,7 +125,7 @@ const Events = () => {
         title: newEventTitle
       };
     
-      //console.log(UserActivitydetail);
+      console.log(UserActivitydetail);
     
       const UpdateActivityFeed = async () => {
         try {

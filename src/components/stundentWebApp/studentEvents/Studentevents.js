@@ -2,13 +2,17 @@ import React, { useEffect, useState } from "react";
 import "./Studentevents.scss";
 import cardImage from "./card1.png"; // Default image if needed
 import axiosInstance from "../../../axiosInstance"; // Adjust the path as needed
-
+import {useAuth} from "../../auth/AuthContext"
 const Studentevents = () => {
   const [events, setEvents] = useState([]);
-
+  const { getUser } = useAuth();
+  const user = getUser();
   // Fetch events from backend
   useEffect(() => {
     const fetchEvents = async () => {
+      const user = JSON.parse(localStorage.getItem("user")); // Assuming user object is stored in local storage
+            const email = user?.email; // Get email from the user object
+           
       try {
         const response = await axiosInstance.get("/event/getallevent"); // Adjust the API endpoint as needed
 

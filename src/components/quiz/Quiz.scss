@@ -126,6 +126,8 @@
 .selectedQuiz {
   padding: 20px;
   background-color: white;
+  overflow-y: auto;
+  height: 80vh;
 
   .back-button {
     background: none;
@@ -140,7 +142,7 @@
   }
 
   .selectedQuizTitle {
-    font-family: Tahoma, Geneva, sans-serif;
+    font-family: 'Poppins';
     font-size: 26px;
     letter-spacing: 0px;
     word-spacing: 0px;
