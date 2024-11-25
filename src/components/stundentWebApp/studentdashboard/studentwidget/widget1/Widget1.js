@@ -1,74 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import './Widget1.scss'; // Import the SCSS file for styling
-import axiosInstance from '../../../../../axiosInstance';
+import React from 'react';
+import './Widget1.scss';
 
 const Widget1 = () => {
-    const [todayNotifications, setTodayNotifications] = useState([]);
-    const [otherNotifications, setOtherNotifications] = useState([]);
-
-    // Fetch notifications when the component mounts
-    useEffect(() => {
-        const fetchNotifications = async () => {
-            try {
-                const response = await axiosInstance.get("/notification/getallnotification"); // Fetch notifications from the backend
-                const data = response.data; // Accessing the data directly from Axios response
-                setTodayNotifications(data.todayNotifications); 
-                setOtherNotifications(data.otherNotifications);
-            } catch (error) {
-                console.error('Error fetching notifications:', error);
-            }
-        };
-
-        fetchNotifications();
-    }, []);
-
-    // Icon mapping for different types of notifications
-    const iconMapping = {
-        quiz: '📄',
-        flashcard: '📚',
-        event: '📅',
-        course: '📝',
-    };
-
-    return (
-        <div className="widget1">
-            <h2>Updates</h2>
-
-            {/* Today's Notifications */}
-            {todayNotifications.length > 0 && (
-                <div>
-                    <h3 className="update-date">Today</h3>
-                    {todayNotifications.map((notification, idx) => (
-                        <div key={idx} className="update-item">
-                            <span className="update-icon">{iconMapping[notification.type] || '🔔'}</span>
-                            <span className="update-text">
-                                {notification.message}
-                            </span>
-                            <span className="update-time">
-                                        {new Date(notification.createdAt).toLocaleDateString()}{' '}
-                                        {new Date(notification.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {/* Other Notifications */}
-            {otherNotifications.length > 0 && (
-                <div>
-                    <h3 className="update-date">Other</h3>
-                    {otherNotifications.map((notification, idx) => (
-                        <div key={idx} className="update-item">
-                            <span className="update-icon">{iconMapping[notification.type] || '🔔'}</span>
-                            <span className="update-text">
-                               {notification.message}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-            )}
+  return (
+    <div className="widget-container">
+      <div className="user-info">
+        <img
+          src="https://offertabs.s3.amazonaws.com/offer/qy9s4z/large/810_1920_6095afa41d80b-SeniorPic.JPG" // Replace with actual image path
+          alt="User"
+          className="user-image"
+        />
+        <div className="user-details">
+          <h3>Jane H</h3>
+          <p className="user-email">Janehugo@gmail.com</p>
         </div>
-    );
+        <div className="user-stats">
+          <p>
+            Classes taken: <span className="stat-value">5</span>
+          </p>
+          <p>
+            Leaves taken: <span className="stat-value">98</span>
+          </p>
+        </div>
+      </div>
+      <div className="time-sheet">
+        <div className="time-date">
+        <p className="time">Time sheet</p>
+        <p className="time-value">5.12 am</p>
+        <p className="view-details">View details</p>
+        </div>
+        <div className="attendance-buttons">
+          <button className="attendance-in">Attendance in</button>
+          <button className="attendance-out">Attendance out</button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Widget1;

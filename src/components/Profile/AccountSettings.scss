@@ -1,0 +1,153 @@
+.heading2{
+    margin-left: 20px;
+}
+.account-settings {
+    width: 90%;
+    max-width: 1150px;
+    padding-left: 40px;
+    font-family: 'Roboto', sans-serif;
+  
+  
+    .profile-section {
+      margin-bottom: 40px;
+      .sub-heading {
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 20px;
+        color: #333;
+      }
+      .profile-card {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 10px;
+  
+        .avatar-placeholder {
+          width: 80px;
+          height: 80px;
+          background-color: #ff9b00;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 32px;
+          color: white;
+          margin-right: 20px;
+        }
+  
+        .profile-info {
+          .name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+          }
+          .email {
+            font-size: 14px;
+            color: #888;
+          }
+        }
+      }
+    }
+  
+    .account-section {
+      margin-bottom: 30px;
+  
+      .section-heading {
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 10px;
+        color: #444;
+      }
+  
+      .section-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        background: #f2f2f2;
+        border-radius: 8px;
+        margin-bottom: 15px;
+  
+        .detail {
+          color: #555;
+          font-size: 14px;
+        }
+  
+        .btn {
+          background-color: #ff9b00;
+          color: white;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 5px;
+          font-size: 14px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+  
+          &.change {
+            background-color: #ff9b00;
+  
+            &:hover {
+              background-color: #ff7a00;
+            }
+          }
+  
+          &.delete-btn {
+            background-color: #ff4c4c;
+  
+            &:hover {
+              background-color: #ff1a1a;
+            }
+          }
+        }
+  
+        .toggle-container {
+          .toggle-button {
+            padding: 5px 15px;
+            font-size: 14px;
+            background-color: #ddd;
+            border: none;
+            margin-left: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+  
+            &.active {
+              background-color: #ff9b00;
+              color: white;
+            }
+          }
+        }
+  
+        &.delete {
+          justify-content: space-between;
+          .delete-btn {
+            background-color: #ff4c4c;
+          }
+        }
+      }
+    }
+  
+    .link {
+      color: #ff9b00;
+      text-decoration: none;
+      font-size: 14px;
+  
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .modal-overlay{
+    .modal-content{
+        .close-modal{
+           float: right;
+           border: none;
+           background-color: #ff9b00;
+           border-radius: 45px;
+           color: white;
+           cursor: pointer;
+        }
+    }
+  }
+  

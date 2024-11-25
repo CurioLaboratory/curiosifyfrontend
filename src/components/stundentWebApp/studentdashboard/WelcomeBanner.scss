@@ -1,0 +1,45 @@
+.welcome-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    margin:20px;
+    background-color: #ffa500; // Bright orange background
+    border-radius: 15px;
+    color: #fff;
+    font-family: Arial, sans-serif;
+  
+    .welcome-text {
+      flex: 1;
+  
+      .date {
+        font-size: 14px;
+        margin-bottom: 5px;
+        color: #ffd1a4; // Slightly lighter color for the date
+      }
+  
+      .greeting {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 0;
+        color: #fff;
+      }
+  
+      .subtext {
+        font-size: 16px;
+        color: #fff;
+        margin-top: 5px;
+      }
+    }
+  
+    .welcome-image {
+      width: 200px;
+      height: auto;
+  
+      svg {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+  

@@ -41,11 +41,11 @@ const Register = () => {
       });
     }else{
     if (formData.password.length !== 0 && (formData.password === rePassword)) {
-      console.log(formData);
+     // console.log(formData);
       setLoading(true); // Set loading to true
       try {
         const user = await axiosInstance.post("/auth/signup", { ...formData, role: userType });
-        console.log(user);
+       // console.log(user);
         toast.success("Please verify your email Address", {
           position: "top-right",
           autoClose: 2000

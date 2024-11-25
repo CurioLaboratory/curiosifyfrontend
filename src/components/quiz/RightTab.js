@@ -89,7 +89,7 @@ const RightTab = (props) => {
         "/quiz/createmanualquiz",
         publishedQuiz
       );
-
+      // console.log(response.data.addedQuiz._id)
        //Upadate acttivity feed for user publish quiz
        const userdetail = JSON.parse(localStorage.getItem("user")); // Parse the stored string into an object
 

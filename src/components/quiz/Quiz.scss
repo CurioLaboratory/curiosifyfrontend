@@ -126,6 +126,8 @@
 .selectedQuiz {
   padding: 20px;
   background-color: white;
+  overflow-y: auto;
+  height: 80vh;
 
   .back-button {
     background: none;

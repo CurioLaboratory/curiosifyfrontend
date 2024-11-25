@@ -14,6 +14,7 @@ import CreateContent from './createContent/Createcontent';
 import Create_assigment from './createContent/Create_assigment'
 import Createcourses from './createContent/Createcourses';
 import ModulePage from './createContent/ModulePage';
+import AccountSettings from './Profile/AccountSettings';
 const HomePage = () => {
   const [selectedMenu, setSelectedMenu] = useState('home');
   const [currentPage, setCurrentPage] = useState('home');
@@ -65,6 +66,8 @@ const HomePage = () => {
         return <ModulePage chapterModuleData={chapterModuleData} setCurrentPage={setCurrentPage} />;  
       case 'student-management':
         return <StudentManagement />;
+      case 'account-settings':
+          return <AccountSettings />
       default:
         return <div className="content"><h1>Content Not Found</h1></div>;
     }
@@ -120,7 +123,7 @@ const HomePage = () => {
               {showProfileMenu && (
                 <div className="profile-dropdown">
                   <ul>
-                    <li>Profile</li>
+                    <li onClick={()=>setCurrentPage('account-settings')}>Profile</li>
                     <li>Settings</li>
                     <li onClick={logout}><a href="/">Logout</a></li>
                   </ul>
