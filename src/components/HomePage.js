@@ -7,7 +7,7 @@ import ScanAI from './scanAI/ScanAI';
 import Events from './events/Events';
 import StudentManagement from './studentManagement/StudentManagement';
 import AttendanceSheet from './attendanceSheet/AttendanceSheet';
-import LessonPlan from './lessonPlan/LessonPlan';
+import CreateLessonPlan from './lessonPlan/CreateLessonPlan';
 import PaySlip from './paySlip/PaySlip';
 import { useAuth } from './auth/AuthContext';
 import Grid from './Grid';
@@ -72,7 +72,7 @@ const HomePage = () => {
       case 'attendance-sheet':
         return <AttendanceSheet />;
       case 'lesson-plan':
-        return <LessonPlan />;
+        return <CreateLessonPlan />;
       case 'pay-slip':
         return <PaySlip />;
       case 'account-settings':
