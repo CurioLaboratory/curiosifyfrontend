@@ -1,5 +1,8 @@
 .attendance-sheet {
   padding: 20px;
+  height: 100vh; /* Full viewport height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 
   .summary {
     display: flex;
