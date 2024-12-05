@@ -14,13 +14,14 @@ const RightTab = (props) => {
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("manualQuizData")) || [];
+    console.log("data",data);
     setQuizData(data);
   }, [props.refreshLocalQuiz]);
 
   useEffect(() => {
     if (props.activeTab === "Text/AI") {
       const data = JSON.parse(localStorage.getItem("textAiTabQuiz")) || {};
-      // console.log("Loaded textAiTabQuiz data:", data);
+      console.log("Loaded textAiTabQuiz data:", data);
       setAiQuizData(data);
        //console.log(quizAiData);
     }
@@ -83,8 +84,7 @@ const RightTab = (props) => {
         collegeName:user.collegeName,
       };
      // console.log("Published Quiz Data:", publishedQuiz);
-   
-
+     console.log("quizData",quizAiData);
       const response = await axiosInstance.post(
         "/quiz/createmanualquiz",
         publishedQuiz
