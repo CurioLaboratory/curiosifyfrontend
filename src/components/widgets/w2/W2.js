@@ -2,7 +2,7 @@ import React from 'react'
 
 const W2 = () => {
   return (
-      <div><h2>Quiz Performance</h2>
+      <div><h3>Quiz Performance</h3>
           <p>You have no quizzes.</p></div>
   )
 }

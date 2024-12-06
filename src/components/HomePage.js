@@ -6,6 +6,9 @@ import Library from './library/Library';
 import ScanAI from './scanAI/ScanAI';
 import Events from './events/Events';
 import StudentManagement from './studentManagement/StudentManagement';
+import AttendanceSheet from './attendanceSheet/AttendanceSheet';
+import CreateLessonPlan from './lessonPlan/CreateLessonPlan';
+import PaySlip from './paySlip/PaySlip';
 import { useAuth } from './auth/AuthContext';
 import Grid from './Grid';
 import FlashCard from './flashCard/FlashCard';
@@ -66,6 +69,12 @@ const HomePage = () => {
         return <ModulePage chapterModuleData={chapterModuleData} setCurrentPage={setCurrentPage} />;  
       case 'student-management':
         return <StudentManagement />;
+      case 'attendance-sheet':
+        return <AttendanceSheet />;
+      case 'lesson-plan':
+        return <CreateLessonPlan />;
+      case 'pay-slip':
+        return <PaySlip />;
       case 'account-settings':
           return <AccountSettings />
       default:
@@ -100,6 +109,15 @@ const HomePage = () => {
           </li>
           <li onClick={() => { setSelectedMenu('student-management'); setCurrentPage('student-management'); }} className={selectedMenu === 'student-management' ? 'active' : ''}>
             <img src="/icons/student-management.png" alt="Student Management" /> Student Management
+          </li>
+          <li onClick={() => { setSelectedMenu('attendance-sheet'); setCurrentPage('attendance-sheet'); }} className={selectedMenu === 'attendence-sheet' ? 'active' : ''}>
+            <img src="/icons/attendance-sheet.png" alt="Attandance Sheet" /> Attendence Sheet
+          </li>
+          <li onClick={() => { setSelectedMenu('lesson-plan'); setCurrentPage('lesson-plan'); }} className={selectedMenu === 'student-management' ? 'active' : ''}>
+            <img src="/icons/lesson-plan.png" alt="Lesson Plan" /> Lesson Plan
+          </li>
+          <li onClick={() => { setSelectedMenu('pay-slip'); setCurrentPage('pay-slip'); }} className={selectedMenu === 'student-management' ? 'active' : ''}>
+            <img src="/icons/pay-slip.png" alt="Pay Slip" /> My Pay Slips
           </li>
         </ul>
       </div>
