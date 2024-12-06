@@ -4,7 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../auth/AuthContext';
 
-
+import axiosInstance from "../../axiosInstance"; // Import axiosInstance for API calls
 function TextAiTab(props) {
     const [language, setLanguage] = useState('English');
     const [title, setTitle] = useState('');
@@ -17,115 +17,119 @@ function TextAiTab(props) {
     const [classLevel, setClassLevel] = useState('9');
   
     const handleGenerateQuiz = async () => {
-       localStorage.removeItem("textAiTabQuiz");
-     // props.setAiQuizGenerated(!props.aiQuizGenerated);
-
-      if(!title || !level || !numQuestions  || !language){
-        toast.info("Fields are missing!", {
-          position: "top-right",
-          autoClose: 1000,
-        });
-        return;
-      }
-      props.setLoading(true);
-
-      // Define the endpoint based on the language
-  let endpointURL;
-  if (language.toLowerCase() === "english") {
-    endpointURL = "https://nsyqsyo2bm6csijtfl4cl5cjvu0annrl.lambda-url.us-east-1.on.aws/";
-  } else {
-    endpointURL = "https://bhghddzlvw7366bldu3vpzmj4u0dordd.lambda-url.us-east-1.on.aws/";
-  }
-      // Handle quiz generation logic
-
-      const quizRequestData = {
-        subject: subject+" "+title,
-        ton: level,
-        numQuestions: numQuestions,
-        questionType: questionType,
-        youtubeURL: topic,
-        ...(language.toLowerCase() !== "english" && { language: language }), // Conditionally add language
-      };
-    console.log(questionType)
-    // console.log(quizRequestData)
-      try {
-        // 1. Make a POST request to the external API to generate the quiz
-        const externalResponse = await fetch(endpointURL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(quizRequestData),
-        });
-    
-        if (!externalResponse.ok) {
-          throw new Error("Failed to generate quiz from external API");
-        }
-    
-        const quizdata = await externalResponse.json();
-       console.log(quizdata)
+      localStorage.removeItem("textAiTabQuiz");
+      console.log({ level, numQuestions, language, topic, questionType });
   
-        const user = getUser();
-
-        // Generate the quiz based on the type
-        const questions = quizdata.map((item) => {
-          if (item.option1) {
-              // MCQ Question
-              return {
-                type: "MCQ",
-                question: item.question,
-                options: [item.option1, item.option2, item.option3, item.option4],
-                answer: item[item.correctOption.toLowerCase()] 
-            };
-          } else if (item.correctAnswer) {
-              // Subjective Question
-              return {
-                  type: "Subjective",
-                  question: item.Question,
-                  answer: item.correctAnswer,
-              };
-          }
-      });
-console.log(questions)
-        // this data will send to backend for saving into database
-        const publishedQuiz = {
+      if (!title || !level || !numQuestions || !language || !topic || !questionType) {
+          toast.info("Fields are missing!", {
+              position: "top-right",
+              autoClose: 1000,
+          });
+          return;
+      }
+  
+      if (isNaN(parseInt(numQuestions, 10))) {
+          toast.error("Number of questions must be a valid number!", {
+              position: "top-right",
+              autoClose: 1000,
+          });
+          return;
+      }
+  
+      props.setLoading(true);
+  
+      const payload = {
+          language: language,
           title: title,
           subject: subject,
-          date: new Date().toLocaleDateString(),
-          language: language,
-          totalQuestions: quizdata.length,
-          questions: questions,
-          classLevel:classLevel,
-          createdBy: user.email,
-          collegeName:user.collegeName
+          topic: topic,
+          questionType: questionType,
+          level: level,
+          numberOfQuestions: parseInt(numQuestions, 10), // Convert to number
       };
-      console.log(publishedQuiz)
+      console.log(payload);
   
-      
-      localStorage.setItem('textAiTabQuiz', JSON.stringify(publishedQuiz));
-
-      props.setAiQuizGenerated(!props.aiQuizGenerated);
-      setTitle('')
-      setQuestionType("MCQ")
-      setNumQuestions('1')
-      setLevel('easy')
-      setSubject('')
-      toast.success("Quiz question added successfully!", {
-          position: "top-right",
-          autoClose: 1000
-      });
-  
-      } catch (error) {
+      try {
+        const response = await axiosInstance.post(`/quiz/genrateQuizText`, payload);
+        console.log(response);
+        
+        if (response.status !== 201) {
+            throw new Error("Failed to generate quiz from external API");
+        }
+    
+       // Example quizData with question and answer:
+const quizData = [
+  {
+    question: "Which part of the human body is the skull found? Answer: B) Head", // Example question with answer in it
+    options: ["A) Arm", "B) Head", "C) Leg", "D) Foot"],
+  },
+  {
+    question: "What is the largest organ in the human body? Answer: B) Skin", // Another question with answer
+    options: ["A) Brain", "B) Skin", "C) Heart", "D) Liver"],
+  },
+];
+        
+        // Then you can use this data in your JSX code
+        
+        console.log("Response from API:", quizData);
+    
+        const user = getUser();
+    
+        // Process the quiz data to create clearer objects
+        const questions = quizData.map((item) => {
+          // Extract the answer from the question string if it's present
+          let answer = null;
+          if (item.question.includes("Answer:")) {
+            const answerMatch = item.question.split("Answer:")[1].trim();
+            answer = answerMatch;
+          }
+        
+          return {
+            type: "MCQ", // Assuming it's always MCQ, you can add conditions if needed for other types
+            question: item.question.replace(/Answer:.*$/, '').trim(), // Remove "Answer:" and the answer part from the question
+            options: item.options || [], // Use the options provided
+            answer: answer, // Store the extracted answer
+          };
+        });
+    console.log(quizData);
+        const publishedQuiz = {
+            title: title,
+            subject: subject,
+            date: new Date().toLocaleDateString(),
+            language: language,
+            totalQuestions: quizData.length,
+            questions: questions,
+            classLevel: classLevel,
+            createdBy: user.email,
+            collegeName: user.collegeName,
+        };
+    
+        localStorage.setItem("textAiTabQuiz", JSON.stringify(publishedQuiz));
+        props.setAiQuizGenerated(!props.aiQuizGenerated);
+        setTitle("");
+        setQuestionType("MCQ");
+        setNumQuestions("1");
+        setLevel("easy");
+        setSubject("");
+    
+        toast.success("Quiz generated successfully!", {
+            position: "top-right",
+            autoClose: 1000,
+        });
+    } catch (error) {
         toast.error("Error Fetching, try again!", {
-          position: "top-right",
-          autoClose: 1000,
+            position: "top-right",
+            autoClose: 1000,
         });
         console.error("Error:", error.message);
-      }
-      finally {
-        props.setLoading(false); // Step 3: Set loading to false after the request
-      }
-    };
+    } finally {
+        props.setLoading(false);
+    }
+    
+  };
+  
+  
+    
 
 
   
