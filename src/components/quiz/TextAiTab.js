@@ -8,7 +8,7 @@ import axiosInstance from "../../axiosInstance"; // Import axiosInstance for API
 function TextAiTab(props) {
     const [language, setLanguage] = useState('English');
     const [title, setTitle] = useState('');
-    const [questionType, setQuestionType] = useState('MCQ');
+    const [questionType, setQuestionType] = useState("Multiple Single choice");
     const [numQuestions, setNumQuestions] = useState(1);
     const [level, setLevel] = useState('Easy');
     const [topic, setTopic] = useState('');
@@ -47,51 +47,35 @@ function TextAiTab(props) {
           level: level,
           numberOfQuestions: parseInt(numQuestions, 10), // Convert to number
       };
-      console.log(payload);
+      //console.log(payload);
   
       try {
         const response = await axiosInstance.post(`/quiz/genrateQuizText`, payload);
-        console.log(response);
+       // console.log(response.data.generatedQuestions);
         
         if (response.status !== 201) {
             throw new Error("Failed to generate quiz from external API");
         }
     
        // Example quizData with question and answer:
-const quizData = [
-  {
-    question: "Which part of the human body is the skull found? Answer: B) Head", // Example question with answer in it
-    options: ["A) Arm", "B) Head", "C) Leg", "D) Foot"],
-  },
-  {
-    question: "What is the largest organ in the human body? Answer: B) Skin", // Another question with answer
-    options: ["A) Brain", "B) Skin", "C) Heart", "D) Liver"],
-  },
-];
-        
+const quizData = response.data.generatedQuestions;
+       // console.log(quizData)
         // Then you can use this data in your JSX code
         
-        console.log("Response from API:", quizData);
+       // console.log("Response from API:", quizData);
     
         const user = getUser();
     
         // Process the quiz data to create clearer objects
-        const questions = quizData.map((item) => {
-          // Extract the answer from the question string if it's present
-          let answer = null;
-          if (item.question.includes("Answer:")) {
-            const answerMatch = item.question.split("Answer:")[1].trim();
-            answer = answerMatch;
-          }
-        
-          return {
-            type: "MCQ", // Assuming it's always MCQ, you can add conditions if needed for other types
-            question: item.question.replace(/Answer:.*$/, '').trim(), // Remove "Answer:" and the answer part from the question
-            options: item.options || [], // Use the options provided
-            answer: answer, // Store the extracted answer
-          };
-        });
-    console.log(quizData);
+        const questions = quizData.map(item => ({
+          type: item.questionType, 
+          question: item.question,
+          answer: item.correct_answer,
+          options: item.options || [] // Default to an empty array if no options are provided
+      }));
+
+
+    console.log(questions);
         const publishedQuiz = {
             title: title,
             subject: subject,
@@ -107,7 +91,7 @@ const quizData = [
         localStorage.setItem("textAiTabQuiz", JSON.stringify(publishedQuiz));
         props.setAiQuizGenerated(!props.aiQuizGenerated);
         setTitle("");
-        setQuestionType("MCQ");
+        setQuestionType("Multiple Single choice");
         setNumQuestions("1");
         setLevel("easy");
         setSubject("");
@@ -167,9 +151,11 @@ const quizData = [
     <div className="form-group">
       <label>Question type</label>
       <select value={questionType} onChange={(e) => setQuestionType(e.target.value)}>
-        <option value="MCQ">Multiple single choice</option>
+        <option value="Multiple Single choice">Multiple single choice</option>
         <option value="Subjective">Subjective</option>
-        <option value="MCQ+Subjective">Subjective + MCQ</option>
+        <option value="True/False">True/False</option>
+        <option value="Formula Based">Formula Based</option>
+        <option value="Mixed">Mixed Questions</option>
       </select>
     </div>
     <div className="form-group">

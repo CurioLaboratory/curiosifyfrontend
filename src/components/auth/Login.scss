@@ -1,10 +1,5 @@
 body {
-<<<<<<< HEAD
-  margin: 0;
-  font-family: Arial, sans-serif;
-=======
   font-family: 'Poppins';
->>>>>>> Abhishek-main
   background-color: #f9f9f9;
 }
 
@@ -38,7 +33,9 @@ body {
 
     .user-type-toggle {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
+      max-width: 350px;
+      width: 100%;
       margin-bottom: 20px;
 
       button {
@@ -47,10 +44,12 @@ body {
         background: none;
         cursor: pointer;
         color: #333;
+        font-size: 20px;
+        font-weight: 600;
 
         &.active {
           color: orange;
-          border-bottom: 2px solid orange;
+          
         }
       }
     }
@@ -76,8 +75,11 @@ body {
       .form-footer {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 15px;
-
+        margin-top: 20px;
+        font-size: 12px;
+        span{
+          color: #949191;
+        }
         a {
           color: orange;
           text-decoration: none;
@@ -85,9 +87,9 @@ body {
       }
 
       button {
-        width: 100%;
+        width: 107%;
         padding: 10px;
-        background-color: orange;
+        background-color: rgb(164, 163, 160);
         border: none;
         color: white;
         border-radius: 5px;
@@ -106,15 +108,27 @@ body {
     color: white;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    .customer{
+      display: flex;
+      justify-content: space-between;
 
+      .indicator{
+        margin-right: 20px;
+      }
+    }
     h1 {
-      font-size: 50px;
+      margin-left: 20px;
+      margin-top: 100px;
+      font-size: 30px;
       margin-bottom: 20px;
     }
+    .tag{
+      margin-left: 20px;
 
+      p{
+        margin:0;
+      }
+    }
     blockquote {
       font-size: 16px;
       font-style: italic;
@@ -127,11 +141,20 @@ body {
         font-weight: bold;
       }
     }
-
-    .tablet-preview {
-      width: 100%;
-      margin-top: 20px;
+    .imageContainer{
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 12px;
+      height: 100%;
+      
+      .tablet-preview {
+        height: 52.5vh;
+        width: 100%;
+        max-width: 100%;
+        max-height: 100%;
+      }
     }
+    
   }
 }
 

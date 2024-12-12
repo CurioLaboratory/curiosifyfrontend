@@ -7,6 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Spinner from "../Customspinner";
 import "./Login.scss";
 import img1 from './assets/pen.svg'
+import img2 from './assets/indicator.svg'
+import img3 from './assets/double.svg'
 
 const Login = () => {
   const [userType, setUserType] = useState("teacher");
@@ -64,8 +66,8 @@ const Login = () => {
         <div className="logo">
           <img src="/icons/logo.png" alt="Logo" />
         </div>
-        <h2>Welcome Back!</h2>
-        <p>Sign in to your Curiosify account</p>
+        
+       
 
         <div className="user-type-toggle">
           <button
@@ -83,46 +85,52 @@ const Login = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <label>Email</label>
+          
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter email"
+            placeholder="Email id"
             required
           />
-          <label>Password</label>
+          
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter password"
+            placeholder="Password"
             required
           />
-          <div className="form-footer">
-            <a href="/forgot-password">Forgot Password?</a>
-            <a href="/register">Register</a>
-          </div>
           <button type="submit">
             {loading ? <Spinner /> : "Login"}
           </button>
+          <div className="form-footer">
+            <span>Don't have an account</span>
+            <a href="/register">Create an account</a>
+          </div>
         </form>
       </div>
 
       {/* Right Section */}
       <div className="promo-section">
-        <h1>What Our Customer Said</h1>
-        <div>
+        <div className="customer">
+          <h1>What's Our <br /> Customer Said</h1>
+          <img src={img2} alt="" className="indicator" />
+        </div>
+        <div className="tag">
+          <img src={img3} alt="" />
         <p>"Curiosify is our campus lifeline—secure,</p> 
         <p>efficient, and well-supported for seamless</p>
         <p>learning!"</p>
         </div>
+        <div className="imageContainer">
         <img
           src={img1}
           alt="Preview"
           className="tablet-preview"
           
         />
+        </div>
       </div>
 
       <ToastContainer />

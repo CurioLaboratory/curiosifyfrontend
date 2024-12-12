@@ -1,10 +1,5 @@
 body {
-<<<<<<< HEAD
-    margin: 0;
-    font-family: Arial, sans-serif;
-=======
     font-family: 'Poppins';
->>>>>>> Abhishek-main
     background-color: #f9f9f9;
   }
   
@@ -105,18 +100,29 @@ body {
       width: 50%;
       background-color: #ff5722;
       color: white;
-      padding: 50px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
+      .customer{
+        display: flex;
+        justify-content: space-between;
   
+        .indicator{
+          margin-right: 20px;
+        }
+      }
       h1 {
-        font-size: 24px;
+        margin-left: 20px;
+        margin-top: 100px;
+        font-size: 30px;
         margin-bottom: 20px;
       }
+      .tag{
+        margin-left: 20px;
   
+        p{
+          margin:0;
+        }
+      }
       blockquote {
         font-size: 16px;
         font-style: italic;
@@ -129,22 +135,18 @@ body {
           font-weight: bold;
         }
       }
-  
-      .tablet-preview {
-        width: 80%;
-        margin-top: 20px;
-      }
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .register-page {
-      flex-direction: column;
-  
-      .register-form-section,
-      .promo-section {
-        width: 100%;
-        padding: 20px;
+      .imageContainer{
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 10px;
+        height: 100%;
+        
+        .tablet-preview {
+          height: 55vh;
+          width: 100%;
+          max-width: 100%;
+          max-height: 100%;
+        }
       }
     }
   }

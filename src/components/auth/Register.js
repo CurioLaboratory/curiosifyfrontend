@@ -6,6 +6,9 @@ import axiosInstance from "../../axiosInstance";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Spinner from "../Customspinner";
+import img1 from './assets/pen.svg'
+import img2 from './assets/indicator.svg'
+import img3 from './assets/double.svg'
 
 const Register = () => {
   const [userType, setUserType] = useState("teacher");
@@ -64,8 +67,7 @@ const Register = () => {
         <div className="logo">
           <img src="/icons/logo.png" alt="Logo" />
         </div>
-        <h2>Welcome!</h2>
-        <p>Sign up to your Curiosify account</p>
+        
 
         <div className="user-type-toggle">
           <button
@@ -161,19 +163,26 @@ const Register = () => {
         </form>
       </div>
 
-      {/* Right Section */}
-      <div className="promo-section">
-        <h1>Why Curiosify?</h1>
-        <blockquote>
-          "Curiosify has redefined the way we manage and interact in our
-          educational spaces. Secure, efficient, and user-friendly!"
-          <cite>- Ramitha Ramachandran, Principal</cite>
-        </blockquote>
+       {/* Right Section */}
+       <div className="promo-section">
+        <div className="customer">
+          <h1>What's Our <br /> Customer Said</h1>
+          <img src={img2} alt="" className="indicator" />
+        </div>
+        <div className="tag">
+          <img src={img3} alt="" />
+        <p>"Curiosify is our campus lifeline—secure,</p> 
+        <p>efficient, and well-supported for seamless</p>
+        <p>learning!"</p>
+        </div>
+        <div className="imageContainer">
         <img
-          src="/icons/tablet-preview.png"
-          alt="Tablet Preview"
+          src={img1}
+          alt="Preview"
           className="tablet-preview"
+          
         />
+        </div>
       </div>
 
       <ToastContainer />

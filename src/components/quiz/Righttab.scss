@@ -2,6 +2,11 @@
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    .Download-publish{
+      display: flex
+      ;
+          gap: 12px;
+    }
 }
 
 .cardTitle {
@@ -12,11 +17,39 @@
 .cardQues {
     // border: 1px solid blue;
     margin-bottom: 10px;
-    background-color: white;
+    background-color: #f0efef;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    // box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     flex: 1;
+
+    h3{
+      font-weight: lighter;
+    }
+
+    ul {
+      list-style-type: none; /* Remove default bullets */
+      padding-left: 20px; /* Add padding to align items nicely */
+    }
+    
+    ul li {
+      position: relative;
+      padding-left: 25px; /* Space for the custom dot */
+      margin-bottom: 8px; /* Add some spacing between list items */
+    }
+    
+    ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 15px; /* Outer dot size */
+      height: 15px; /* Outer dot size */
+      border: 2px solid grey; /* Outer border to make it look hollow */
+      border-radius: 50%; /* Make it circular */
+      box-sizing: border-box; /* Ensure proper dimensions */
+    }
 }
 
 .publish-button {
