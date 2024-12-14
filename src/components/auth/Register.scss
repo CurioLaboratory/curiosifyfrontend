@@ -1,127 +1,153 @@
 body {
     font-family: 'Poppins';
     background-color: #f9f9f9;
-    margin: 0;
-    padding: 0;
-}
-
-.register-container {
-    max-width: 400px;
-    margin: 0px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    padding-top: 0px;
-
-    .logo {
-        text-align: center;
-        padding: 0;
-
-        img {
-            width: 50%;
-        }
-    }
-
-    h1 {
+  }
+  
+  .register-page {
+    display: flex;
+    height: 100vh;
+  
+    .register-form-section {
+      width: 50%;
+      padding: 50px;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+  
+      .logo img {
+        width: 150px;
+        margin-bottom: 20px;
+      }
+  
+      h2 {
         font-size: 28px;
         margin-bottom: 10px;
-    }
-
-    p {
+      }
+  
+      p {
         color: #666;
-        margin-bottom: 20px;
-    }
-
-    .user-type-toggle {
+        margin-bottom: 30px;
+      }
+  
+      .user-type-toggle {
         display: flex;
         justify-content: center;
         margin-bottom: 20px;
-
+  
         button {
-            padding: 10px 20px;
-            border: none;
-            background: none;
-            cursor: pointer;
-
-            &.active {
-                border-bottom: 2px solid orange;
-            }
+          padding: 10px 20px;
+          border: none;
+          background: none;
+          cursor: pointer;
+          color: #333;
+  
+          &.active {
+            color: orange;
+            border-bottom: 2px solid orange;
+          }
         }
-    }
-
-    form {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    label {
+      }
+  
+      form {
         width: 100%;
-        margin-bottom: 12px;
+        max-width: 300px;
+  
+        label {
+          font-weight: bold;
+          display: block;
+          margin-bottom: 5px;
+        }
+  
+        input,
+        select {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 15px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+        }
+  
+        .form-footer {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 15px;
+  
+          a {
+            color: orange;
+            text-decoration: none;
+          }
+        }
+  
+        button {
+          width: 100%;
+          padding: 10px;
+          background-color: orange;
+          border: none;
+          color: white;
+          border-radius: 5px;
+          cursor: pointer;
+  
+          &:hover {
+            background-color: #e68a00;
+          }
+        }
+      }
     }
-
-    input,select {
-        width: calc(100% - 20px);
-        padding: 10px;
-        margin-top: 5px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-    }
-
-    .form-button {
-        width: 100%;
-        padding: 10px;
-        background-color: #ff9900;
-        border: none;
-        color: #fff;
-        font-size: 16px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    &.hover {
-        background-color: #e68a00;
-    }
-
-    a {
-        color: #ff9900;
-        text-decoration: none;
-        margin-bottom: 20px;
-    }
-
-    a:hover {
-        text-decoration: underline;
-    }
-
-    .form-footer {
+  
+    .promo-section {
+      width: 50%;
+      background-color: #ff5722;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      .customer{
         display: flex;
         justify-content: space-between;
-        width: 100%;
-        margin-top: -10px;
-        margin-bottom: 20px;
-    }
-}
-
-@media (max-width: 600px) {
-
-    .login-container {
-        width: 90%;
-        margin: 20px auto;
-        padding: 10px;
-
-        .logo {
-            text-align: center;
-            padding: 0;
-
-            img {
-                width: 50%;
-            }
+  
+        .indicator{
+          margin-right: 20px;
         }
+      }
+      h1 {
+        margin-left: 20px;
+        margin-top: 100px;
+        font-size: 30px;
+        margin-bottom: 20px;
+      }
+      .tag{
+        margin-left: 20px;
+  
+        p{
+          margin:0;
+        }
+      }
+      blockquote {
+        font-size: 16px;
+        font-style: italic;
+        margin: 20px 0;
+  
+        cite {
+          display: block;
+          margin-top: 10px;
+          font-size: 14px;
+          font-weight: bold;
+        }
+      }
+      .imageContainer{
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 10px;
+        height: 100%;
+        
+        .tablet-preview {
+          height: 55vh;
+          width: 100%;
+          max-width: 100%;
+          max-height: 100%;
+        }
+      }
     }
-}
-
-
+  }
+  

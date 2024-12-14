@@ -1,129 +1,171 @@
 body {
   font-family: 'Poppins';
   background-color: #f9f9f9;
-  margin: 0;
-  padding: 0;
 }
-.teacher-login{
+
+.login-page {
   display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
-.login-container {
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
 
-  .logo {
-    text-align: center;
-    padding: 0;
-
-    img {
-      width: 50%;
-    }
-  }
-
-  h1 {
-    font-size: 28px;
-    margin-bottom: 10px;
-  }
-
-  p {
-    color: #666;
-    margin-bottom: 20px;
-  }
-
-  .user-type-toggle {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-
-    button {
-      padding: 10px 20px;
-      border: none;
-      background: none;
-      cursor: pointer;
-
-      &.active {
-        border-bottom: 2px solid orange;
-      }
-    }
-  }
-
-  form {
+  .login-form-section {
+    width: 50%;
+    padding: 50px;
+    background-color: #fff;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-  }
+    align-items: center;
+    justify-content: center;
 
-  label {
-    width: 100%;
-    margin-bottom: 15px;
-  }
+    .logo img {
+      width: 150px;
+      margin-bottom: 20px;
+    }
 
-  input {
-    width: calc(100% - 20px);
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
+    h2 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
 
-  .form-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #ff9900;
-    border: none;
-    color: #fff;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
+    p {
+      color: #666;
+      margin-bottom: 30px;
+    }
 
-  &.hover {
-    background-color: #e68a00;
-  }
+    .user-type-toggle {
+      display: flex;
+      justify-content: space-between;
+      max-width: 350px;
+      width: 100%;
+      margin-bottom: 20px;
 
-  a {
-    color: #ff9900;
-    text-decoration: none;
-    margin-bottom: 20px;
-  }
+      button {
+        padding: 10px 20px;
+        border: none;
+        background: none;
+        cursor: pointer;
+        color: #333;
+        font-size: 20px;
+        font-weight: 600;
 
-  a:hover {
-    text-decoration: underline;
-  }
+        &.active {
+          color: orange;
+          
+        }
+      }
+    }
 
-  .form-footer {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-top: -10px;
-    margin-bottom: 20px;
-  }
-}
-}
+    form {
+      width: 100%;
+      max-width: 300px;
 
-@media (max-width: 600px) {
+      label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+      }
 
-  .login-container {
-    width: 90%;
-    margin: 20px auto;
-    padding: 10px;
+      input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
 
-    .logo {
-      text-align: center;
-      padding: 0;
+      .form-footer {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        font-size: 12px;
+        span{
+          color: #949191;
+        }
+        a {
+          color: orange;
+          text-decoration: none;
+        }
+      }
 
-      img {
-        width: 50%;
+      button {
+        width: 107%;
+        padding: 10px;
+        background-color: rgb(164, 163, 160);
+        border: none;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #e68a00;
+        }
       }
     }
   }
 
+  .promo-section {
+    width: 50%;
+    background-color: #ff5722;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    .customer{
+      display: flex;
+      justify-content: space-between;
+
+      .indicator{
+        margin-right: 20px;
+      }
+    }
+    h1 {
+      margin-left: 20px;
+      margin-top: 100px;
+      font-size: 30px;
+      margin-bottom: 20px;
+    }
+    .tag{
+      margin-left: 20px;
+
+      p{
+        margin:0;
+      }
+    }
+    blockquote {
+      font-size: 16px;
+      font-style: italic;
+      margin: 20px 0;
+
+      cite {
+        display: block;
+        margin-top: 10px;
+        font-size: 14px;
+        font-weight: bold;
+      }
+    }
+    .imageContainer{
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 12px;
+      height: 100%;
+      
+      .tablet-preview {
+        height: 52.5vh;
+        width: 100%;
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+    
+  }
+}
+
+@media (max-width: 768px) {
+  .login-page {
+    flex-direction: column;
+
+    .login-form-section,
+    .promo-section {
+      width: 100%;
+      padding: 20px;
+    }
+  }
 }

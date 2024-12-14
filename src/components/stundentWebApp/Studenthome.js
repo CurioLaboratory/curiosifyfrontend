@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import '../HomePage.scss';
 import { useAuth } from '../auth/AuthContext';
-import Studentquiz from './studentquiz/Studentquiz';
+import Studentquiz from './studentQuiz/Studentquiz';
 import StudentAskCurio from './studentAsk-Curio/StudentAskCurio';
 import Studentevents from './studentEvents/Studentevents';
 import Studentflashcard from './studentFlashcard/Studentflashcard';
 import Studentscanai from './studentScanai/Studentscanai';
 import Studentlibrary from './studentLibrary/Studentlibrary';
-import QuizPage from './studentquiz/Quizpage';
-import SubmittedQuizPage from './studentquiz/Submittedquiz';
+import QuizPage from './studentQuiz/Quizpage';
+import SubmittedQuizPage from './studentQuiz/Submittedquiz';
 import StudentDashboard from './studentdashboard/StudentDashboard';
 import { useQuiz } from './QuizContext';
 import AccountSettings from '../../components/Profile/AccountSettings'

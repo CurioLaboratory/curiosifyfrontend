@@ -1,27 +1,30 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
-// import { loginUser } from './AuthAPI';
-import "./Login.scss";
 import axiosInstance from "../../axiosInstance";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Spinner from "../Customspinner";
+import "./Login.scss";
+import img1 from './assets/pen.svg'
+import img2 from './assets/indicator.svg'
+import img3 from './assets/double.svg'
+
 const Login = () => {
   const [userType, setUserType] = useState("teacher");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
-  const [Loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
-    if (email.length !== 0 && password.length !== 0) {
+
+    if (email.length && password.length) {
       try {
         const response = await axiosInstance.post("/auth/login", {
           email,
@@ -30,38 +33,27 @@ const Login = () => {
         });
         console.log("response", response);
         if (response.status === 200) {
-          setTimeout(() => {
-            toast.success("Login Successful", {
-              position: "top-right",
-              autoClose: 2000,
-            });
-          }, 100);
+          toast.success("Login Successful!", {
+            position: "top-right",
+            autoClose: 2000,
+          });
           setTimeout(() => {
             login({ ...response.data.user, token: response.data.token });
-            toast.success("Login Sucessfully", {
-              position: "top-right",
-              autoClose: 2000,
-            });
-            {
-              userType == "teacher"
-                ? navigate("/home")
-                : navigate("/studenthome");
-            }
+            userType === "teacher"
+              ? navigate("/home")
+              : navigate("/studenthome");
           }, 2000);
         } else {
-          toast.warn("Invalid Credentials", {
+          toast.warn("Invalid Credentials!", {
             position: "top-right",
             autoClose: 2000,
           });
         }
       } catch (error) {
-        console.log(error);
-        setError(error.response.data.message);
-        toast.error("Invalid Credentials", {
-          position: "top-left",
+        toast.error("Invalid Credentials!", {
+          position: "top-right",
           autoClose: 2000,
         });
-        console.log(error);
       } finally {
         setLoading(false);
       }
@@ -69,97 +61,81 @@ const Login = () => {
   };
 
   return (
-    <>
-      <div className="teacher-login">
-        <div className="login-container">
-          <div className="logo">
-            <img src="/icons/logo.png" alt="Logo" />
+    <div className="login-page">
+      {/* Left Section */}
+      <div className="login-form-section">
+        <div className="logo">
+          <img src="/icons/logo.png" alt="Logo" />
+        </div>
+        
+       
+
+        <div className="user-type-toggle">
+          <button
+            className={userType === "teacher" ? "active" : ""}
+            onClick={() => setUserType("teacher")}
+          >
+            Teacher
+          </button>
+          <button
+            className={userType === "student" ? "active" : ""}
+            onClick={() => setUserType("student")}
+          >
+            Student
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email id"
+            required
+          />
+          
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            required
+          />
+          <button type="submit">
+            {loading ? <Spinner /> : "Login"}
+          </button>
+          <div className="form-footer">
+            <span>Don't have an account</span>
+            <a href="/register">Create an account</a>
           </div>
-          <h2>Welcome Back!</h2>
-          <p>Sign in to Curiosify account</p>
-          {/* {location.state?.registered && <p style={{ color: 'green' }}>Registration Successful!</p>} */}
-          <div className="user-type-toggle">
-            <button
-              className={userType === "teacher" ? "active" : ""}
-              onClick={() => setUserType("teacher")}
-            >
-              Join as a teacher
-            </button>
-            <button
-              className={userType === "student" ? "active" : ""}
-              onClick={() => setUserType("student")}
-            >
-              Join as a student
-            </button>
-          </div>
-          {userType === "teacher" ? (
-            <form onSubmit={handleSubmit}>
-              {/* {error && <p style={{ color: 'red' }}>{error}</p>} */}
-              <label>
-                Teacher Email
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder="Enter email address"
-                />
-              </label>
-              <label>
-                Password
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password"
-                  required
-                />
-              </label>
-              <div className="form-footer">
-                <a href="/forgot-password">Forgot Password?</a>
-                <a href="/register">Register</a>
-              </div>
-              <button className="form-button" type="submit">
-                {" "}
-                {Loading ? <Spinner /> : "Login"}
-              </button>
-            </form>
-          ) : (
-            <form onSubmit={handleSubmit}>
-              {/* {error && <p style={{ color: 'red' }}>{error}</p>} */}
-              <label>
-                Student Email
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder="Enter email address"
-                />
-              </label>
-              <label>
-                Password
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password"
-                  required
-                />
-              </label>
-              <div className="form-footer">
-                <a href="/forgot-password">Forgot Password?</a>
-                <a href="/register">Register</a>
-              </div>
-              <button className="form-button" type="submit">
-                {Loading ? <Spinner /> : "Login"}
-              </button>
-            </form>
-          )}
-          <ToastContainer />
+        </form>
+      </div>
+
+      {/* Right Section */}
+      <div className="promo-section">
+        <div className="customer">
+          <h1>What's Our <br /> Customer Said</h1>
+          <img src={img2} alt="" className="indicator" />
+        </div>
+        <div className="tag">
+          <img src={img3} alt="" />
+        <p>"Curiosify is our campus lifeline—secure,</p> 
+        <p>efficient, and well-supported for seamless</p>
+        <p>learning!"</p>
+        </div>
+        <div className="imageContainer">
+        <img
+          src={img1}
+          alt="Preview"
+          className="tablet-preview"
+          
+        />
         </div>
       </div>
-    </>
+
+      <ToastContainer />
+    </div>
   );
 };
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const baseURL = "http://localhost:5001/api";
-  //const baseURL ="https://api.usecuriosify.in/api";
+//const baseURL ="https://api.usecuriosify.in/api";
 
 const instance = axios.create({
     baseURL,

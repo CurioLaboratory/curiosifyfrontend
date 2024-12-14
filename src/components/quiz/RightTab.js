@@ -32,7 +32,7 @@ const RightTab = (props) => {
       const data = JSON.parse(localStorage.getItem("uploadTabQuiz")) || {};
       console.log("Loaded uploadTabQuiz data:", data);
       setuploadQuizData(data);
-      console.log(quizuploadData.totalQuestions);
+      console.log("set"+quizuploadData);
     }
   }, [props.uploadQuizGenerated]);
 
@@ -56,6 +56,167 @@ const RightTab = (props) => {
     }
   };
 
+  const handleDownload= async ()=>{
+    if(props.activeTab==="Manual"){
+      if (quizData.length === 0) {
+        toast.info("No questions to Download!", {
+          position: "top-right",
+          autoClose: 1000,
+        });
+        // alert('No questions to publish!');
+        return;
+      }
+
+      const formattedQuestions = quizData.questions.map((item) => ({
+        question: item.question,          
+        options: item.options || [],       
+        correctAnswer: item.answer,        
+      }));
+      
+      const finalOutput = { questions: formattedQuestions }; 
+
+      try {
+        // Send a POST request to generate and download the PDF
+        const response = await axiosInstance.post(`/quiz/downloadfile`, finalOutput, {
+          responseType: "blob", // Important: Ensures the response is treated as binary data
+        });
+    
+        if (response.status !== 200) {
+          throw new Error("Failed to generate quiz from external API");
+        }
+    
+        // Create a Blob from the response data
+        const blob = new Blob([response.data], { type: "application/pdf" });
+    
+        // Create a download link dynamically
+        const link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = "questions.pdf";
+        link.click();
+    
+        // Cleanup the object URL
+        window.URL.revokeObjectURL(link.href);
+    
+        toast.success("PDF downloaded successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+        });
+      } catch (error) {
+        console.error("Error downloading quiz:", error.message);
+        toast.error("Error downloading quiz. Please try again.", {
+          position: "top-right",
+          autoClose: 1000,
+        });
+      }
+    }
+    else if(props.activeTab === "Text/AI"){
+      if (Object.keys(quizAiData).length === 0 || quizAiData.totalQuestions === 0) { //Object.keys(quizAiData).length === 0
+        toast.info("No questions to download!", {
+          position: "top-right",
+          autoClose: 1000,
+        });
+        // alert('No questions to publish!');
+        return;
+      }
+
+      const formattedQuestions = quizAiData.questions.map((item) => ({
+        question: item.question,          
+        options: item.options || [],       
+        correctAnswer: item.answer,        
+      }));
+      
+      const finalOutput = { questions: formattedQuestions }; 
+
+      try {
+        // Send a POST request to generate and download the PDF
+        const response = await axiosInstance.post(`/quiz/downloadfile`, finalOutput, {
+          responseType: "blob", // Important: Ensures the response is treated as binary data
+        });
+    
+        if (response.status !== 200) {
+          throw new Error("Failed to generate quiz from external API");
+        }
+    
+        // Create a Blob from the response data
+        const blob = new Blob([response.data], { type: "application/pdf" });
+    
+        // Create a download link dynamically
+        const link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = "questions.pdf";
+        link.click();
+    
+        // Cleanup the object URL
+        window.URL.revokeObjectURL(link.href);
+    
+        toast.success("PDF downloaded successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+        });
+      } catch (error) {
+        console.error("Error downloading quiz:", error.message);
+        toast.error("Error downloading quiz. Please try again.", {
+          position: "top-right",
+          autoClose: 1000,
+        });
+      }
+      
+      console.log(finalOutput);
+      
+    }
+    else if(props.activeTab === "Upload"){
+      if (Object.keys(quizuploadData).length === 0 || quizuploadData.totalQuestions === 0) { //Object.keys(quizAiData).length === 0
+        toast.info("No questions to publish!", {
+          position: "top-right",
+          autoClose: 1000,
+        });
+        // alert('No questions to publish!');
+        return;
+      }
+
+      const formattedQuestions = quizuploadData.questions.map((item) => ({
+        question: item.question,          
+        options: item.options || [],       
+        correctAnswer: item.answer,        
+      }));
+      
+      const finalOutput = { questions: formattedQuestions }; 
+
+      try {
+        // Send a POST request to generate and download the PDF
+        const response = await axiosInstance.post(`/quiz/downloadfile`, finalOutput, {
+          responseType: "blob", // Important: Ensures the response is treated as binary data
+        });
+    
+        if (response.status !== 200) {
+          throw new Error("Failed to generate quiz from external API");
+        }
+    
+        // Create a Blob from the response data
+        const blob = new Blob([response.data], { type: "application/pdf" });
+    
+        // Create a download link dynamically
+        const link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = "questions.pdf";
+        link.click();
+    
+        // Cleanup the object URL
+        window.URL.revokeObjectURL(link.href);
+    
+        toast.success("PDF downloaded successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+        });
+      } catch (error) {
+        console.error("Error downloading quiz:", error.message);
+        toast.error("Error downloading quiz. Please try again.", {
+          position: "top-right",
+          autoClose: 1000,
+        });
+      }
+    }
+  }
   const handlePublish = async () => {
     // console.log(quizData[0]);
     const user = getUser();
@@ -280,7 +441,14 @@ const RightTab = (props) => {
           </button>
         </div>
         <h3> Review your Quiz</h3>
-        <div>
+        <div className="Download-publish">
+          <button
+            type="button"
+            className="publish-button"
+            onClick={handleDownload}
+          >
+           Download
+          </button>
           <button
             type="button"
             className="publish-button"
@@ -289,6 +457,7 @@ const RightTab = (props) => {
             Publish
           </button>
         </div>
+        
       </div>
       <div className="quiz-data-display">
         <Card className="text-center cardBody">
@@ -333,69 +502,80 @@ const RightTab = (props) => {
                         <h3>
                           {index + 1}. {item.question}
                         </h3>
-                        {item.type === "MCQ" && (
-                          <>
-                            <ul>
-                              {item.options.map((option, optionIndex) => (
-                                <li
-                                  key={optionIndex}
-                                  style={{
-                                    color: option === item.answer ? "green" : "black",
-                                  }}
-                                >
-                                  {String.fromCharCode(65 + optionIndex)}: {option}
-                                </li>
-                              ))}
-                            </ul>
-                            <p>Correct Answer: {item.answer}</p>
-                          </>
+                        {item.type === "Multiple Single Choice" && (
+                          <ul>
+                            {item.options.map((option, optionIndex) => (
+                              <li
+                                key={optionIndex}
+                                
+                              >
+                                {option}
+                              </li>
+                            ))}
+                          </ul>
                         )}
                         {item.type === "Subjective" && (
-                          <>
-                            <p>correctAnswer: {item.answer}</p>
-                          </>
+                          <p>
+                            -------------
+                          </p>
                         )}
-                        <p>Created on: {quizAiData.date}</p>
+                        {item.type === "Formula Based" && (
+                          <p>
+                            -------------
+                          </p>
+                        )}
+                        {item.type === "True/False" && (
+                          <p>
+                            -------------
+                          </p>
+                        )}
+                        
                       </div>
                     ))}
                   </div>
                 )
+                
                 
               )}
                {props.loading&&props.activeTab === "Upload" ? (
                  <div className="loader-animation"><ProgressSteps/></div> 
               ) : (
                 props.activeTab === "Upload" &&
-                quizuploadData.totalQuestions && (
+                quizuploadData.questions && (
                   <div>
                     {quizuploadData.questions.map((item, index) => (
                       <div key={index} className="cardQues">
                         <h3>
                           {index + 1}. {item.question}
                         </h3>
-                        {item.type === "MCQ" && (
-                          <>
-                            <ul>
-                              {item.options.map((option, optionIndex) => (
-                                <li
-                                  key={optionIndex}
-                                  style={{
-                                    color: option === item.answer ? "green" : "black",
-                                  }}
-                                >
-                                  {String.fromCharCode(65 + optionIndex)}: {option}
-                                </li>
-                              ))}
-                            </ul>
-                            <p>Correct Answer: {item.answer}</p>
-                          </>
+                        {item.type === "Multiple Single Choice" && (
+                          <ul>
+                            {item.options.map((option, optionIndex) => (
+                              <li
+                                key={optionIndex}
+                                
+                              >
+                                {option}
+                              </li>
+                            ))}
+                          </ul>
                         )}
                         {item.type === "Subjective" && (
-                          <>
-                            <p>correctAnswer: {item.answer}</p>
-                          </>
+                          <p>
+                            -------------
+                          </p>
                         )}
-                        <p>Created on: {quizuploadData.date}</p>
+                        {item.type === "Formula Based" && (
+                          <p>
+                            -------------
+                          </p>
+                        )}
+                        {item.type === "True/False" && (
+                          <p>
+                            -------------
+                          </p>
+                        )}
+                        
                       </div>
                     ))}
                   </div>
