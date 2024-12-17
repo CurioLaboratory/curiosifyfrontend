@@ -86,7 +86,7 @@ const Register = () => {
 
         <form onSubmit={handleSubmit}>
           <label>
-            {userType === "teacher" ? "Teacher Name" : "Student Name"}
+            
             <input
               type="text"
               name="name"
@@ -97,7 +97,7 @@ const Register = () => {
             />
           </label>
           <label>
-            {userType === "teacher" ? "Teacher Email" : "Student Email"}
+           
             <input
               type="email"
               name="email"
@@ -109,7 +109,7 @@ const Register = () => {
           </label>
           {userType === "student" && (
             <label>
-              Class
+              
               <input
                 type="text"
                 name="classLevel"
@@ -121,7 +121,7 @@ const Register = () => {
             </label>
           )}
           <label>
-            Choose College
+            
             <select
               name="collegeName"
               value={formData.collegeName}
@@ -132,7 +132,7 @@ const Register = () => {
             </select>
           </label>
           <label>
-            Password
+          
             <input
               type="password"
               name="password"
@@ -143,7 +143,7 @@ const Register = () => {
             />
           </label>
           <label>
-            Re-enter Password
+           
             <input
               type="password"
               name="rePassword"
@@ -154,7 +154,7 @@ const Register = () => {
             />
           </label>
           <div className="form-footer">
-            <a href="/forgot-password">Forgot Password?</a>
+            <span>Already have an account?</span>
             <a href="/">Login</a>
           </div>
           <button type="submit" className="form-button" disabled={loading}>

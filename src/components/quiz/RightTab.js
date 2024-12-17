@@ -6,6 +6,7 @@ import "./Righttab.scss";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProgressSteps from "./Loader";
+import img1 from './assets/Curiosify.svg'
 const RightTab = (props) => {
   const [quizData, setQuizData] = useState([]);
   const [quizAiData, setAiQuizData] = useState({});
@@ -15,6 +16,7 @@ const RightTab = (props) => {
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("manualQuizData")) || [];
     setQuizData(data);
+    //console.log(data)
   }, [props.refreshLocalQuiz]);
 
   useEffect(() => {
@@ -31,7 +33,7 @@ const RightTab = (props) => {
       const data = JSON.parse(localStorage.getItem("uploadTabQuiz")) || {};
       console.log("Loaded uploadTabQuiz data:", data);
       setuploadQuizData(data);
-      console.log("set"+quizuploadData);
+      //console.log("set"+quizuploadData);
     }
   }, [props.uploadQuizGenerated]);
 
@@ -66,7 +68,7 @@ const RightTab = (props) => {
         return;
       }
 
-      const formattedQuestions = quizData.questions.map((item) => ({
+      const formattedQuestions = quizData.map((item) => ({
         question: item.question,          
         options: item.options || [],       
         correctAnswer: item.answer,        
@@ -477,16 +479,13 @@ const RightTab = (props) => {
                         {item.options.map((option, optionIndex) => (
                           <li
                             key={optionIndex}
-                            style={{
-                              color: option === item.answer ? "green" : "black",
-                            }}
+                            
                           >
-                            {String.fromCharCode(65 + optionIndex)}: {option}
+                            {option}
                           </li>
                         ))}
                       </ul>
-                      <p>Correct Answer: {item.answer}</p>
-                      <p>Created on: {item.date}</p>
+                     
                     </div>
                   ))}
                 </div>
@@ -537,6 +536,8 @@ const RightTab = (props) => {
                 
                 
               )}
+              {/* <ProgressSteps/> */}
+              
                {props.loading&&props.activeTab === "Upload" ? (
                  <div className="loader-animation"><ProgressSteps/></div> 
               ) : (
