@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import "./Create_assigment.scss";
 import PreviewAssignment from "./PreviewAssignment";
-import { jsPDF } from 'jspdf';
+import { jsPDF } from "jspdf";
 import { useAuth } from "../auth/AuthContext";
 import axiosInstance from "../../axiosInstance";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 //store the values of each dropdown
 const CreateAssignment = () => {
   const [assignmentGenerated, setAssignmentGenerated] = useState(false);
-  const [assignment,setAssignment]=useState({});
+  const [assignment, setAssignment] = useState({});
   const [selectedOption, setSelectedOption] = useState({
     learningObjectives: "",
     assignmentType: "",
@@ -16,12 +16,11 @@ const CreateAssignment = () => {
     class: "",
     language: "",
   });
-  const [loading,setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
   const { getUser } = useAuth();
 
   // this usestate is to store the file in learning object dropdown
-  const [file, setFile] = useState(null);  
-
+  const [file, setFile] = useState(null);
 
   //this usestate is used for toggle dropdown
   const [dropdownOpen, setDropdownOpen] = useState({
@@ -32,7 +31,7 @@ const CreateAssignment = () => {
     language: false,
   });
 
-//function to toggle dropdown
+  //function to toggle dropdown
   const toggleDropdown = (option) => {
     setDropdownOpen((prev) => ({
       ...prev,
@@ -40,21 +39,20 @@ const CreateAssignment = () => {
     }));
   };
 
-//function to handle textarea
+  //function to handle textarea
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setSelectedOption((prev) => ({
       ...prev,
       [name]: value,
     }));
-   // console.log(selectedOption.grading);
+    // console.log(selectedOption.grading);
   };
 
- //function to upload file 
+  //function to upload file
   const handleFileUpload = (e) => {
     setFile(e.target.files[0]);
   };
-
 
   //function to select values from dropdown and store them in corresponding usestate
   const handleOptionSelect = (option, value) => {
@@ -66,47 +64,42 @@ const CreateAssignment = () => {
     //console.log(option, value);
   };
 
-
   //Function to handle next click in learningobject dropdown
   const handleNext = () => {
     // Check if textarea has a value or a file is attached
     if (selectedOption.learningObjectives.trim()) {
       // Proceed to next step
       console.log(selectedOption.learningObjectives);
-      if(file){
+      if (file) {
         //to display file in console
-        console.log("File",file);
-    } 
-    } 
-    else {
+        console.log("File", file);
+      }
+    } else {
       // Display error or handle accordingly
       console.log("Please enter learning objectives or attach a file");
     }
   };
 
-  const handleGenerateAssignment=async()=>{
-    
+  const handleGenerateAssignment = async () => {
     if (
-      !selectedOption.assignmentType || 
-      !selectedOption.grading || 
-      !selectedOption.learningObjectives || 
-      !selectedOption.language || 
+      !selectedOption.assignmentType ||
+      !selectedOption.grading ||
+      !selectedOption.learningObjectives ||
+      !selectedOption.language ||
       !selectedOption.class
     ) {
-
       return;
     }
-    setLoading(true)
-    const url =
-      "http://localhost:5001/api/content/createAssignment";
+    setLoading(true);
+    const url = "http://localhost:5001/api/content/createAssignment";
 
     // The data you need to send in the request body
     const requestData = {
       httpMethod: "POST",
-      assignment_type:selectedOption.assignmentType,
-      grading:selectedOption.grading,
-      learning_objectives:selectedOption.learningObjectives,
-      language:selectedOption.language
+      assignmentType: selectedOption.assignmentType,
+      grading: selectedOption.grading,
+      learningObjectives: selectedOption.learningObjectives,
+      language: selectedOption.language,
     };
 
     try {
@@ -125,38 +118,33 @@ const CreateAssignment = () => {
 
       // Get the response first, if it's a string
       const responseText = await response.json();
-      setLoading(false)
+      setLoading(false);
       // const data = JSON.parse(responseText);
-      console.log(responseText)
+      console.log(responseText);
       setAssignment(responseText);
       setAssignmentGenerated(!assignmentGenerated);
-  }
-  catch(err){
-    console.log(err);
-  }
-  finally{
-    setLoading(false);
-  }
-  }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const handleCreateAssignment=async ()=>{
-    if(!assignment){
+  const handleCreateAssignment = async () => {
+    if (!assignment) {
       return;
     }
     const user = getUser();
-    const publishedAssignment ={
-      assignmentTitle:assignment["Assignment Title"],
-      assignmentObjective:assignment.Objective,
-      assignmentGrading:assignment.Grading,
-      Instructions:assignment.Instructions?.map((instruction, index) => (
-        {
-          index: index + 1, // Assign an index to each instruction
-          title: instruction,
-        }
-    )),
-    createdBy: user.email,
-
-    }
+    const publishedAssignment = {
+      assignmentTitle: assignment["Assignment Title"],
+      assignmentObjective: assignment.Objective,
+      assignmentGrading: assignment.Grading,
+      Instructions: assignment.Instructions?.map((instruction, index) => ({
+        index: index + 1, // Assign an index to each instruction
+        title: instruction,
+      })),
+      createdBy: user.email,
+    };
 
     const response = await axiosInstance.post(
       "/createCourse/saveAssignmentData",
@@ -168,74 +156,99 @@ const CreateAssignment = () => {
         autoClose: 1000,
       });
       // alert('Quiz published successfully!');
-      
+
       setAssignment({});
     }
 
     if (response.status === 203) {
       alert(response.data.message);
     }
-  }
-  const handleDownload=()=>{
-     const data = assignment;
-     
-     if(Object.keys(data).length === 0){
+  };
+  const handleDownload = () => {
+    const data = assignment;
+
+    if (Object.keys(data).length === 0) {
       return;
-     }
-     
-     const doc = new jsPDF();
-     const pageHeight = doc.internal.pageSize.height;
-     const pageWidth = doc.internal.pageSize.width;
-     let currentY = 10; // Initial Y position
-     const lineHeight = 10; // Line height
- 
-     const addWrappedText = (text, x, y, maxWidth) => {
-       const lines = doc.splitTextToSize(text, maxWidth);
-       lines.forEach((line) => {
-         // Add a new page if the content exceeds the page height
-         if (y + lineHeight > pageHeight) {
-           doc.addPage();
-           y = 10; // Reset Y position for new page
-         }
-         doc.text(line, x, y);
-         y += lineHeight; // Increment Y position for the next line
-       });
-       return y; // Return the updated Y position
-     };
- 
-     try {
-       // Add the assignment title
-       doc.setFontSize(16);
-       currentY = addWrappedText('Assignment Title:', 10, currentY, pageWidth - 20);
-       doc.setFontSize(12);
-       currentY = addWrappedText(String(data["Assignment Title"] || ''), 10, currentY, pageWidth - 20);
- 
-       // Add the objective
-       doc.setFontSize(16);
-       currentY = addWrappedText('Objective:', 10, currentY, pageWidth - 20);
-       doc.setFontSize(12);
-       currentY = addWrappedText(String(data["Objective"] || ''), 10, currentY, pageWidth - 20);
- 
-       // Add the grading
-       doc.setFontSize(16);
-       currentY = addWrappedText('Grading:', 10, currentY, pageWidth - 20);
-       doc.setFontSize(12);
-       currentY = addWrappedText(String(data["Grading"] || ''), 10, currentY, pageWidth - 20);
- 
-       // Add the instructions
-       doc.setFontSize(16);
-       currentY = addWrappedText('Instructions:', 10, currentY, pageWidth - 20);
-       doc.setFontSize(12);
-       (data["Instructions"] || []).forEach((instruction, index) => {
-         currentY = addWrappedText(`${index + 1}. ${String(instruction)}`, 10, currentY, pageWidth - 20);
-       });
- 
-       // Download the PDF
-       doc.save(`${data["Assignment Title"]}.pdf`);
-     } catch (error) {
-       console.error('Error creating PDF:', error);
-     }
-  }
+    }
+
+    const doc = new jsPDF();
+    const pageHeight = doc.internal.pageSize.height;
+    const pageWidth = doc.internal.pageSize.width;
+    let currentY = 10; // Initial Y position
+    const lineHeight = 10; // Line height
+
+    const addWrappedText = (text, x, y, maxWidth) => {
+      const lines = doc.splitTextToSize(text, maxWidth);
+      lines.forEach((line) => {
+        // Add a new page if the content exceeds the page height
+        if (y + lineHeight > pageHeight) {
+          doc.addPage();
+          y = 10; // Reset Y position for new page
+        }
+        doc.text(line, x, y);
+        y += lineHeight; // Increment Y position for the next line
+      });
+      return y; // Return the updated Y position
+    };
+
+    try {
+      // Add the assignment title
+      doc.setFontSize(16);
+      currentY = addWrappedText(
+        "Assignment Title:",
+        10,
+        currentY,
+        pageWidth - 20
+      );
+      doc.setFontSize(12);
+      currentY = addWrappedText(
+        String(data["Assignment Title"] || ""),
+        10,
+        currentY,
+        pageWidth - 20
+      );
+
+      // Add the objective
+      doc.setFontSize(16);
+      currentY = addWrappedText("Objective:", 10, currentY, pageWidth - 20);
+      doc.setFontSize(12);
+      currentY = addWrappedText(
+        String(data["Objective"] || ""),
+        10,
+        currentY,
+        pageWidth - 20
+      );
+
+      // Add the grading
+      doc.setFontSize(16);
+      currentY = addWrappedText("Grading:", 10, currentY, pageWidth - 20);
+      doc.setFontSize(12);
+      currentY = addWrappedText(
+        String(data["Grading"] || ""),
+        10,
+        currentY,
+        pageWidth - 20
+      );
+
+      // Add the instructions
+      doc.setFontSize(16);
+      currentY = addWrappedText("Instructions:", 10, currentY, pageWidth - 20);
+      doc.setFontSize(12);
+      (data["Instructions"] || []).forEach((instruction, index) => {
+        currentY = addWrappedText(
+          `${index + 1}. ${String(instruction)}`,
+          10,
+          currentY,
+          pageWidth - 20
+        );
+      });
+
+      // Download the PDF
+      doc.save(`${data["Assignment Title"]}.pdf`);
+    } catch (error) {
+      console.error("Error creating PDF:", error);
+    }
+  };
   return (
     <div className="craeteassigment-parentdiv">
       <div className="heading">
@@ -283,7 +296,9 @@ const CreateAssignment = () => {
                       style={{ display: "none" }}
                       onChange={handleFileUpload}
                     />
-                    <button className="attach-file-button"  onClick={handleNext}>Next</button>
+                    <button className="attach-file-button" onClick={handleNext}>
+                      Next
+                    </button>
                   </div>
                 </div>
               )}
@@ -329,20 +344,19 @@ const CreateAssignment = () => {
               </button>
               {dropdownOpen.grading && (
                 <div className="learning-objectives-section">
-                <label htmlFor="learningObjectives" className="label-text">
-                 Grading Criteria
-                </label>
-                <textarea
-                  id="grading"
-                  name="grading"
-                  value={
-                    selectedOption.grading.name ||
-                    selectedOption.grading
-                  }
-                  onChange={handleInputChange}
-                  className="learning-objectives-textarea"
-                />
-              </div>
+                  <label htmlFor="learningObjectives" className="label-text">
+                    Grading Criteria
+                  </label>
+                  <textarea
+                    id="grading"
+                    name="grading"
+                    value={
+                      selectedOption.grading.name || selectedOption.grading
+                    }
+                    onChange={handleInputChange}
+                    className="learning-objectives-textarea"
+                  />
+                </div>
               )}
             </div>
           </div>
@@ -401,15 +415,28 @@ const CreateAssignment = () => {
         </div>
         <div className="assignment-preview">
           <div className="PreviewContainer">
-          <h3>Preview</h3>
-          <button className="downloadButton" onClick={handleDownload}>D</button>
+            <h3>Preview</h3>
+            <button className="downloadButton" onClick={handleDownload}>
+              D
+            </button>
           </div>
-          <PreviewAssignment assignmentGenerated={assignmentGenerated} assignment={assignment} loading={loading}/>
+          <PreviewAssignment
+            assignmentGenerated={assignmentGenerated}
+            assignment={assignment}
+            loading={loading}
+          />
         </div>
       </div>
       <div className="assignment-actions">
-        <button className="regenerate-button" onClick={handleGenerateAssignment}>Regenerate</button>
-        <button className="create-button" onClick={handleCreateAssignment}>Create</button>
+        <button
+          className="regenerate-button"
+          onClick={handleGenerateAssignment}
+        >
+          Regenerate
+        </button>
+        <button className="create-button" onClick={handleCreateAssignment}>
+          Create
+        </button>
       </div>
     </div>
   );
