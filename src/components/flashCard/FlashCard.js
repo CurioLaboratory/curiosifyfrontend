@@ -19,17 +19,7 @@ const FlashCard = ({ onCreateFlashCards }) => {
         </div>
     );
 
-    // useEffect(() => {
-    //     // Simulating a fetch request to the backend with dummy data
-    //     setTimeout(() => {
-    //         const dummyData = [
-    //             { id: 1, name: 'Evolution', numOfCards: 2, tags: [], createdAt: '01-03-2024', lastAttempted: "01-03-2024", lastAttemptedScore: "100%"},
-    //             // { id: 2, name: 'Laws of motion', numberOfQuestions: 1, class: 11, createdOn: '01-03-2024' },
-    //         ];
-    //         setflashCards(dummyData);
-    //         setLoading(false);
-    //     }, 10); // Simulating network delay
-    // }, []);
+  
 
     useEffect(() => {
         const fetchFlashcards = async () => {
@@ -37,14 +27,15 @@ const FlashCard = ({ onCreateFlashCards }) => {
                 "/flashcard/getAllFlashcards"
             );
 
-            // console.log(response)
+             console.log(response.data)
             if (response.status === 200) {
-                setflashCards(response.data.flashcards);
+                setflashCards(response.data);
                 setLoading(false);
             }
         };
-
+        
         fetchFlashcards();
+        
     }, []);
 
     const handleCheckboxChange = (id) => {
@@ -69,12 +60,12 @@ const FlashCard = ({ onCreateFlashCards }) => {
     };
 
     const formatDateString = (dateString) => {
-        const date = new Date(Number(dateString));
-
+        const date = new Date(dateString); // Directly create a Date object
+    
         const day = String(date.getDate()).padStart(2, "0");
         const month = String(date.getMonth() + 1).padStart(2, "0");
         const year = date.getFullYear();
-
+    
         return `${day}/${month}/${year}`;
     };
 
@@ -103,36 +94,22 @@ const FlashCard = ({ onCreateFlashCards }) => {
     if (selectedflashCard) {
         return (
             <div className="quiz-detail">
-                <button
-                    className="back-button"
-                    onClick={() => setSelectedflashCard(null)}
-                >
-                    Back
-                </button>
-                <h1>{selectedflashCard.name}</h1>
-                <h2>Published for Class {selectedflashCard.class}</h2>
-                <div>
-                    <h3>
-                        1. Which of the following is an example of evolution?
-                    </h3>
-                    <p>A deer growing antlers as it matures</p>
-                    <p>A bird learning to sing a new song</p>
-                    <p>
-                        A fish changing colors to blend in with its surroundings
-                    </p>
-                    <p>A snake shedding its skin</p>
-                </div>
-                <div>
-                    <h3>
-                        2. What is the term for process which species evolve
-                        similar traits due to shared environmental pressures?
-                    </h3>
-                    <p>Convergent evolution</p>
-                    <p>Divergent evolution</p>
-                    <p>Co-evolution</p>
-                    <p>Adaptive radiation</p>
-                </div>
-            </div>
+    <button
+        className="back-button"
+        onClick={() => setSelectedflashCard(null)}
+    >
+        Back
+    </button>
+    <h1>{selectedflashCard.deckname}</h1>
+    <h2>Published for Class {selectedflashCard.targetClass}</h2>
+
+    {selectedflashCard.questions.map((question, index) => (
+        <div key={index} className="cardQues">
+            <h3>{index + 1}. {question.question}</h3>
+        </div>
+    ))}
+</div>
+
         );
     }
 
@@ -199,7 +176,6 @@ const FlashCard = ({ onCreateFlashCards }) => {
                                 <th></th>
                                 <th>Deckname</th>
                                 <th>No. of questions</th>
-                                <th>Tags</th>
                                 <th>Created at</th>
                                 <th>Last attempted</th>
                                 <th>Last attempted score</th>
@@ -230,11 +206,7 @@ const FlashCard = ({ onCreateFlashCards }) => {
                                     </td>
                                     <td>{flashCard.deckname}</td>
                                     <td>{flashCard.numberOfQues}</td>
-                                    <td>
-                                        {flashCard.tags.length
-                                            ? flashCard.tags
-                                            : "None"}
-                                    </td>
+                                   
                                     <td>
                                         {formatDateString(flashCard.createdAt)}
                                     </td>

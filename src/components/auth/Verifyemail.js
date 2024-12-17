@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import axiosInstance from '../../axiosInstance'
 const VerifyEmail = () => {
 
   const [message, setMessage] = useState('');
@@ -21,7 +21,7 @@ const VerifyEmail = () => {
     if (!hasVerified) {
       
       try {
-        const response = await axios.post('http://localhost:5001/api/auth/verify-email', { token });
+        const response = await axiosInstance.post('auth/verify-email', { token });
         setMessage('Email successfully verified, redirecting to login page...');
         // Navigate to login page after successful verification
         setTimeout(() => {
