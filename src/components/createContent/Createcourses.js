@@ -98,7 +98,7 @@ const CreateCourse = ({ setCurrentPage, setChapterModuleData }) => {
 
   // this usestate is to store the file in learning object dropdown
   const [file, setFile] = useState(null);
-  const[loading,setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
   //this usestate is used for toggle dropdown
   const [dropdownOpen, setDropdownOpen] = useState({
     learningObjectives: false,
@@ -159,14 +159,14 @@ const CreateCourse = ({ setCurrentPage, setChapterModuleData }) => {
     return data.map((chapterObj) => {
       const chapterName = Object.keys(chapterObj)[0]; // Get chapter name
       const modules = chapterObj[chapterName]; // Get the module contents
-  
+
       const moduleList = Object.keys(modules).map((moduleName) => {
         return {
           Name: moduleName.split(": ")[1], // Extract the name after "Module X: "
           Explanation: modules[moduleName], // Get the explanation from the original object
         };
       });
-  
+
       return {
         Chapter: chapterName.split(": ")[1], // Extract the chapter name after "Chapter X: "
         Modules: moduleList,
@@ -176,8 +176,7 @@ const CreateCourse = ({ setCurrentPage, setChapterModuleData }) => {
   const handleGenerateCourse = async () => {
     localStorage.removeItem("createCourses");
     setLoading(true);
-    const url =
-      "https://favcy4ohbl4h3tye7itgi7ju7i0spbfm.lambda-url.us-east-1.on.aws/";
+    const url = "http://localhost:5001/api/content/createCourse";
 
     // The data you need to send in the request body
     const requestData = {
@@ -204,42 +203,41 @@ const CreateCourse = ({ setCurrentPage, setChapterModuleData }) => {
 
       // Get the response first, if it's a string
       const responseText = await response.json();
-console.log(responseText)
+      console.log(responseText);
       // Convert the string response to JSON
-       const data = JSON.parse(responseText);
-       console.log(typeof(data))
-     /// const result = convertData(data);
+      // const data = JSON.parse(responseText);
+      // console.log(typeof data);
+      /// const result = convertData(data);
       //console.log(result)
       // const ans = JSON.stringify(result, null, 2);
       // const ans2 = JSON.parse(ans);
       // console.log(ans2);
       // Store the fetched data in localStorage with key "createCourses"
-      // localStorage.setItem("createCourses", JSON.stringify(ans2));
+      localStorage.setItem("createCourses", JSON.stringify(responseText.course));
 
       setCourseGenerated(!courseGenerated);
       console.log("Data successfully fetched and stored in localStorage!");
     } catch (error) {
       console.error("Error fetching data:", error);
-    }
-    finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
-const handleCreateCourse= async()=>{
-  const user = getUser();
-  console.log(user)
-  const saveData = {
-    Chapters: data,  // This is the chapters array you've already defined
-    createdBy: user.email  // Assuming user.email holds the creator's email
+  const handleCreateCourse = async () => {
+    const user = getUser();
+    console.log(user);
+    const saveData = {
+      Chapters: data, // This is the chapters array you've already defined
+      createdBy: user.email, // Assuming user.email holds the creator's email
+    };
+    const response = await axiosInstance.post(
+      "/createCourse/saveChapterData",
+      saveData
+    );
+    if (response.status === 201) {
+      console.log("good");
+    }
   };
-  const response = await axiosInstance.post(
-    "/createCourse/saveChapterData",
-    saveData
-  )
-  if (response.status === 201){
-    console.log("good")
-  }
-}
   return (
     <div className="createcourse-parentdiv">
       <div className="heading">
@@ -388,7 +386,9 @@ const handleCreateCourse= async()=>{
         <button className="regenerate-button" onClick={handleGenerateCourse}>
           Regenerate
         </button>
-        <button className="create-button" onClick={handleCreateCourse}>Create</button>
+        <button className="create-button" onClick={handleCreateCourse}>
+          Create
+        </button>
       </div>
     </div>
   );

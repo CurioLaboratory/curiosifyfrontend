@@ -98,7 +98,7 @@ const CreateAssignment = () => {
     }
     setLoading(true)
     const url =
-      "https://ddtbgcci6phatqfgjsqturhtem0ieubd.lambda-url.us-east-1.on.aws/";
+      "http://localhost:5001/api/content/createAssignment";
 
     // The data you need to send in the request body
     const requestData = {
@@ -126,9 +126,9 @@ const CreateAssignment = () => {
       // Get the response first, if it's a string
       const responseText = await response.json();
       setLoading(false)
-      const data = JSON.parse(responseText);
-      console.log(data)
-      setAssignment(data);
+      // const data = JSON.parse(responseText);
+      console.log(responseText)
+      setAssignment(responseText);
       setAssignmentGenerated(!assignmentGenerated);
   }
   catch(err){
