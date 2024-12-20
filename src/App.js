@@ -17,7 +17,7 @@ import { TeacherProtectedRoute, StudentProtectedRoute } from './components/auth/
 import VerifyEmail from './components/auth/Verifyemail';
 import QuizPage from './components/stundentWebApp/studentquiz/Quizpage';
 import { QuizProvider } from './components/stundentWebApp/QuizContext';
-
+import AdminDashboard from './components/adminDashboard/AdminDashboard';
 function App() {
   return (
     <AuthProvider>
@@ -39,6 +39,7 @@ function App() {
               </QuizProvider>
             } />
           } />
+          <Route path="/adminDashboard" element={<AdminDashboard />} />
           <Route path="/studentmanagement" element={<StudentManagement />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/take-quiz" element={<QuizPage />} />

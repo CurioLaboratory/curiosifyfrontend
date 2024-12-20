@@ -1,0 +1,177 @@
+.admin-home {
+  font-family: Arial, sans-serif;
+  color: #333;
+  height: 100vh; /* Full viewport height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  margin: 10px;
+  // Header
+  header {
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+
+      .stat-box {
+        background: #ffffff;
+        border: 1px solid #f4f4f4;
+        border-radius: 8px;
+        padding: 10px;
+
+        width: 30%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+
+        .icon-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 50px;
+          height: 50px;
+          background-color: #ffa500;
+          border-radius: 50%;
+
+          .stat-icon {
+            width: 30px; // Adjust based on your image size
+            height: 30px;
+            object-fit: contain;
+          }
+        }
+        .data-container {
+          margin-left: 8%;
+          margin-top: 8%;
+          p {
+            margin: 0;
+            font-weight: bold;
+            color: #777;
+          }
+
+          h2 {
+            margin-top: 5px;
+            color: #000;
+            font-size: 20px;
+          }
+        }
+      }
+    }
+  }
+
+  // Charts Section
+  .charts {
+    display: flex;
+    gap: 20px;
+    margin: 20px 0;
+
+    .chart-box {
+      flex: 1;
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 20px;
+      .chart-box-heading {
+        margin-bottom: 10px;
+      }
+      .chart-box-header {
+        display: flex;
+        justify-content: space-between;
+
+        h3 {
+          display: inline;
+          margin-right: 10px;
+        }
+
+        select {
+          padding: 5px;
+          border-radius: 4px;
+          border: 1px solid #ddd;
+        }
+      }
+
+      .chart-placeholder {
+        height: 150px;
+        background: #eee;
+        border: 1px dashed #ccc;
+        margin-top: 10px;
+        text-align: center;
+        line-height: 150px;
+        color: #aaa;
+      }
+    }
+  }
+
+  // Lists and Calendar Section
+  .Admin-lists-calendar {
+    display: flex;
+    gap: 20px;
+
+    .todolist,.calender,.activities {
+        flex: 1;
+        background: #ffffff;
+        border-radius: 8px;
+        padding: 20px;
+        .todo-calender-activity-heading {
+          margin-bottom: 10px;
+        }
+        .todo-calender-activity-header {
+          display: flex;
+          justify-content: space-between;
+  
+          h3 {
+            display: inline;
+            margin-right: 10px;
+          }
+  
+          select {
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+          }
+        }
+  
+        .chart-placeholder {
+          height: 150px;
+          background: #eee;
+          border: 1px dashed #ccc;
+          margin-top: 10px;
+          text-align: center;
+          line-height: 150px;
+          color: #aaa;
+        }
+      }
+  }
+
+  // Fee Details Section
+  .Admin-fee-details {
+    margin-top: 20px;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+      }
+
+      th {
+        background: #f5f5f5;
+      }
+
+      .paid {
+        color: green;
+        font-weight: bold;
+      }
+
+      .not-paid {
+        color: red;
+        font-weight: bold;
+      }
+    }
+  }
+}
